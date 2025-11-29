@@ -3,13 +3,16 @@ import streamlit as st
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
 
-from src.latency_estimator import latency_estimator
-from src.utils import format_impacts
-from src.impacts import display_impacts
-from src.electricity_mix import COUNTRY_CODES, format_electricity_mix_criterion, format_country_name
-from src.models import load_models
-from src.constants import PROMPTS
-from src.constants import PROMPTS
+from src.core.latency_estimator import latency_estimator
+from src.core.formatting import format_impacts
+from src.ui.impacts import display_impacts
+from src.repositories.electricity_mix import (
+    format_electricity_mix_criterion,
+    format_country_name,
+)
+from src.repositories.models import load_models
+from src.config.constants import PROMPTS, COUNTRY_CODES
+from src.ui.components import render_model_selector
 
 import plotly.express as px
 
@@ -26,26 +29,9 @@ def expert_mode():
 
         df = load_models(filter_main=True)
 
-        with provider_col:
-            providers_clean = [x for x in df["provider_clean"].unique()]
-            provider_exp = st.selectbox(
-                label="Provider",
-                options=providers_clean,
-                index=providers_clean.index("OpenAI"),
-                key=1,
-            )
-
-        with model_col:
-            models_clean = [
-                x
-                for x in df["name_clean"].unique()
-                if x in df[df["provider_clean"] == provider_exp]["name_clean"].unique()
-            ]
-            model_exp = st.selectbox(
-                label="Model",
-                options=models_clean,
-                key=2,
-            )
+        provider_exp, model_exp = render_model_selector(
+            df, provider_col, model_col, key_suffix="exp"
+        )
 
         df_filtered = df[
             (df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)
@@ -53,7 +39,7 @@ def expert_mode():
 
         try:
             total_params = int(df_filtered["total_parameters"].iloc[0])
-        except:
+        except Exception:
             total_params = int(
                 (
                     df_filtered["total_parameters"].values[0]["min"]
@@ -64,7 +50,7 @@ def expert_mode():
 
         try:
             active_params = int(df_filtered["active_parameters"].iloc[0])
-        except:
+        except Exception:
             active_params = int(
                 (
                     df_filtered["active_parameters"].values[0]["min"]
@@ -82,14 +68,17 @@ def expert_mode():
         active_params_col, total_params_col, throughput_col = st.columns(3)
 
         with active_params_col:
-            active_params = st.number_input("Active parameters (B)", 0, None, active_params)
+            active_params = st.number_input(
+                "Active parameters (B)", 0, None, active_params
+            )
 
         with total_params_col:
-            total_params = st.number_input("Total parameters (B)", 0, None, total_params)
+            total_params = st.number_input(
+                "Total parameters (B)", 0, None, total_params
+            )
 
         with throughput_col:
             throughput = st.number_input("Average TPS", 1.0, None, tps_raw)
-
 
     with st.container(border=True):
         st.markdown("###### Configure the prompt")
@@ -108,29 +97,24 @@ def expert_mode():
                 value=[x[1] for x in PROMPTS if x[0] == output_tokens_exp][0],
             )
 
-
     with st.container(border=True):
         st.markdown("###### Configure the data center")
 
         dc_pue_col, dc_wue_col, dc_location_col = st.columns(3)
         with dc_pue_col:
             datacenter_pue = st.number_input(
-                label="Data center PUE",
-                value=1.2,
-                min_value=1.0
+                label="Data center PUE", value=1.2, min_value=1.0
             )
         with dc_wue_col:
             datacenter_wue = st.number_input(
-                label="Data center WUE [L / kWh]",
-                value=0.6,
-                min_value=0.
+                label="Data center WUE [L / kWh]", value=0.6, min_value=0.0
             )
         with dc_location_col:
             dc_location = st.selectbox(
                 label="Data center location",
                 options=[c[1] for c in COUNTRY_CODES],
                 format_func=format_country_name,
-                index=0
+                index=0,
             )
 
         em_gwp_col, em_adpe_col, em_pe_col, em_wue_col = st.columns(4)
@@ -164,7 +148,7 @@ def expert_mode():
         provider=provider_raw,
         model_name=model_name_raw,
         output_tokens=output_tokens,
-        throughput=throughput
+        throughput=throughput,
     )
 
     impacts = compute_llm_impacts(
@@ -177,7 +161,7 @@ def expert_mode():
         if_electricity_mix_pe=em_pe,
         if_electricity_mix_wue=em_wue,
         datacenter_pue=datacenter_pue,
-        datacenter_wue=datacenter_wue
+        datacenter_wue=datacenter_wue,
     )
 
     impacts, usage, embodied = format_impacts(impacts)
@@ -204,8 +188,12 @@ def expert_mode():
         with col_ghg_comparison:
             fig_gwp = px.pie(
                 values=[
-                    usage.gwp.value if isinstance(usage.gwp.value, float) else usage.gwp.value.mean,
-                    embodied.gwp.value if isinstance(embodied.gwp.value, float) else embodied.gwp.value.mean,
+                    usage.gwp.value
+                    if isinstance(usage.gwp.value, float)
+                    else usage.gwp.value.mean,
+                    embodied.gwp.value
+                    if isinstance(embodied.gwp.value, float)
+                    else embodied.gwp.value.mean,
                 ],
                 names=["usage", "embodied"],
                 title="GHG emissions",
@@ -219,8 +207,12 @@ def expert_mode():
         with col_adpe_comparison:
             fig_adpe = px.pie(
                 values=[
-                    usage.adpe.value if isinstance(usage.adpe.value, float) else usage.adpe.value.mean,
-                    embodied.adpe.value if isinstance(embodied.adpe.value, float) else embodied.adpe.value.mean,
+                    usage.adpe.value
+                    if isinstance(usage.adpe.value, float)
+                    else usage.adpe.value.mean,
+                    embodied.adpe.value
+                    if isinstance(embodied.adpe.value, float)
+                    else embodied.adpe.value.mean,
                 ],
                 names=["usage", "embodied"],
                 title="Abiotic depletion",
@@ -234,8 +226,12 @@ def expert_mode():
         with col_pe_comparison:
             fig_pe = px.pie(
                 values=[
-                    usage.pe.value if isinstance(usage.pe.value, float) else usage.pe.value.mean,
-                    embodied.pe.value if isinstance(embodied.pe.value, float) else embodied.pe.value.mean,
+                    usage.pe.value
+                    if isinstance(usage.pe.value, float)
+                    else usage.pe.value.mean,
+                    embodied.pe.value
+                    if isinstance(embodied.pe.value, float)
+                    else embodied.pe.value.mean,
                 ],
                 names=["usage", "embodied"],
                 title="Primary energy",
@@ -267,7 +263,13 @@ def expert_mode():
                 index=0,
             )
 
-            df_comp = pd.DataFrame([em for em in electricity_mixes.list_electricity_mixes() if em.zone in countries_to_compare])
+            df_comp = pd.DataFrame(
+                [
+                    em
+                    for em in electricity_mixes.list_electricity_mixes()
+                    if em.zone in countries_to_compare
+                ]
+            )
             df_comp = df_comp.sort_values(by=impact_type, ascending=True)
 
             fig_2 = px.bar(
@@ -280,5 +282,5 @@ def expert_mode():
 
             st.plotly_chart(fig_2)
 
-        except:
+        except Exception:
             st.warning("Can't display chart with no values.")

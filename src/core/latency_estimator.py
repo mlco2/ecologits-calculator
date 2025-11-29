@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-_BASE_PATH = Path(__file__).parent / "data" / "throughputs.json"
+_BASE_PATH = Path(__file__).parent.parent / "data" / "throughputs.json"
 
 
 class LatencyEstimator:
@@ -20,13 +20,17 @@ class LatencyEstimator:
     def get_throughput(self, provider: str, model_name: str) -> float:
         return float(self.__throughputs.get((provider, model_name), self.__DEFAULT_TPS))
 
-    def estimate(self,
-                 provider: str,
-                 model_name: str,
-                 output_tokens: int,
-                 throughput: float | None = None) -> float:
+    def estimate(
+        self,
+        provider: str,
+        model_name: str,
+        output_tokens: int,
+        throughput: float | None = None,
+    ) -> float:
         if throughput is None:
-            throughput = self.__throughputs.get((provider, model_name), self.__DEFAULT_TPS)
+            throughput = self.__throughputs.get(
+                (provider, model_name), self.__DEFAULT_TPS
+            )
         return float(output_tokens / throughput)
 
 

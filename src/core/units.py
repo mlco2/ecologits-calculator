@@ -1,0 +1,28 @@
+from pint import UnitRegistry
+
+u = UnitRegistry()
+u.define("Wh = watt_hour")
+u.define("mWh = milliwatt_hour")
+u.define("kWh = kilowatt_hour")
+u.define("MWh = megawatt_hour")
+u.define("GWh = gigawatt_hour")
+u.define("TWh = terawatt_hour")
+u.define("gCO2eq = gram")
+u.define("mgCO2eq = milligram")
+u.define("kgCO2eq = kilogram")
+u.define("tCO2eq = metricton")
+u.define("kgSbeq = kilogram")
+u.define("gSbeq = gram")
+u.define("mgSbeq = milligram")
+u.define("µgSbeq = microgram")
+u.define("kJ = kilojoule")
+u.define("MJ = megajoule")
+u.define("L = liter")
+u.define("mL = milliliter")
+u.define("m = meter")
+u.define("km = kilometer")
+u.define("s = second")
+u.define("min = minute")
+u.define("h = hour")
+
+q = u.Quantity
