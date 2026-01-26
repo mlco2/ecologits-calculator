@@ -4,8 +4,6 @@ from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
 from src.ui.impacts import (
     display_impacts,
-    display_equivalent_ghg,
-    display_equivalent_energy,
 )
 from src.core.latency_estimator import latency_estimator
 from src.core.formatting import format_impacts
@@ -13,10 +11,8 @@ from src.config.content import (
     WARNING_CLOSED_SOURCE,
     WARNING_MULTI_MODAL,
     WARNING_BOTH,
-    HOW_TO_TEXT,
 )
 from src.repositories.electricity_mix import (
-    format_electricity_mix_criterion,
     format_country_name,
 )
 from src.config.constants import COUNTRY_CODES
@@ -25,12 +21,12 @@ from src.ui.components import render_model_selector
 
 
 def company_mode():
-    #st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
+    # st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
 
     with st.container(border=True):
         df = load_models(filter_main=True)
 
-        col1, col2, col3= st.columns(3)
+        col1, col2, col3 = st.columns(3)
 
         provider, model = render_model_selector(df, col1, col2, key_suffix="comp")
 
@@ -45,7 +41,7 @@ def company_mode():
             options=["Daily pages", "Daily tokens"],
             default="Daily pages",
             selection_mode="single",
-            help="A page refers to a page of content (approx. 500 words) - for tokens, jump to the dedicated tab to learn more."
+            help="A page refers to a page of content (approx. 500 words) - for tokens, jump to the dedicated tab to learn more.",
         )
 
         if output_method == "Daily pages":
@@ -54,12 +50,14 @@ def company_mode():
                 min_value=1,
                 max_value=100,
                 step=1,
-                value=5
+                value=5,
             )
-            output_tokens_count = output_tokens * 1000 * n_employees  # approx. 1000 tokens per page
+            output_tokens_count = (
+                output_tokens * 1000 * n_employees
+            )  # approx. 1000 tokens per page
         else:
             output_tokens = col2.selectbox(
-                label="Daily tokens",
+                label="Daily tokens (per person)",
                 options=[1000, 5000, 10000, 50000, 100000, 500000, 1000000],
                 index=2,
             )
@@ -75,20 +73,20 @@ def company_mode():
         # Map labels to number of days
         time_horizon_mapping = {
             "Daily": 1,
-            "Weekly": 7,
-            "Monthly": 30,
-            "Yearly": 365,
+            "Weekly": 5,
+            "Monthly": 22,
+            "Yearly": 260,
         }
         time_horizon = time_horizon_mapping[time_horizon_label]
 
         dc_location = st.selectbox(
-                label="Provider location",
-                options=[c[1] for c in COUNTRY_CODES],
-                format_func=format_country_name,
-                index=0,
-                help="If you dont know, the WORLD average is a good first approximate."
-            )
-        
+            label="Provider location",
+            options=[c[1] for c in COUNTRY_CODES],
+            format_func=format_country_name,
+            index=0,
+            help="If you dont know, the WORLD average is a good first approximate.",
+        )
+
         electricity_mix = electricity_mixes.find_electricity_mix(dc_location)
 
         # WARNING DISPLAY
@@ -123,12 +121,12 @@ def company_mode():
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,
-            output_tokens=output_tokens_count*time_horizon,
+            output_tokens=output_tokens_count * time_horizon,
         )
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
-            output_token_count=output_tokens_count*time_horizon,
+            output_token_count=output_tokens_count * time_horizon,
             request_latency=estimated_latency,
             electricity_mix_zone=electricity_mix.zone,
         )
