@@ -17,7 +17,7 @@ For non-trivial changes, please create an issue to discuss your proposal before 
 
 You'll need to meet the following requirements:
 
-- **Python version above 3.12**
+- **Python version above 3.11**
 - **git**
 - **[uv](https://docs.astral.sh/uv/getting-started/installation/)**
 
