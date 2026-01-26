@@ -27,7 +27,7 @@ def expert_mode():
 
         provider_col, model_col = st.columns(2)
 
-        df = load_models(filter_main=True)
+        df = load_models(filter_main=False)
 
         provider_exp, model_exp = render_model_selector(
             df, provider_col, model_col, key_suffix="exp"
