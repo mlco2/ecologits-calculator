@@ -19,6 +19,13 @@ st.set_page_config(layout="wide", page_title="EcoLogits Calculator", page_icon="
 with open("src/ui/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
+
+st.html("""
+<div style="background: #649618; padding: 10px; border-radius: 10px; margin-bottom: 0px;">
+    <p align="center" style="color: white; margin: 0;">📣 EcoLogits is joining CodeCarbon non-profit ! <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank" style="color: white; text-decoration: underline; font-weight: bold;">Full announcement here</a></p>
+</div>
+""")
+
 st.html(HERO_TEXT)
 
 tab_calculator, tab_expert, tab_token, tab_method, tab_about, tab_support = st.tabs(
