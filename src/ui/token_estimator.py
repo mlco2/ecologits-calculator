@@ -1,6 +1,6 @@
 import streamlit as st
 import tiktoken
-from .content import TOKEN_ESTIMATOR_TEXT
+from src.config.content import TOKEN_ESTIMATOR_TEXT
 
 
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
