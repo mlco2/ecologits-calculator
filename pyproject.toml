@@ -48,7 +48,12 @@ select = [
 ignore = [
     "E501",   # Line too long (handled by formatter)
     "D100",   # Missing docstring in public module
+    "D101",   # Missing docstring in public class
+    "D102",   # Missing docstring in public method
+    "D103",   # Missing docstring in public function
     "D104",   # Missing docstring in public package
+    "RUF001",
+    "D107",   # Missing docstring in __init__
 ]
 
 [tool.ruff.lint.pydocstyle]

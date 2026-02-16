@@ -53,9 +53,7 @@ def company_mode():
                 step=1,
                 value=5,
             )
-            output_tokens_count = (
-                output_tokens * 1000 * n_employees
-            )  # approx. 1000 tokens per page
+            output_tokens_count = output_tokens * 1000 * n_employees  # approx. 1000 tokens per page
         else:
             output_tokens = col2.selectbox(
                 label="Daily tokens (per person)",
@@ -95,12 +93,12 @@ def company_mode():
         electricity_mix = electricity_mixes.find_electricity_mix(dc_location)
 
         # WARNING DISPLAY
-        provider_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["provider"].values[0]
-        model_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["name"].values[0]
+        provider_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "provider"
+        ].values[0]
+        model_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "name"
+        ].values[0]
 
         display_model_warnings(df, provider, model)
 
@@ -130,9 +128,7 @@ def company_mode():
             display_impacts(impacts)
 
     except Exception as e:
-        st.error(
-            "Could not find the model in the repository. Please try another model."
-        )
+        st.error("Could not find the model in the repository. Please try another model.")
         raise e
 
     _, col2, _ = st.columns(3)

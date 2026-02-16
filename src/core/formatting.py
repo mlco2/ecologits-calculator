@@ -35,7 +35,9 @@ class QImpacts:
     wcf_max: Quantity | None = None
 
 
-def format_energy(energy_value: float, energy_unit=Energy(value=0.0).unit) -> Quantity:
+def format_energy(energy_value: float, energy_unit: str | None = None) -> Quantity:
+    if energy_unit is None:
+        energy_unit = Energy(value=0.0).unit
     val = q(energy_value, energy_unit)
     if val < q("1 kWh"):
         val = val.to("Wh")
@@ -44,7 +46,9 @@ def format_energy(energy_value: float, energy_unit=Energy(value=0.0).unit) -> Qu
     return val
 
 
-def format_gwp(gwp_value: float, gwp_unit=GWP(value=0.0).unit) -> Quantity:
+def format_gwp(gwp_value: float, gwp_unit: str | None = None) -> Quantity:
+    if gwp_unit is None:
+        gwp_unit = GWP(value=0.0).unit
     val = q(gwp_value, gwp_unit)
     if val < q("1 kgCO2eq"):
         val = val.to("gCO2eq")
@@ -53,7 +57,9 @@ def format_gwp(gwp_value: float, gwp_unit=GWP(value=0.0).unit) -> Quantity:
     return val
 
 
-def format_adpe(adpe_value: float, adpe_unit=ADPe(value=0.0).unit) -> Quantity:
+def format_adpe(adpe_value: float, adpe_unit: str | None = None) -> Quantity:
+    if adpe_unit is None:
+        adpe_unit = ADPe(value=0.0).unit
     val = q(adpe_value, adpe_unit)
     if val < q("1 kgSbeq"):
         val = val.to("gSbeq")
@@ -64,14 +70,18 @@ def format_adpe(adpe_value: float, adpe_unit=ADPe(value=0.0).unit) -> Quantity:
     return val
 
 
-def format_pe(pe_value: float, pe_unit=PE(value=0.0).unit) -> Quantity:
+def format_pe(pe_value: float, pe_unit: str | None = None) -> Quantity:
+    if pe_unit is None:
+        pe_unit = PE(value=0.0).unit
     val = q(pe_value, pe_unit)
     if val < q("1 MJ"):
         val = val.to("kJ")
     return val
 
 
-def format_wcf(wcf_value: float, wcf_unit=WCF(value=0.0).unit) -> Quantity:
+def format_wcf(wcf_value: float, wcf_unit: str | None = None) -> Quantity:
+    if wcf_unit is None:
+        wcf_unit = WCF(value=0.0).unit
     val = q(wcf_value, wcf_unit)
     if val < q("1 L"):
         val = val.to("mL")

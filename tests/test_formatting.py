@@ -19,7 +19,7 @@ from src.core.units import q
 class TestFormatEnergy:
     """Test cases for format_energy function."""
 
-    def test_format_energy_kWh(self):
+    def test_format_energy_kwh(self):
         """Should format energy with appropriate units."""
         result = format_energy(0.05)
         # The function converts to appropriate units based on magnitude

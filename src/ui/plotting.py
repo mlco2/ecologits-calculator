@@ -32,7 +32,8 @@ def range_plot(mean_val, min_val, max_val, unit):
     for val, pos, text in zip(
         [max_val, min_val] * 2,
         [0.85, 0.85, 1.6, 1.6],
-        ["Max", "Min", f"{max_val:.3g} {unit}", f"{min_val:.3g} {unit}"], strict=False,
+        ["Max", "Min", f"{max_val:.3g} {unit}", f"{min_val:.3g} {unit}"],
+        strict=False,
     ):
         fig.add_annotation(
             x=val, y=-pos, text=text, showarrow=False, font={"color": "black", "size": 16}
@@ -58,4 +59,4 @@ def range_plot(mean_val, min_val, max_val, unit):
     )
 
     # Show the plot in Streamlit
-    st.plotly_chart(fig, width="stretch", config={'displayModeBar': False})
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})

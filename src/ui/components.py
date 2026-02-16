@@ -38,22 +38,11 @@ def render_model_selector(
 
 def display_model_warnings(df: pd.DataFrame, provider: str, model: str) -> None:
     """Display warning messages based on model characteristics."""
-    df_filtered = df[
-        (df["provider_clean"] == provider) & (df["name_clean"] == model)
-    ]
+    df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
 
-    if (
-        df_filtered["warning_arch"].values[0]
-        and not df_filtered["warning_multi_modal"].values[0]
-    ):
+    if df_filtered["warning_arch"].values[0] and not df_filtered["warning_multi_modal"].values[0]:
         st.warning(WARNING_CLOSED_SOURCE, icon="⚠️")
-    if (
-        df_filtered["warning_multi_modal"].values[0]
-        and not df_filtered["warning_arch"].values[0]
-    ):
+    if df_filtered["warning_multi_modal"].values[0] and not df_filtered["warning_arch"].values[0]:
         st.warning(WARNING_MULTI_MODAL, icon="⚠️")
-    if (
-        df_filtered["warning_arch"].values[0]
-        and df_filtered["warning_multi_modal"].values[0]
-    ):
+    if df_filtered["warning_arch"].values[0] and df_filtered["warning_multi_modal"].values[0]:
         st.warning(WARNING_BOTH, icon="⚠️")
