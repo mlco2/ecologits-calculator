@@ -1,4 +1,4 @@
-"""Tests for src/repositories/models.py"""
+"""Tests for src/repositories/models.py."""
 
 from unittest.mock import MagicMock, patch
 

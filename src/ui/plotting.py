@@ -11,7 +11,7 @@ def range_plot(mean_val, min_val, max_val, unit):
             x=[max_val],
             y=[""],
             orientation="h",
-            marker=dict(color="#0B3B36"),
+            marker={"color": "#0B3B36"},
             showlegend=False,
             hoverinfo="skip",
         )
@@ -24,7 +24,7 @@ def range_plot(mean_val, min_val, max_val, unit):
         y0=-1,
         x1=mean_val,
         y1=1,
-        line=dict(color="#00BF63", width=3, dash="solid"),
+        line={"color": "#00BF63", "width": 3, "dash": "solid"},
         # name="Average"
     )
 
@@ -32,10 +32,10 @@ def range_plot(mean_val, min_val, max_val, unit):
     for val, pos, text in zip(
         [max_val, min_val] * 2,
         [0.85, 0.85, 1.6, 1.6],
-        ["Max", "Min", f"{max_val:.3g} {unit}", f"{min_val:.3g} {unit}"],
+        ["Max", "Min", f"{max_val:.3g} {unit}", f"{min_val:.3g} {unit}"], strict=False,
     ):
         fig.add_annotation(
-            x=val, y=-pos, text=text, showarrow=False, font=dict(color="black", size=16)
+            x=val, y=-pos, text=text, showarrow=False, font={"color": "black", "size": 16}
         )
 
     # fig.add_annotation(
@@ -50,10 +50,10 @@ def range_plot(mean_val, min_val, max_val, unit):
     fig.update_layout(
         height=160,
         width=400,
-        xaxis=dict(range=[min_val, max_val], showgrid=False, showticklabels=False),
-        yaxis=dict(showticklabels=False),
+        xaxis={"range": [min_val, max_val], "showgrid": False, "showticklabels": False},
+        yaxis={"showticklabels": False},
         plot_bgcolor="white",
-        margin=dict(l=100, r=100, t=0, b=20),
+        margin={"l": 100, "r": 100, "t": 0, "b": 20},
         showlegend=False,
     )
 

@@ -1,8 +1,10 @@
 import pandas as pd
+import streamlit as st
+
 from src.config.content import (
+    WARNING_BOTH,
     WARNING_CLOSED_SOURCE,
     WARNING_MULTI_MODAL,
-    WARNING_BOTH,
 )
 
 
@@ -10,7 +12,7 @@ def render_model_selector(
     df: pd.DataFrame, col_provider, col_model, key_suffix: str = ""
 ) -> tuple[str, str]:
     with col_provider:
-        providers_clean = sorted([x for x in df["provider_clean"].unique()])
+        providers_clean = sorted(df["provider_clean"].unique())
         # Default to OpenAI if available
         default_index = providers_clean.index("OpenAI") if "OpenAI" in providers_clean else 0
 

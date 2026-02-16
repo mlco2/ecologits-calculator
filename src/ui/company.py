@@ -1,19 +1,21 @@
 import logging
+
 import streamlit as st
 
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
-from src.ui.impacts import (
-    display_impacts,
-)
-from src.core.latency_estimator import latency_estimator
+
+from src.config.constants import COUNTRY_CODES
 from src.core.formatting import format_impacts
+from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
     format_country_name,
 )
-from src.config.constants import COUNTRY_CODES
 from src.repositories.models import load_models
-from src.ui.components import render_model_selector, display_model_warnings
+from src.ui.components import display_model_warnings, render_model_selector
+from src.ui.impacts import (
+    display_impacts,
+)
 
 
 def company_mode():
@@ -132,7 +134,7 @@ def company_mode():
             "Could not find the model in the repository. Please try another model."
         )
         raise e
-    
+
     _, col2, _ = st.columns(3)
     with col2:
         pdf_report = st.button(

@@ -276,7 +276,7 @@ def display_equivalent_energy(impacts):
         unsafe_allow_html=True,
     )
 
-    col4, col5, col6 = st.columns(3)
+    col4, col5, _col6 = st.columns(3)
 
     with col4:
         electricity_production, count = format_energy_eq_electricity_production(impacts.energy)
@@ -309,7 +309,7 @@ def display_equivalent_ghg(impacts):
 
     streaming_eq = format_gwp_eq_streaming(impacts.gwp)
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, _col3 = st.columns(3)
 
     with col1:
         st.markdown(
@@ -343,7 +343,7 @@ def display_equivalent_ghg(impacts):
         unsafe_allow_html=True,
     )
 
-    col4, col5, col6 = st.columns(3)
+    _col4, col5, _col6 = st.columns(3)
 
     with col5:
         paris_nyc_airplane = format_gwp_eq_airplane_paris_nyc(impacts.gwp)

@@ -9,10 +9,8 @@ from src.config.content import (
     METHODOLOGY_TEXT,
     SUPPORT_TEXT,
 )
-
-from src.ui.expert import expert_mode
-from src.ui.company import company_mode
 from src.ui.calculator import calculator_mode
+from src.ui.company import company_mode
 from src.ui.expert import expert_mode
 from src.ui.token_estimator import token_estimator
 

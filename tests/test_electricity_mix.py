@@ -1,4 +1,4 @@
-"""Tests for src/repositories/electricity_mix.py"""
+"""Tests for src/repositories/electricity_mix.py."""
 
 from src.config.constants import COUNTRY_CODES
 from src.repositories.electricity_mix import (
@@ -91,7 +91,7 @@ class TestCriteriaConstant:
 
     def test_criteria_non_empty_values(self):
         """All criteria values should be non-empty strings."""
-        for key, value in CRITERIA.items():
+        for _key, value in CRITERIA.items():
             assert isinstance(value, str)
             assert len(value) > 0
 

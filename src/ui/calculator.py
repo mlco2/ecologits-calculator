@@ -9,9 +9,8 @@ from src.config.content import (
 from src.core.formatting import format_impacts
 from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
-from src.ui.components import render_model_selector, display_model_warnings
-
-from src.config.constants import PROMPTS
+from src.ui.components import display_model_warnings, render_model_selector
+from src.ui.impacts import display_equivalent_energy, display_equivalent_ghg, display_impacts
 
 
 def calculator_mode():
@@ -40,7 +39,7 @@ def calculator_mode():
         display_model_warnings(df, provider, model)
 
     try:
-        output_tokens_count = [x[1] for x in PROMPTS if x[0] == output_tokens][0]
+        output_tokens_count = next(x[1] for x in PROMPTS if x[0] == output_tokens)
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,

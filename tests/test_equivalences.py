@@ -1,4 +1,4 @@
-"""Tests for src/core/equivalences.py"""
+"""Tests for src/core/equivalences.py."""
 
 from src.core.equivalences import (
     AIRPLANE_PARIS_NYC_GWP_EQ,
@@ -68,14 +68,14 @@ class TestFormatEnergyEqPhysicalActivity:
     def test_low_energy_returns_walking(self):
         """Should return WALKING for low energy values."""
         energy = q("50 kJ")  # Less than sufficient for running
-        activity, distance = format_energy_eq_physical_activity(energy)
+        activity, _distance = format_energy_eq_physical_activity(energy)
         # This will return walking for very low values
         assert activity in [PhysicalActivity.RUNNING, PhysicalActivity.WALKING]
 
     def test_returns_distance_quantity(self):
         """Should return a quantity with distance units."""
         energy = q("5 kJ")
-        activity, distance = format_energy_eq_physical_activity(energy)
+        _activity, distance = format_energy_eq_physical_activity(energy)
         assert "meter" in str(distance.units) or "km" in str(distance.units)
 
     def test_energy_conversion_is_positive(self):
@@ -146,14 +146,14 @@ class TestFormatEnergyEqElectricityProduction:
         """Very high energy should return NUCLEAR production."""
         # Scale to 1% of world population per day per year
         high_energy = q("1000 kWh")  # Scaled appropriately
-        prod_type, quantity = format_energy_eq_electricity_production(high_energy)
+        prod_type, _quantity = format_energy_eq_electricity_production(high_energy)
         # Could be nuclear or wind depending on scaling
         assert prod_type in [EnergyProduction.NUCLEAR, EnergyProduction.WIND]
 
     def test_low_energy_might_return_wind(self):
         """Low energy might return WIND production."""
         low_energy = q("0.0001 kWh")
-        prod_type, quantity = format_energy_eq_electricity_production(low_energy)
+        prod_type, _quantity = format_energy_eq_electricity_production(low_energy)
         assert prod_type in [EnergyProduction.NUCLEAR, EnergyProduction.WIND]
 
 

@@ -1,4 +1,4 @@
-"""Tests for src/core/formatting.py"""
+"""Tests for src/core/formatting.py."""
 
 from unittest.mock import MagicMock
 
@@ -180,7 +180,7 @@ class TestFormatImpacts:
         mock_impacts.usage = "usage"
         mock_impacts.embodied = "embodied"
 
-        q_impacts, usage, embodied = format_impacts(mock_impacts)
+        q_impacts, _usage, _embodied = format_impacts(mock_impacts)
 
         assert isinstance(q_impacts, QImpacts)
         assert q_impacts.ranges

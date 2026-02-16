@@ -16,7 +16,7 @@ HERO_TEXT = """
 """
 
 HOW_TO_TEXT = """
-Chose a provider, a model and an example of usage (prompts). 
+Chose a provider, a model and an example of usage (prompts).
 
 1. The calculator will provide you estimates of environmental impacts of this example. To learn more about how these impacts are computed check the Methodology tab.
 
@@ -77,7 +77,7 @@ The rapid evolution of generative AI is reshaping numerous industries and aspect
 At **[CodeCarbon](https://codecarbon.io/) we are dedicated to understanding and mitigating the environmental impacts of generative AI** through rigorous research, innovative tools, and community engagement. Especially, in early 2024 we have launched an new open-source tool called [EcoLogits](https://github.com/mlco2/ecologits) that tracks the energy consumption and environmental footprint of using generative AI models through APIs.
 
 
-### 🙋 FAQ 
+### 🙋 FAQ
 
 **How we assess the impacts of closed-source models?**
 
@@ -103,13 +103,13 @@ To see the full list of **generative AI providers** currently supported by EcoLo
     * Quantize your models.
     * Use inference optimization tricks.
     * Prefer fine-tuning of small and existing models over generalist models.
-    
+
 **What is the difference between **EcoLogits** and [CodeCarbon](https://github.com/mlco2/codecarbon)?**
 
 EcoLogits is focused on estimating the environmental impacts of generative AI (only LLMs for now) used **through API providers (such as OpenAI, Anthropic, Cloud APIs...)** whereas  CodeCarbon is more general tool to measure energy consumption and estimate GHG emissions measurement. If you deploy LLMs locally we encourage you to use CodeCarbon to get real numbers of your energy consumption.
 
 
-### 🤗 Contributing 
+### 🤗 Contributing
 
 We are eager to get feedback from the community, don't hesitate to engage the discussion with us on this [GitHub thread](https://github.com/mlco2/ecologits/discussions/45) or message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
 
@@ -119,7 +119,7 @@ We also welcome any open-source contributions on 🌱 **[EcoLogits](https://gith
 ### ⚖️ License
 
 <p xmlns:cc="http://creativecommons.org/ns#" >
-  This work is licensed under 
+  This work is licensed under
   <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
     CC BY-SA 4.0
   </a>
@@ -127,19 +127,19 @@ We also welcome any open-source contributions on 🌱 **[EcoLogits](https://gith
 
 ### 🙌 Acknowledgement
 
-We thank [Data For Good](https://dataforgood.fr/) and [Boavizta](https://boavizta.org/en) for supporting the development of this project. Their contributions of tools, best practices, and expertise in environmental impact assessment have been invaluable. 
+We thank [Data For Good](https://dataforgood.fr/) and [Boavizta](https://boavizta.org/en) for supporting the development of this project. Their contributions of tools, best practices, and expertise in environmental impact assessment have been invaluable.
 
 
 ### 🤝 Contact
 
-For general question on the project, please use the [GitHub thread](https://github.com/mlco2/ecologits/discussions/45). 
+For general question on the project, please use the [GitHub thread](https://github.com/mlco2/ecologits/discussions/45).
 Otherwise you can reach out on our [Discord channel](https://discord.gg/GS9js2XkJR).
 """
 
 SUPPORT_TEXT = r"""
 ### How to support us
 
-At GenAI Impact, our projects are powered by the passion and dedication of our team. 
+At GenAI Impact, our projects are powered by the passion and dedication of our team.
 Since its first release in June 2024, this calculator has been **developed and maintained entirely on a volunteer basis by our members**.
 We aim to keep this tool available as a free and open-source resource for the common good. We need your support to reach this goal, this is how you can help.
 
@@ -155,8 +155,8 @@ We aim to keep this tool available as a free and open-source resource for the co
 Share your feedback, ask questions, help other members of the community !
 
 Engage the discussion with us:
-- Start a new discussion on this space or on this 
-[GitHub thread](https://github.com/mlco2/ecologits/discussions/45) 
+- Start a new discussion on this space or on this
+[GitHub thread](https://github.com/mlco2/ecologits/discussions/45)
 - message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
 
 #### If you have more to give
@@ -164,7 +164,7 @@ Engage the discussion with us:
 ###### As an individual
 
 We welcome any open source contribution ! You can :
-- Contribute on **[EcoLogits](https://github.com/mlco2/ecologits)** or on 
+- Contribute on **[EcoLogits](https://github.com/mlco2/ecologits)** or on
 **EcoLogits Calculator**.
 - Become a an active member of [CodeCarbon](https://codecarbon.io/) non profit. Get involved in our broader mission !
 
@@ -211,7 +211,7 @@ Additionally, to ⚡️ **direct energy consumption** the environmental impacts 
 
 We use a **bottom-up methodology** to model impacts, meaning that we will estimate the impacts of low-level physical components to then estimate the impacts at software level (in that case an LLM inference). We also rely on **Life Cycle Approach (LCA) proxies and approach** to model both usage and embodied phases with multi-criteria impacts. If you are interested in this approach we recommend you to read the following [Boavizta](https://boavizta.org/) resources.
 
-* [Digital & environment: How to evaluate server manufacturing footprint, beyond greenhouse gas emissions?](https://boavizta.org/en/blog/empreinte-de-la-fabrication-d-un-serveur) 
+* [Digital & environment: How to evaluate server manufacturing footprint, beyond greenhouse gas emissions?](https://boavizta.org/en/blog/empreinte-de-la-fabrication-d-un-serveur)
 * [Boavizta API automated evaluation of environmental impacts of ICT services and equipments](https://boavizta.org/en/blog/boavizta-api-automated-evaluation-of-ict-impacts-on-the-environment)
 * [Boavizta API documentation](https://doc.api.boavizta.org/)
 
@@ -223,7 +223,7 @@ We leverage **open data to estimate the environmental impacts**, here is an exha
 
 Finally here are the **main hypotheses** we have made to compute the impacts.
 
-* ⚠️ **We *"guesstimate"* the model architecture of proprietary LLMs when not disclosed by the provider.** 
+* ⚠️ **We *"guesstimate"* the model architecture of proprietary LLMs when not disclosed by the provider.**
 * Production setup: quantized models running on data center grade servers and GPUs such as H100.
 * Electricity mixes are yearly averages.
 * Ignore the following impacts: unused cloud resources, data center building, network and end-user devices... (for now)
@@ -243,13 +243,13 @@ We compare the ⚡️ direct energy consumption with the energy consumption of s
 * 🚶‍♂️‍➡️ walking: $ 196\ kJ/km $ (speed of $ 3\ km/h $)
 * 🏃‍♂️‍➡️ running: $ 294\ kJ/km $ (speed of $ 10\ km/h $)
 
-We divide the request energy consumption by these values to compute the distance traveled. 
+We divide the request energy consumption by these values to compute the distance traveled.
 
 ##### 🔋 Electric Vehicle distance
 
 We compare the ⚡️ direct energy consumption with the energy consumer by a EV car. From [selectra.info](https://selectra.info/energie/actualites/insolite/consommation-vehicules-electriques-france-2040) or [tesla.com](https://www.tesla.com/fr_fr/support/power-consumption) we consider an average value of energy consumed per kilometer of: $ 0.17\ kWh/km $.
 
-We divide the request energy consumption by this value to compute the distance driven by an EV. 
+We divide the request energy consumption by this value to compute the distance driven by an EV.
 
 ##### ⏯️ Streaming time
 
@@ -307,7 +307,7 @@ CITATION_TEXT = """@misc{ecologits_calculator,
 }"""
 
 LICENCE_TEXT = """<p xmlns:cc="http://creativecommons.org/ns#" >
-  This work is licensed under 
+  This work is licensed under
   <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
     CC BY-SA 4.0
   </a>
