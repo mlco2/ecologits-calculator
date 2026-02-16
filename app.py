@@ -1,10 +1,10 @@
 import streamlit as st
 
 from src.config.content import (
-    HERO_TEXT,
     ABOUT_TEXT,
     CITATION_LABEL,
     CITATION_TEXT,
+    HERO_TEXT,
     LICENCE_TEXT,
     METHODOLOGY_TEXT,
     SUPPORT_TEXT,
@@ -13,6 +13,7 @@ from src.config.content import (
 from src.ui.expert import expert_mode
 from src.ui.company import company_mode
 from src.ui.calculator import calculator_mode
+from src.ui.expert import expert_mode
 from src.ui.token_estimator import token_estimator
 
 st.set_page_config(layout="wide", page_title="EcoLogits Calculator", page_icon="🧮")

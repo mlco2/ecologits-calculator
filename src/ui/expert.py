@@ -1,20 +1,20 @@
 import pandas as pd
+import plotly.express as px
 import streamlit as st
+
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
 
-from src.core.latency_estimator import latency_estimator
+from src.config.constants import COUNTRY_CODES, PROMPTS
 from src.core.formatting import format_impacts
-from src.ui.impacts import display_impacts
+from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
-    format_electricity_mix_criterion,
     format_country_name,
+    format_electricity_mix_criterion,
 )
 from src.repositories.models import load_models
-from src.config.constants import PROMPTS, COUNTRY_CODES
 from src.ui.components import render_model_selector
-
-import plotly.express as px
+from src.ui.impacts import display_impacts
 
 
 def expert_mode():
@@ -33,9 +33,7 @@ def expert_mode():
             df, provider_col, model_col, key_suffix="exp"
         )
 
-        df_filtered = df[
-            (df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)
-        ]
+        df_filtered = df[(df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)]
 
         try:
             total_params = int(df_filtered["total_parameters"].iloc[0])
@@ -68,14 +66,10 @@ def expert_mode():
         active_params_col, total_params_col, throughput_col = st.columns(3)
 
         with active_params_col:
-            active_params = st.number_input(
-                "Active parameters (B)", 0, None, active_params
-            )
+            active_params = st.number_input("Active parameters (B)", 0, None, active_params)
 
         with total_params_col:
-            total_params = st.number_input(
-                "Total parameters (B)", 0, None, total_params
-            )
+            total_params = st.number_input("Total parameters (B)", 0, None, total_params)
 
         with throughput_col:
             throughput = st.number_input("Average TPS", 1.0, None, tps_raw)
@@ -102,9 +96,7 @@ def expert_mode():
 
         dc_pue_col, dc_wue_col, dc_location_col = st.columns(3)
         with dc_pue_col:
-            datacenter_pue = st.number_input(
-                label="Data center PUE", value=1.2, min_value=1.0
-            )
+            datacenter_pue = st.number_input(label="Data center PUE", value=1.2, min_value=1.0)
         with dc_wue_col:
             datacenter_wue = st.number_input(
                 label="Data center WUE [L / kWh]", value=0.6, min_value=0.0
@@ -167,9 +159,7 @@ def expert_mode():
     impacts, usage, embodied = format_impacts(impacts)
 
     with st.container(border=True):
-        st.markdown(
-            '<h3 align="center">Environmental Impacts</h2>', unsafe_allow_html=True
-        )
+        st.markdown('<h3 align="center">Environmental Impacts</h2>', unsafe_allow_html=True)
 
         display_impacts(impacts)
 
@@ -188,9 +178,7 @@ def expert_mode():
         with col_ghg_comparison:
             fig_gwp = px.pie(
                 values=[
-                    usage.gwp.value
-                    if isinstance(usage.gwp.value, float)
-                    else usage.gwp.value.mean,
+                    usage.gwp.value if isinstance(usage.gwp.value, float) else usage.gwp.value.mean,
                     embodied.gwp.value
                     if isinstance(embodied.gwp.value, float)
                     else embodied.gwp.value.mean,
@@ -226,9 +214,7 @@ def expert_mode():
         with col_pe_comparison:
             fig_pe = px.pie(
                 values=[
-                    usage.pe.value
-                    if isinstance(usage.pe.value, float)
-                    else usage.pe.value.mean,
+                    usage.pe.value if isinstance(usage.pe.value, float) else usage.pe.value.mean,
                     embodied.pe.value
                     if isinstance(embodied.pe.value, float)
                     else embodied.pe.value.mean,

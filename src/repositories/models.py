@@ -1,14 +1,15 @@
 import pandas as pd
 import streamlit as st
-from ecologits.model_repository import models as model_repository, ArchitectureTypes
+
+from ecologits.model_repository import ArchitectureTypes
+from ecologits.model_repository import models as model_repository
 from ecologits.status_messages import (
-    ModelArchNotReleasedWarning,
     ModelArchMultimodalWarning,
+    ModelArchNotReleasedWarning,
 )
 from ecologits.utils.range_value import RangeValue
 
 from src.config.constants import MAIN_MODELS
-
 
 PROVIDERS_FORMAT = {
     "anthropic": "Anthropic",
@@ -65,9 +66,7 @@ def load_models(filter_main=True) -> pd.DataFrame:
         data.append(
             {
                 "provider": m.provider.value,
-                "provider_clean": PROVIDERS_FORMAT.get(
-                    m.provider.value, m.provider.value
-                ),
+                "provider_clean": PROVIDERS_FORMAT.get(m.provider.value, m.provider.value),
                 "name": m.name,
                 "name_clean": clean_model_name(m.name),
                 "architecture_type": m.architecture.type.value,

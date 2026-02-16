@@ -3,242 +3,262 @@
         {
             "provider": "openai",
             "name": "gpt-3.5-turbo",
-            "throughput": 144.6
+            "throughput": 76.2
         },
         {
             "provider": "openai",
             "name": "gpt-4",
-            "throughput": 33.0
+            "throughput": 21.4
         },
         {
             "provider": "openai",
             "name": "gpt-4-turbo",
-            "throughput": 46.5
+            "throughput": 24.8
         },
         {
             "provider": "openai",
             "name": "gpt-4o",
-            "throughput": 68.4
+            "throughput": 34.6
         },
         {
             "provider": "openai",
             "name": "gpt-4o-mini",
-            "throughput": 59.5
+            "throughput": 31.6
         },
         {
             "provider": "openai",
             "name": "o1",
-            "throughput": 442.9
+            "throughput": 90.8
         },
         {
             "provider": "openai",
             "name": "o1-mini",
-            "throughput": 173.2
+            "throughput": 90.8
         },
         {
             "provider": "openai",
             "name": "o3-mini",
-            "throughput": 597.4
+            "throughput": 116.9
         },
         {
             "provider": "openai",
             "name": "gpt-4.1-nano",
-            "throughput": 91.9
+            "throughput": 52.9
         },
         {
             "provider": "openai",
             "name": "gpt-4.1-mini",
-            "throughput": 68.7
+            "throughput": 35.0
         },
         {
             "provider": "openai",
             "name": "gpt-4.1",
-            "throughput": 61.0
+            "throughput": 32.2
         },
         {
             "provider": "openai",
             "name": "o4-mini",
-            "throughput": 64.7
+            "throughput": 93.8
         },
         {
             "provider": "openai",
             "name": "gpt-5-nano",
-            "throughput": 82.4
+            "throughput": 81.0
         },
         {
             "provider": "openai",
             "name": "gpt-5-mini",
-            "throughput": 47.1
+            "throughput": 51.6
         },
         {
             "provider": "openai",
             "name": "gpt-5",
-            "throughput": 41.3
+            "throughput": 41.5
+        },
+        {
+            "provider": "openai",
+            "name": "gpt-5-pro",
+            "throughput": 12.8
+        },
+        {
+            "provider": "openai",
+            "name": "gpt-5.1",
+            "throughput": 44.5
+        },
+        {
+            "provider": "openai",
+            "name": "gpt-5.2",
+            "throughput": 40.1
+        },
+        {
+            "provider": "openai",
+            "name": "gpt-5.2-pro",
+            "throughput": 11.2
         },
         {
             "provider": "anthropic",
             "name": "claude-3-5-haiku-latest",
-            "throughput": 59.6
-        },
-        {
-            "provider": "anthropic",
-            "name": "claude-3-5-sonnet-latest",
-            "throughput": 52.7
+            "throughput": 45.2
         },
         {
             "provider": "anthropic",
             "name": "claude-3-7-sonnet-latest",
-            "throughput": 51.9
+            "throughput": 46.0
         },
         {
             "provider": "anthropic",
             "name": "claude-opus-4-0",
-            "throughput": 37.0
+            "throughput": 28.2
         },
         {
             "provider": "anthropic",
             "name": "claude-opus-4-1",
-            "throughput": 38.1
+            "throughput": 26.6
         },
         {
             "provider": "anthropic",
             "name": "claude-sonnet-4-0",
-            "throughput": 60.2
+            "throughput": 45.4
         },
         {
             "provider": "anthropic",
             "name": "claude-sonnet-4-5",
-            "throughput": 61.4
+            "throughput": 35.5
         },
         {
             "provider": "anthropic",
             "name": "claude-haiku-4-5",
-            "throughput": 119.8
+            "throughput": 74.0
+        },
+        {
+            "provider": "anthropic",
+            "name": "claude-opus-4-5",
+            "throughput": 35.6
         },
         {
             "provider": "mistralai",
             "name": "codestral-latest",
-            "throughput": 272.8
+            "throughput": 62.2
         },
         {
             "provider": "mistralai",
             "name": "devstral-medium-latest",
-            "throughput": 106.7
+            "throughput": 43.0
         },
         {
             "provider": "mistralai",
             "name": "devstral-small-latest",
-            "throughput": 187.8
+            "throughput": 122.7
         },
         {
             "provider": "mistralai",
             "name": "magistral-medium-latest",
-            "throughput": 106.7
+            "throughput": 43.0
         },
         {
             "provider": "mistralai",
             "name": "magistral-small-latest",
-            "throughput": 187.8
+            "throughput": 122.7
         },
         {
             "provider": "mistralai",
             "name": "ministral-3b-latest",
-            "throughput": 309.6
+            "throughput": 88.8
         },
         {
             "provider": "mistralai",
             "name": "ministral-8b-latest",
-            "throughput": 213.7
+            "throughput": 97.9
+        },
+        {
+            "provider": "mistralai",
+            "name": "ministral-14b-latest",
+            "throughput": 88.8
         },
         {
             "provider": "mistralai",
             "name": "mistral-large-latest",
-            "throughput": 48.6
+            "throughput": 34.2
         },
         {
             "provider": "mistralai",
             "name": "mistral-medium-latest",
-            "throughput": 54.6
+            "throughput": 75.5
         },
         {
             "provider": "mistralai",
             "name": "mistral-small-latest",
-            "throughput": 158.0
+            "throughput": 83.9
         },
         {
             "provider": "mistralai",
             "name": "mistral-tiny-latest",
-            "throughput": 92.8
-        },
-        {
-            "provider": "mistralai",
-            "name": "open-mistral-7b",
-            "throughput": 121.5
+            "throughput": 10.9
         },
         {
             "provider": "mistralai",
             "name": "open-mistral-nemo",
-            "throughput": 153.2
-        },
-        {
-            "provider": "mistralai",
-            "name": "open-mixtral-8x22b",
-            "throughput": 85.7
-        },
-        {
-            "provider": "mistralai",
-            "name": "open-mixtral-8x7b",
-            "throughput": 80
+            "throughput": 101.5
         },
         {
             "provider": "google_genai",
             "name": "gemini-2.0-flash-lite",
-            "throughput": 74.1
+            "throughput": 80.1
         },
         {
             "provider": "google_genai",
             "name": "gemini-2.0-flash",
-            "throughput": 151.4
+            "throughput": 78.1
         },
         {
             "provider": "google_genai",
             "name": "gemini-2.5-flash-lite",
-            "throughput": 74.1
+            "throughput": 80.1
         },
         {
             "provider": "google_genai",
             "name": "gemini-2.5-flash",
-            "throughput": 93.2
+            "throughput": 76.9
         },
         {
             "provider": "google_genai",
             "name": "gemini-2.5-pro",
-            "throughput": 86.6
+            "throughput": 97.5
+        },
+        {
+            "provider": "google_genai",
+            "name": "gemini-3-flash",
+            "throughput": 53.1
+        },
+        {
+            "provider": "google_genai",
+            "name": "gemini-3-pro",
+            "throughput": 48.6
         },
         {
             "provider": "cohere",
             "name": "command-a-03-2025",
-            "throughput": 77.4
+            "throughput": 39.3
         },
         {
             "provider": "cohere",
             "name": "command-r",
-            "throughput": 125.1
+            "throughput": 64.8
         },
         {
             "provider": "cohere",
             "name": "command-r-08-2024",
-            "throughput": 67.2
+            "throughput": 56.1
         },
         {
             "provider": "cohere",
             "name": "command-r-plus-08-2024",
-            "throughput": 26.9
+            "throughput": 33.4
         },
         {
             "provider": "cohere",
             "name": "command-r7b-12-2024",
-            "throughput": 125.1
+            "throughput": 64.8
         }
     ]
 }

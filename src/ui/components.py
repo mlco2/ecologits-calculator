@@ -1,4 +1,3 @@
-import streamlit as st
 import pandas as pd
 from src.config.content import (
     WARNING_CLOSED_SOURCE,
@@ -13,9 +12,7 @@ def render_model_selector(
     with col_provider:
         providers_clean = sorted([x for x in df["provider_clean"].unique()])
         # Default to OpenAI if available
-        default_index = (
-            providers_clean.index("OpenAI") if "OpenAI" in providers_clean else 0
-        )
+        default_index = providers_clean.index("OpenAI") if "OpenAI" in providers_clean else 0
 
         provider = st.selectbox(
             label="Provider",
@@ -32,9 +29,7 @@ def render_model_selector(
                 if x in df[df["provider_clean"] == provider]["name_clean"].unique()
             ]
         )
-        model = st.selectbox(
-            label="Model", options=models_clean, key=f"model_select_{key_suffix}"
-        )
+        model = st.selectbox(label="Model", options=models_clean, key=f"model_select_{key_suffix}")
 
     return provider, model
 

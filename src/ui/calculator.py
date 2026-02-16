@@ -1,16 +1,13 @@
 import streamlit as st
 
 from ecologits.tracers.utils import llm_impacts
-from src.ui.impacts import (
-    display_impacts,
-    display_equivalent_ghg,
-    display_equivalent_energy,
-)
-from src.core.latency_estimator import latency_estimator
-from src.core.formatting import format_impacts
+
+from src.config.constants import PROMPTS
 from src.config.content import (
     HOW_TO_TEXT,
 )
+from src.core.formatting import format_impacts
+from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.components import render_model_selector, display_model_warnings
 
@@ -33,12 +30,12 @@ def calculator_mode():
             )
 
         # WARNING DISPLAY
-        provider_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["provider"].values[0]
-        model_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["name"].values[0]
+        provider_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "provider"
+        ].values[0]
+        model_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "name"
+        ].values[0]
 
         display_model_warnings(df, provider, model)
 
@@ -67,9 +64,7 @@ def calculator_mode():
             display_impacts(impacts)
 
         with st.container(border=False):
-            st.markdown(
-                '<h3 align = "center">Equivalences</h3>', unsafe_allow_html=True
-            )
+            st.markdown('<h3 align = "center">Equivalences</h3>', unsafe_allow_html=True)
             st.markdown(
                 '<p align = "center">Making this request to the LLM is equivalent to the following actions :</p>',
                 unsafe_allow_html=True,
@@ -83,7 +78,5 @@ def calculator_mode():
                 display_equivalent_ghg(impacts)
 
     except Exception as e:
-        st.error(
-            "Could not find the model in the repository. Please try another model."
-        )
+        st.error("Could not find the model in the repository. Please try another model.")
         raise e

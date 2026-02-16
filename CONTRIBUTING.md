@@ -4,7 +4,7 @@ Help us improve EcoLogits Calculator by contributing! :tada:
 
 ## Issues
 
-Questions, feature requests and bug reports are all welcome as [discussions or issues](https://github.com/genai-impact/ecologits-calculator/issues/new/choose).
+Questions, feature requests and bug reports are all welcome as [discussions or issues](https://github.com/mlco2/ecologits-calculator/issues/new).
 
 When submitting a feature request or bug report, please provide as much detail as possible. For bug reports, please include relevant information about your environment, including the version of EcoLogits Calculator and other Python dependencies used in your project.
 

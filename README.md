@@ -14,7 +14,7 @@ license: cc-by-sa-4.0
 
 <div align="center">
   <a href="https://ecologits.ai/">
-    <img alt="EcoLogits" src="https://raw.githubusercontent.com/genai-impact/ecologits-calculator/main/assets/logo.png" width="200" />
+    <img alt="EcoLogits" src="https://raw.githubusercontent.com/mlco2/ecologits-calculator/main/assets/logo.png" width="200" />
   </a>
   
   <br />
@@ -31,7 +31,7 @@ license: cc-by-sa-4.0
 
 ## 🌍 About
 
-**EcoLogits Calculator** is an open-source interactive tool for estimating the **energy consumption** and **environmental footprint** of generative AI models. Developed by the non-profit [GenAI Impact](https://genai-impact.org/), this calculator helps individuals, researchers, and organizations understand and evaluate the sustainability of AI usage.
+**EcoLogits Calculator** is an open-source interactive tool for estimating the **energy consumption** and **environmental footprint** of generative AI models. Developed by the non-profit [CodeCarbon](https://codecarbon.io/), this calculator helps individuals, researchers, and organizations understand and evaluate the sustainability of AI usage.
 
 The calculator provides:
 - **Energy consumption estimates** for AI model inference
@@ -65,7 +65,7 @@ If you want to run the calculator locally, follow the instructions below.
 
 ```bash
 # Clone the repository
-git clone https://github.com/genai-impact/ecologits-calculator.git
+git clone https://github.com/mlco2/ecologits-calculator.git
 cd ecologits-calculator
 
 # Install dependencies using uv
@@ -97,7 +97,7 @@ The basic workflow of the EcoLogits Calculator involves the following steps:
 
 - **[Methodology](https://ecologits.ai/latest/methodology/)**: Detailed explanation of how environmental impacts are calculated
 - **[EcoLogits Documentation](https://ecologits.ai/dev/reference/_ecologits/)**: Learn about the underlying EcoLogits library
-- **[GenAI Impact](https://genai-impact.org/)**: Learn more about the organization behind this project
+- **[CodeCarbon](https://codecarbon.io/)**: Learn more about the organization behind this project
 
 ## 🤝 Contributing
 
@@ -117,17 +117,17 @@ If you find this tool helpful, please consider:
 - ⭐ Starring this repository
 - 💬 Sharing feedback and suggestions
 - 🤝 Contributing to the project
-- 💝 Supporting [GenAI Impact](https://genai-impact.org/) on their mission to make AI more sustainable
+- 💝 Supporting [CodeCarbon](https://codecarbon.io/) on their mission to make AI more sustainable
 
 ## 📬 Questions?
 
 Have questions or feedback? Feel free to:
-- Open an [issue](https://github.com/genai-impact/ecologits-calculator/issues)
-- Start a [discussion](https://github.com/genai-impact/ecologits-calculator/discussions)
-- Contact [GenAI Impact](https://genai-impact.org/)
+- Open an [issue](https://github.com/mlco2/ecologits-calculator/issues)
+- Start a [discussion](https://github.com/mlco2/ecologits-calculator/discussions)
+- Contact [CodeCarbon](https://codecarbon.io/)
 
 ---
 
 <div align="center">
-  <p>Developed with ❤️ by <a href="https://genai-impact.org/">GenAI Impact</a></p>
+  <p>Developed with ❤️ by <a href="https://codecarbon.io/">CodeCarbon</a></p>
 </div>
