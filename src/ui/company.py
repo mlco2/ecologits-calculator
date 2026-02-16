@@ -8,17 +8,12 @@ from src.ui.impacts import (
 )
 from src.core.latency_estimator import latency_estimator
 from src.core.formatting import format_impacts
-from src.config.content import (
-    WARNING_CLOSED_SOURCE,
-    WARNING_MULTI_MODAL,
-    WARNING_BOTH,
-)
 from src.repositories.electricity_mix import (
     format_country_name,
 )
 from src.config.constants import COUNTRY_CODES
 from src.repositories.models import load_models
-from src.ui.components import render_model_selector
+from src.ui.components import render_model_selector, display_model_warnings
 
 
 def company_mode():
@@ -105,25 +100,7 @@ def company_mode():
             (df["provider_clean"] == provider) & (df["name_clean"] == model)
         ]["name"].values[0]
 
-        df_filtered = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]
-
-        if (
-            df_filtered["warning_arch"].values[0]
-            and not df_filtered["warning_multi_modal"].values[0]
-        ):
-            st.warning(WARNING_CLOSED_SOURCE, icon="⚠️")
-        if (
-            df_filtered["warning_multi_modal"].values[0]
-            and not df_filtered["warning_arch"].values[0]
-        ):
-            st.warning(WARNING_MULTI_MODAL, icon="⚠️")
-        if (
-            df_filtered["warning_arch"].values[0]
-            and df_filtered["warning_multi_modal"].values[0]
-        ):
-            st.warning(WARNING_BOTH, icon="⚠️")
+        display_model_warnings(df, provider, model)
 
     try:
         estimated_latency = latency_estimator.estimate(
@@ -156,11 +133,14 @@ def company_mode():
         )
         raise e
     
-    pdf_report = st.button(
-        "Generate PDF report",
-        type="primary",
-        help="Download a PDF report summarizing the estimated environmental impacts of your organization.",
-    )
+    _, col2, _ = st.columns(3)
+    with col2:
+        pdf_report = st.button(
+            "Generate PDF report",
+            type="primary",
+            width="stretch",
+            help="Download a PDF report summarizing the estimated environmental impacts of your organization.",
+        )
     if pdf_report:
         st.info("PDF report generation is not yet implemented. Stay tuned!", icon="🧑‍🔧")
         logging.info("PDF report generation requested, but not yet implemented.")
