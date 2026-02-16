@@ -27,8 +27,14 @@ jobs:
     - name: Install dependencies
       run: uv sync --group dev
 
-    - name: Lint with ruff
-      run: uv run ruff check src/ tests/ --exit-zero
+    - name: Lint with Ruff (check)
+      run: uv run ruff check src/ tests/ app.py
+
+    - name: Format check with Ruff
+      run: uv run ruff format src/ tests/ app.py --check
+
+    - name: Type check with Mypy
+      run: uv run mypy src/ --ignore-missing-imports
       continue-on-error: true
 
     - name: Run tests

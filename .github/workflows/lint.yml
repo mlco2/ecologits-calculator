@@ -1,0 +1,68 @@
+name: Lint and Format
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Code
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v2
+
+    - name: Install dependencies
+      run: uv sync --group dev
+
+    - name: Run Ruff linter
+      run: uv run ruff check src/ tests/ app.py
+
+    - name: Check Ruff formatting
+      run: uv run ruff format src/ tests/ app.py --check
+
+    - name: Run Mypy type checker
+      run: uv run mypy src/ --ignore-missing-imports
+      continue-on-error: true
+
+  format:
+    runs-on: ubuntu-latest
+    name: Check Format
+    needs: lint
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v2
+
+    - name: Install dependencies
+      run: uv sync --group dev
+
+    - name: Auto-format with Ruff
+      run: uv run ruff format src/ tests/ app.py
+
+    - name: Check if formatting changes are needed
+      run: |
+        if git diff --quiet; then
+          echo "✓ Code is properly formatted"
+        else
+          echo "✗ Code needs formatting"
+          echo "Run: uv run ruff format src/ tests/ app.py"
+          exit 1
+        fi
