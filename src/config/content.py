@@ -139,7 +139,7 @@ Otherwise you can reach out on our [Discord channel](https://discord.gg/GS9js2Xk
 SUPPORT_TEXT = r"""
 ### How to support us
 
-At GenAI Impact, our projects are powered by the passion and dedication of our team.
+At CodeCarbon, our projects are powered by the passion and dedication of our team.
 Since its first release in June 2024, this calculator has been **developed and maintained entirely on a volunteer basis by our members**.
 We aim to keep this tool available as a free and open-source resource for the common good. We need your support to reach this goal, this is how you can help.
 
