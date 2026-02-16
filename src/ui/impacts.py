@@ -13,8 +13,7 @@ from src.ui.plotting import range_plot
 
 
 def display_impacts(impacts):
-    st.divider()
-
+    st.space(5)
     _, col_energy, col_gwp, _ = st.columns([1, 2, 2, 1])
 
     with col_energy:
@@ -24,6 +23,9 @@ def display_impacts(impacts):
         )
         st.markdown(
             '<p align="center">Electricity consumption</p>', unsafe_allow_html=True
+        )
+        st.latex(
+            rf"\Large {impacts.energy.magnitude:.3g} \ \large {impacts.energy.units}"
         )
         if impacts.ranges:
             range_plot(
@@ -45,6 +47,9 @@ def display_impacts(impacts):
         st.markdown(
             '<p align="center">Effect on global warming</p>', unsafe_allow_html=True
         )
+        st.latex(
+            rf"\Large {impacts.gwp.magnitude:.3g} \ \large {impacts.gwp.units}"
+        )
         if impacts.ranges:
             range_plot(
                 impacts.gwp.magnitude,
@@ -52,12 +57,8 @@ def display_impacts(impacts):
                 impacts.gwp_max.magnitude,
                 impacts.gwp.units,
             )
-        else:
-            st.latex(
-                rf"\Large {impacts.gwp.magnitude:.3g} \ \large {impacts.gwp.units}"
-            )
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.space(5)
 
     col_adpe, col_pe, col_wcf = st.columns(3)
 
@@ -73,16 +74,15 @@ def display_impacts(impacts):
         st.markdown(
             '<p align="center"> Use of metals and minerals</p>', unsafe_allow_html=True
         )
+        st.latex(
+                rf"\Large {impacts.adpe.magnitude:.3g} \ \large {impacts.adpe.units}"
+            )
         if impacts.ranges:
             range_plot(
                 impacts.adpe.magnitude,
                 impacts.adpe_min.magnitude,
                 impacts.adpe_max.magnitude,
                 impacts.adpe.units,
-            )
-        else:
-            st.latex(
-                rf"\Large {impacts.adpe.magnitude:.3g} \ \large {impacts.adpe.units}"
             )
 
     with col_pe:
@@ -98,6 +98,9 @@ def display_impacts(impacts):
             '<p align="center">Use of natural energy resources</p>',
             unsafe_allow_html=True,
         )
+        st.latex(
+            rf"\Large {impacts.pe.magnitude:.3g} \ \large {impacts.pe.units}"
+        )
         if impacts.ranges:
             range_plot(
                 impacts.pe.magnitude,
@@ -105,8 +108,6 @@ def display_impacts(impacts):
                 impacts.pe_max.magnitude,
                 impacts.pe.units,
             )
-        else:
-            st.latex(rf"\Large {impacts.pe.magnitude:.3g} \ \large {impacts.pe.units}")
 
     with col_wcf:
         st.markdown(
@@ -118,16 +119,15 @@ def display_impacts(impacts):
             unsafe_allow_html=True,
         )
         st.markdown('<p align="center">Water consumption</p>', unsafe_allow_html=True)
+        st.latex(
+                rf"\Large {impacts.wcf.magnitude:.3g} \ \large {impacts.wcf.units}"
+            )
         if impacts.ranges:
             range_plot(
                 impacts.wcf.magnitude,
                 impacts.wcf_min.magnitude,
                 impacts.wcf_max.magnitude,
                 impacts.wcf.units,
-            )
-        else:
-            st.latex(
-                rf"\Large {impacts.wcf.magnitude:.3g} \ \large {impacts.wcf.units}"
             )
 
 

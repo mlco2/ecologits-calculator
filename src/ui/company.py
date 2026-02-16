@@ -1,3 +1,4 @@
+import logging
 import streamlit as st
 
 from ecologits.electricity_mix_repository import electricity_mixes
@@ -30,10 +31,13 @@ def company_mode():
 
         provider, model = render_model_selector(df, col1, col2, key_suffix="comp")
 
-        n_employees = col3.selectbox(
-            label="Number of employees",
-            options=[10, 50, 100, 500, 1000, 5000, 10000],
-            index=2,
+        n_employees = col3.number_input(
+            label="Number of employees using AI tools",
+            min_value=1,
+            max_value=10000,
+            value=100,
+            step=1,
+            help="This is the number of employees in your company using AI tools on a regular basis. If you are unsure, you can start with an estimate and adjust later as you gather more data.",
         )
 
         output_method = col1.pills(
@@ -70,14 +74,18 @@ def company_mode():
             selection_mode="single",
         )
 
-        # Map labels to number of days
-        time_horizon_mapping = {
-            "Daily": 1,
-            "Weekly": 5,
-            "Monthly": 22,
-            "Yearly": 260,
-        }
-        time_horizon = time_horizon_mapping[time_horizon_label]
+        try:
+            # Map labels to number of days
+            time_horizon_mapping = {
+                "Daily": 1,
+                "Weekly": 5,
+                "Monthly": 22,
+                "Yearly": 260,
+            }
+            time_horizon = time_horizon_mapping[time_horizon_label]
+        except KeyError:
+            st.error("Invalid time horizon selected. Please choose a valid option.")
+            return
 
         dc_location = st.selectbox(
             label="Provider location",
@@ -135,7 +143,9 @@ def company_mode():
 
         with st.container(border=True):
             st.markdown(
-                '<h3 align = "center">Environmental impacts</h3>',
+                f"<h5 align = 'center'>Estimated environmental impacts of using</h5>"
+                f"<h4 align = 'center'>{model} ({provider})</h4>"
+                f"<p align = 'center'><i>on a {time_horizon_label.lower()} basis in my company</i></p>",
                 unsafe_allow_html=True,
             )
             display_impacts(impacts)
@@ -145,3 +155,12 @@ def company_mode():
             "Could not find the model in the repository. Please try another model."
         )
         raise e
+    
+    pdf_report = st.button(
+        "Generate PDF report",
+        type="primary",
+        help="Download a PDF report summarizing the estimated environmental impacts of your organization.",
+    )
+    if pdf_report:
+        st.info("PDF report generation is not yet implemented. Stay tuned!", icon="🧑‍🔧")
+        logging.info("PDF report generation requested, but not yet implemented.")

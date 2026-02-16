@@ -38,13 +38,13 @@ def range_plot(mean_val, min_val, max_val, unit):
             x=val, y=-pos, text=text, showarrow=False, font=dict(color="black", size=16)
         )
 
-    fig.add_annotation(
-        x=mean_val,
-        y=1.65,
-        text=f"{mean_val:.3g} {unit}",
-        showarrow=False,
-        font=dict(color="black", size=35),
-    )
+    # fig.add_annotation(
+    #     x=mean_val,
+    #     y=1.65,
+    #     text=f"{mean_val:.3g} {unit}",
+    #     showarrow=False,
+    #     font=dict(color="black", size=35),
+    # )
 
     # Layout adjustments
     fig.update_layout(
