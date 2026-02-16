@@ -5,19 +5,13 @@ from ecologits.tracers.utils import llm_impacts
 from src.config.constants import PROMPTS
 from src.config.content import (
     HOW_TO_TEXT,
-    WARNING_BOTH,
-    WARNING_CLOSED_SOURCE,
-    WARNING_MULTI_MODAL,
 )
 from src.core.formatting import format_impacts
 from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
-from src.ui.components import render_model_selector
-from src.ui.impacts import (
-    display_equivalent_energy,
-    display_equivalent_ghg,
-    display_impacts,
-)
+from src.ui.components import render_model_selector, display_model_warnings
+
+from src.config.constants import PROMPTS
 
 
 def calculator_mode():
@@ -43,20 +37,7 @@ def calculator_mode():
             "name"
         ].values[0]
 
-        df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
-
-        if (
-            df_filtered["warning_arch"].values[0]
-            and not df_filtered["warning_multi_modal"].values[0]
-        ):
-            st.warning(WARNING_CLOSED_SOURCE, icon="⚠️")
-        if (
-            df_filtered["warning_multi_modal"].values[0]
-            and not df_filtered["warning_arch"].values[0]
-        ):
-            st.warning(WARNING_MULTI_MODAL, icon="⚠️")
-        if df_filtered["warning_arch"].values[0] and df_filtered["warning_multi_modal"].values[0]:
-            st.warning(WARNING_BOTH, icon="⚠️")
+        display_model_warnings(df, provider, model)
 
     try:
         output_tokens_count = [x[1] for x in PROMPTS if x[0] == output_tokens][0]
