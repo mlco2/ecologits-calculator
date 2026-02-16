@@ -1,8 +1,8 @@
 """Shared pytest configuration and fixtures."""
 
-import pytest
 from unittest.mock import MagicMock, patch
-from pint import Quantity
+
+import pytest
 
 from src.core.units import q
 
@@ -56,18 +56,18 @@ def mock_moe_model():
     mock.name = "mistral-large-latest"
     mock.provider.value = "mistralai"
     mock.architecture.type.value = "moe"
-    
+
     # Mock MoE parameters
     total_params = MagicMock()
     total_params.__class__.__name__ = "RangeValue"
     total_params.min = 41000
     total_params.max = 41000
-    
+
     active_params = MagicMock()
     active_params.__class__.__name__ = "RangeValue"
     active_params.min = 14000
     active_params.max = 14000
-    
+
     mock.architecture.parameters.total = total_params
     mock.architecture.parameters.active = active_params
     mock.warnings = []

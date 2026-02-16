@@ -1,23 +1,23 @@
 import streamlit as st
 
 from ecologits.tracers.utils import llm_impacts
-from src.ui.impacts import (
-    display_impacts,
-    display_equivalent_ghg,
-    display_equivalent_energy,
-)
-from src.core.latency_estimator import latency_estimator
-from src.core.formatting import format_impacts
-from src.config.content import (
-    WARNING_CLOSED_SOURCE,
-    WARNING_MULTI_MODAL,
-    WARNING_BOTH,
-    HOW_TO_TEXT,
-)
-from src.repositories.models import load_models
-from src.ui.components import render_model_selector
 
 from src.config.constants import PROMPTS
+from src.config.content import (
+    HOW_TO_TEXT,
+    WARNING_BOTH,
+    WARNING_CLOSED_SOURCE,
+    WARNING_MULTI_MODAL,
+)
+from src.core.formatting import format_impacts
+from src.core.latency_estimator import latency_estimator
+from src.repositories.models import load_models
+from src.ui.components import render_model_selector
+from src.ui.impacts import (
+    display_equivalent_energy,
+    display_equivalent_ghg,
+    display_impacts,
+)
 
 
 def calculator_mode():
@@ -36,16 +36,14 @@ def calculator_mode():
             )
 
         # WARNING DISPLAY
-        provider_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["provider"].values[0]
-        model_raw = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]["name"].values[0]
+        provider_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "provider"
+        ].values[0]
+        model_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
+            "name"
+        ].values[0]
 
-        df_filtered = df[
-            (df["provider_clean"] == provider) & (df["name_clean"] == model)
-        ]
+        df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
 
         if (
             df_filtered["warning_arch"].values[0]
@@ -57,10 +55,7 @@ def calculator_mode():
             and not df_filtered["warning_arch"].values[0]
         ):
             st.warning(WARNING_MULTI_MODAL, icon="⚠️")
-        if (
-            df_filtered["warning_arch"].values[0]
-            and df_filtered["warning_multi_modal"].values[0]
-        ):
+        if df_filtered["warning_arch"].values[0] and df_filtered["warning_multi_modal"].values[0]:
             st.warning(WARNING_BOTH, icon="⚠️")
 
     try:
@@ -88,9 +83,7 @@ def calculator_mode():
             display_impacts(impacts)
 
         with st.container(border=False):
-            st.markdown(
-                '<h3 align = "center">Equivalences</h3>', unsafe_allow_html=True
-            )
+            st.markdown('<h3 align = "center">Equivalences</h3>', unsafe_allow_html=True)
             st.markdown(
                 '<p align = "center">Making this request to the LLM is equivalent to the following actions :</p>',
                 unsafe_allow_html=True,
@@ -104,7 +97,5 @@ def calculator_mode():
                 display_equivalent_ghg(impacts)
 
     except Exception as e:
-        st.error(
-            "Could not find the model in the repository. Please try another model."
-        )
+        st.error("Could not find the model in the repository. Please try another model.")
         raise e

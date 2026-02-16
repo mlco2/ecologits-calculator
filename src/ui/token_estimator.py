@@ -1,5 +1,6 @@
 import streamlit as st
 import tiktoken
+
 from src.config.content import TOKEN_ESTIMATOR_TEXT
 
 
@@ -17,9 +18,7 @@ def token_estimator():
         "As our methodology deeply relies on the number of tokens processed by the model *(and as no-one is token-fluent)*, we provide you with a tool to estimate the number of tokens in a given text."
     )
 
-    st.expander("ℹ️ What is a token anyway ?", expanded=False).markdown(
-        TOKEN_ESTIMATOR_TEXT
-    )
+    st.expander("ℹ️ What is a token anyway ?", expanded=False).markdown(TOKEN_ESTIMATOR_TEXT)
 
     user_text_input = st.text_area(
         "Type or paste some text to estimate the amount of tokens.",

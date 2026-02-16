@@ -1,13 +1,11 @@
 """Tests for src/repositories/electricity_mix.py"""
 
-import pytest
-
+from src.config.constants import COUNTRY_CODES
 from src.repositories.electricity_mix import (
+    CRITERIA,
     format_country_name,
     format_electricity_mix_criterion,
-    CRITERIA,
 )
-from src.config.constants import COUNTRY_CODES
 
 
 class TestFormatCountryName:

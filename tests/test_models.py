@@ -1,11 +1,10 @@
 """Tests for src/repositories/models.py"""
 
-import pytest
-import pandas as pd
-from unittest.mock import patch, MagicMock
-from ecologits.utils.range_value import RangeValue
+from unittest.mock import MagicMock, patch
 
-from src.repositories.models import clean_model_name, load_models, PROVIDERS_FORMAT
+import pandas as pd
+
+from src.repositories.models import PROVIDERS_FORMAT, clean_model_name, load_models
 
 
 class TestCleanModelName:
@@ -57,38 +56,44 @@ class TestLoadModels:
         mock_model.architecture.type.value = "dense"
         mock_model.architecture.parameters = 1700
         mock_model.warnings = []
-        
+
         mock_repo.list_models.return_value = [mock_model]
-        
+
         # Import after mocking to clear the cache
         with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
             result = load_models(filter_main=True)
-        
+
         assert isinstance(result, pd.DataFrame)
 
     @patch("src.repositories.models.model_repository")
     def test_load_models_contains_expected_columns(self, mock_repo, streamlit_mock):
         """Should contain all expected columns."""
         from ecologits.model_repository import ArchitectureTypes
-        
+
         mock_model = MagicMock()
         mock_model.name = "gpt-4"
         mock_model.provider.value = "openai"
         mock_model.architecture.type = ArchitectureTypes.DENSE
         mock_model.architecture.parameters = 1700
         mock_model.warnings = []
-        
+
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
-        
+
         with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
             result = load_models(filter_main=True)
-        
+
         if len(result) > 0:
             expected_columns = {
-                "provider", "provider_clean", "name", "name_clean",
-                "architecture_type", "total_parameters", "active_parameters",
-                "warning_arch", "warning_multi_modal"
+                "provider",
+                "provider_clean",
+                "name",
+                "name_clean",
+                "architecture_type",
+                "total_parameters",
+                "active_parameters",
+                "warning_arch",
+                "warning_multi_modal",
             }
             assert expected_columns.issubset(set(result.columns))
 
@@ -96,20 +101,20 @@ class TestLoadModels:
     def test_load_models_dense_architecture(self, mock_repo, streamlit_mock):
         """Should correctly process dense architecture models."""
         from ecologits.model_repository import ArchitectureTypes
-        
+
         mock_model = MagicMock()
         mock_model.name = "gpt-4"
         mock_model.provider.value = "openai"
         mock_model.architecture.type = ArchitectureTypes.DENSE
         mock_model.architecture.parameters = 1700
         mock_model.warnings = []
-        
+
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
-        
+
         with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
             result = load_models(filter_main=True)
-        
+
         if len(result) > 0:
             assert result.iloc[0]["total_parameters"] == 1700
 
@@ -117,20 +122,20 @@ class TestLoadModels:
     def test_load_models_provider_format_mapping(self, mock_repo, streamlit_mock):
         """Should map provider correctly using PROVIDERS_FORMAT."""
         from ecologits.model_repository import ArchitectureTypes
-        
+
         mock_model = MagicMock()
         mock_model.name = "gpt-4"
         mock_model.provider.value = "openai"
         mock_model.architecture.type = ArchitectureTypes.DENSE
         mock_model.architecture.parameters = 1700
         mock_model.warnings = []
-        
+
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
-        
+
         with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
             result = load_models(filter_main=True)
-        
+
         if len(result) > 0:
             assert result.iloc[0]["provider_clean"] == "OpenAI"
 
@@ -138,26 +143,26 @@ class TestLoadModels:
     def test_load_models_filter_main_false(self, mock_repo, streamlit_mock):
         """Should process models when filter_main=False."""
         from ecologits.model_repository import ArchitectureTypes
-        
+
         mock_model1 = MagicMock()
         mock_model1.name = "gpt-4"
         mock_model1.provider.value = "openai"
         mock_model1.architecture.type = ArchitectureTypes.DENSE
         mock_model1.architecture.parameters = 1700
         mock_model1.warnings = []
-        
+
         mock_model2 = MagicMock()
         mock_model2.name = "unknown-model"
         mock_model2.provider.value = "openai"
         mock_model2.architecture.type = ArchitectureTypes.DENSE
         mock_model2.architecture.parameters = 700
         mock_model2.warnings = []
-        
+
         mock_repo.list_models.return_value = [mock_model1, mock_model2]
         mock_repo.ArchitectureTypes = ArchitectureTypes
-        
+
         result = load_models(filter_main=False)
-        
+
         assert len(result) >= 0  # Just verify it returns a DataFrame
 
 

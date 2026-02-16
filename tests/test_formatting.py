@@ -1,17 +1,17 @@
 """Tests for src/core/formatting.py"""
 
-import pytest
 from unittest.mock import MagicMock
+
 from pint import Quantity
 
 from src.core.formatting import (
+    QImpacts,
+    format_adpe,
     format_energy,
     format_gwp,
-    format_adpe,
+    format_impacts,
     format_pe,
     format_wcf,
-    format_impacts,
-    QImpacts,
 )
 from src.core.units import q
 

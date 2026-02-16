@@ -1,26 +1,24 @@
 """Tests for src/core/equivalences.py"""
 
-import pytest
-
 from src.core.equivalences import (
-    PhysicalActivity,
-    EnergyProduction,
-    format_energy_eq_physical_activity,
-    format_energy_eq_electric_vehicle,
-    format_gwp_eq_streaming,
-    format_energy_eq_electricity_production,
-    format_energy_eq_electricity_consumption_ireland,
-    format_gwp_eq_airplane_paris_nyc,
-    RUNNING_ENERGY_EQ,
-    WALKING_ENERGY_EQ,
-    EV_ENERGY_EQ,
-    STREAMING_GWP_EQ,
-    ONE_PERCENT_WORLD_POPULATION,
+    AIRPLANE_PARIS_NYC_GWP_EQ,
     DAYS_IN_YEAR,
+    EV_ENERGY_EQ,
+    ONE_PERCENT_WORLD_POPULATION,
+    RUNNING_ENERGY_EQ,
+    STREAMING_GWP_EQ,
+    WALKING_ENERGY_EQ,
+    YEARLY_IRELAND_ELECTRICITY_CONSUMPTION,
     YEARLY_NUCLEAR_ENERGY_EQ,
     YEARLY_WIND_ENERGY_EQ,
-    YEARLY_IRELAND_ELECTRICITY_CONSUMPTION,
-    AIRPLANE_PARIS_NYC_GWP_EQ,
+    EnergyProduction,
+    PhysicalActivity,
+    format_energy_eq_electric_vehicle,
+    format_energy_eq_electricity_consumption_ireland,
+    format_energy_eq_electricity_production,
+    format_energy_eq_physical_activity,
+    format_gwp_eq_airplane_paris_nyc,
+    format_gwp_eq_streaming,
 )
 from src.core.units import q
 

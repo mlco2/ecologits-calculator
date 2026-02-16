@@ -1,13 +1,14 @@
 import streamlit as st
+
 from src.core.equivalences import (
+    EnergyProduction,
+    PhysicalActivity,
     format_energy_eq_electric_vehicle,
     format_energy_eq_electricity_consumption_ireland,
     format_energy_eq_electricity_production,
     format_energy_eq_physical_activity,
     format_gwp_eq_airplane_paris_nyc,
     format_gwp_eq_streaming,
-    PhysicalActivity,
-    EnergyProduction,
 )
 from src.ui.plotting import range_plot
 
@@ -22,9 +23,7 @@ def display_impacts(impacts):
             """<p style='font-size:30px;text-align: center;margin-bottom :2px'>⚡️</p><p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Energy</p>""",
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center">Electricity consumption</p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center">Electricity consumption</p>', unsafe_allow_html=True)
         if impacts.ranges:
             range_plot(
                 impacts.energy.magnitude,
@@ -33,18 +32,14 @@ def display_impacts(impacts):
                 impacts.energy.units,
             )
         else:
-            st.latex(
-                rf"\Large {impacts.energy.magnitude:.3g} \ \large {impacts.energy.units}"
-            )
+            st.latex(rf"\Large {impacts.energy.magnitude:.3g} \ \large {impacts.energy.units}")
 
     with col_gwp:
         st.markdown(
             """<p style='font-size:30px;text-align: center;margin-bottom :2px'>🌍️</p><p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>GHG Emissions</p>""",
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center">Effect on global warming</p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center">Effect on global warming</p>', unsafe_allow_html=True)
         if impacts.ranges:
             range_plot(
                 impacts.gwp.magnitude,
@@ -53,9 +48,7 @@ def display_impacts(impacts):
                 impacts.gwp.units,
             )
         else:
-            st.latex(
-                rf"\Large {impacts.gwp.magnitude:.3g} \ \large {impacts.gwp.units}"
-            )
+            st.latex(rf"\Large {impacts.gwp.magnitude:.3g} \ \large {impacts.gwp.units}")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -70,9 +63,7 @@ def display_impacts(impacts):
             """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Abiotic Resources</p>""",
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center"> Use of metals and minerals</p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center"> Use of metals and minerals</p>', unsafe_allow_html=True)
         if impacts.ranges:
             range_plot(
                 impacts.adpe.magnitude,
@@ -81,9 +72,7 @@ def display_impacts(impacts):
                 impacts.adpe.units,
             )
         else:
-            st.latex(
-                rf"\Large {impacts.adpe.magnitude:.3g} \ \large {impacts.adpe.units}"
-            )
+            st.latex(rf"\Large {impacts.adpe.magnitude:.3g} \ \large {impacts.adpe.units}")
 
     with col_pe:
         st.markdown(
@@ -126,9 +115,7 @@ def display_impacts(impacts):
                 impacts.wcf.units,
             )
         else:
-            st.latex(
-                rf"\Large {impacts.wcf.magnitude:.3g} \ \large {impacts.wcf.units}"
-            )
+            st.latex(rf"\Large {impacts.wcf.magnitude:.3g} \ \large {impacts.wcf.units}")
 
 
 ############################################################################################################
@@ -150,9 +137,7 @@ def display_equivalent(impacts):
         if physical_activity == PhysicalActivity.RUNNING:
             physical_activity = "🏃 " + physical_activity.capitalize()
 
-        st.markdown(
-            f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True
-        )
+        st.markdown(f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True)
         st.latex(rf"\Large {distance.magnitude:.3g} \ \large {distance.units}")
         st.markdown(
             '<p align="center"><i>Based on energy consumption<i></p>',
@@ -161,9 +146,7 @@ def display_equivalent(impacts):
 
     with col2:
         ev_eq = format_energy_eq_electric_vehicle(impacts.energy)
-        st.markdown(
-            '<h4 align="center">🔋 Electric Vehicle</h4>', unsafe_allow_html=True
-        )
+        st.markdown('<h4 align="center">🔋 Electric Vehicle</h4>', unsafe_allow_html=True)
         st.latex(rf"\Large {ev_eq.magnitude:.3g} \ \large {ev_eq.units}")
         st.markdown(
             '<p align="center"><i>Based on energy consumption<i></p>',
@@ -193,9 +176,7 @@ def display_equivalent(impacts):
     col4, col5, col6 = st.columns(3)
 
     with col4:
-        electricity_production, count = format_energy_eq_electricity_production(
-            impacts.energy
-        )
+        electricity_production, count = format_energy_eq_electricity_production(impacts.energy)
         if electricity_production == EnergyProduction.NUCLEAR:
             emoji = "☢️"
             name = "Nuclear power plants"
@@ -228,9 +209,7 @@ def display_equivalent(impacts):
             f'<h4 align="center">✈️ {round(paris_nyc_airplane.magnitude):,} Paris ↔ NYC</h4>',
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center"><i>Based on GHG emissions<i></p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center"><i>Based on GHG emissions<i></p>', unsafe_allow_html=True)
 
 
 def display_equivalent_energy(impacts):
@@ -247,9 +226,7 @@ def display_equivalent_energy(impacts):
         if physical_activity == PhysicalActivity.RUNNING:
             physical_activity = "🏃 " + physical_activity.capitalize()
 
-        st.markdown(
-            f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True
-        )
+        st.markdown(f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True)
         st.markdown(
             f"""<p style='font-size:35px;text-align: center'>≈  {distance.magnitude:.3g} <i>{distance.units} </p>""",
             unsafe_allow_html=True,
@@ -290,9 +267,7 @@ def display_equivalent_energy(impacts):
     col4, col5, col6 = st.columns(3)
 
     with col4:
-        electricity_production, count = format_energy_eq_electricity_production(
-            impacts.energy
-        )
+        electricity_production, count = format_energy_eq_electricity_production(impacts.energy)
         if electricity_production == EnergyProduction.NUCLEAR:
             emoji = "☢️"
             name = "Nuclear power plants"
@@ -303,9 +278,7 @@ def display_equivalent_energy(impacts):
             f'<h4 align="center">{emoji} {count.magnitude:.0f} {name} </h4>',
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center">Energy produced yearly </p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center">Energy produced yearly </p>', unsafe_allow_html=True)
 
     with col5:
         ireland_count = format_energy_eq_electricity_consumption_ireland(impacts.energy)
@@ -366,6 +339,4 @@ def display_equivalent_ghg(impacts):
             f'<h4 align="center">✈️ {round(paris_nyc_airplane.magnitude):,} Paris ↔ NYC</h4>',
             unsafe_allow_html=True,
         )
-        st.markdown(
-            '<p align="center"><i>Based on GHG emissions<i></p>', unsafe_allow_html=True
-        )
+        st.markdown('<p align="center"><i>Based on GHG emissions<i></p>', unsafe_allow_html=True)

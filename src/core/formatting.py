@@ -1,15 +1,17 @@
 from dataclasses import dataclass
-from pint import Quantity
+
 from ecologits.impacts.modeling import (
-    Impacts,
-    Energy,
     GWP,
-    ADPe,
     PE,
     WCF,
-    Usage,
+    ADPe,
     Embodied,
+    Energy,
+    Impacts,
+    Usage,
 )
+from pint import Quantity
+
 from src.core.units import q
 
 

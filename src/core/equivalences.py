@@ -1,5 +1,7 @@
 from enum import Enum
+
 from pint import Quantity
+
 from src.core.units import q
 
 
