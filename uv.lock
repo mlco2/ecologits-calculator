@@ -286,7 +286,7 @@ wheels = [
 [[package]]
 name = "ecologits"
 version = "0.9.2"
-source = { git = "https://github.com/genai-impact/ecologits#730af473dd607c7c5164d219878899b4211bbc6c" }
+source = { git = "https://github.com/mlco2/ecologits#730af473dd607c7c5164d219878899b4211bbc6c" }
 dependencies = [
     { name = "packaging" },
     { name = "pydantic" },
@@ -319,7 +319,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ecologits", git = "https://github.com/genai-impact/ecologits" },
+    { name = "ecologits", git = "https://github.com/mlco2/ecologits" },
     { name = "pint", specifier = ">=0.24.4" },
     { name = "plotly", specifier = ">=6.2.0" },
     { name = "ruff", specifier = ">=0.14.7" },

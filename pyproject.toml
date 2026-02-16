@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-ecologits = { git = "https://github.com/genai-impact/ecologits" }
+ecologits = { git = "https://github.com/mlco2/ecologits" }
 
 [dependency-groups]
 dev = [

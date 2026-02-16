@@ -8,7 +8,7 @@ PROMPTS = [
 ]
 PROMPTS = [(s + f" ({v} output tokens)", v) for (s, v) in PROMPTS]
 
-MODEL_REPOSITORY_URL = "https://raw.githubusercontent.com/genai-impact/ecologits/refs/heads/main/ecologits/data/models.json"
+MODEL_REPOSITORY_URL = "https://raw.githubusercontent.com/mlco2/ecologits/refs/heads/main/ecologits/data/models.json"
 
 main_models_openai = [
     "gpt-3.5-turbo",

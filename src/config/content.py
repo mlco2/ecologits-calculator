@@ -1,12 +1,12 @@
 HERO_TEXT = """
 <div align="center" class="hero">
   <a href="https://ecologits.ai/">
-    <img style="max-height: 200px" alt="EcoLogits" src="https://raw.githubusercontent.com/genai-impact/ecologits-calculator/main/assets/logo.png">
+    <img style="max-height: 200px" alt="EcoLogits" src="https://raw.githubusercontent.com/mlco2/ecologits-calculator/main/assets/logo.png">
   </a>
 </div>
 <div align="center">
   <p style="max-width: 850px; text-align: left">
-    <b><a href="https://ecologits.ai/" target="_blank">EcoLogits</a></b> is an <b>open source</b> tool for estimating the <b>energy consumption</b> and <b>environmental footprint</b> when using <b>generative AI models</b>. It is developed by the <b><a href="https://genai-impact.org/">GenAI Impact</a></b> non-profit.
+    <b><a href="https://ecologits.ai/" target="_blank">EcoLogits</a></b> is an <b>open source</b> tool for estimating the <b>energy consumption</b> and <b>environmental footprint</b> when using <b>generative AI models</b>. It is developed by the <b><a href="https://codecarbon.io/">CodeCarbon</a></b> non-profit.
     <br><br>
     This page is the official calculator made for everyone to explore the impact evaluation methodology and raise awareness on sustainable AI.
   </p>
@@ -74,7 +74,7 @@ ABOUT_TEXT = r"""
 
 The rapid evolution of generative AI is reshaping numerous industries and aspects of our daily lives. While these advancements offer some benefits, they also **pose substantial environmental challenges that cannot be overlooked**. Plus the issue of AI's environmental footprint has been mainly discussed at training stage but rarely at the inference stage. That is an issue because **inference impacts for large langauge models (LLMs) can largely overcome the training impacts when deployed at large scales**.
 
-At **[GenAI Impact](https://genai-impact.org/) we are dedicated to understanding and mitigating the environmental impacts of generative AI** through rigorous research, innovative tools, and community engagement. Especially, in early 2024 we have launched an new open-source tool called [EcoLogits](https://github.com/genai-impact/ecologits) that tracks the energy consumption and environmental footprint of using generative AI models through APIs.
+At **[CodeCarbon](https://codecarbon.io/) we are dedicated to understanding and mitigating the environmental impacts of generative AI** through rigorous research, innovative tools, and community engagement. Especially, in early 2024 we have launched an new open-source tool called [EcoLogits](https://github.com/mlco2/ecologits) that tracks the energy consumption and environmental footprint of using generative AI models through APIs.
 
 
 ### 🙋 FAQ 
@@ -85,7 +85,7 @@ Environmental impacts are calculated based on model architecture and parameter c
 
 **Which generative AI models or providers are supported?**
 
-To see the full list of **generative AI providers** currently supported by EcoLogits, see the following [documentation page](https://ecologits.ai/providers/). As of today we only support LLMs but we plan to add support for embeddings, image generation, multi-modal models and more. If you are interested don't hesitate to [join us](https://genai-impact.org/contact/) and accelerate our work!
+To see the full list of **generative AI providers** currently supported by EcoLogits, see the following [documentation page](https://ecologits.ai/providers/). As of today we only support LLMs but we plan to add support for embeddings, image generation, multi-modal models and more. If you are interested don't hesitate to [join us](https://codecarbon.io/contact/) and accelerate our work!
 
 **How to reduce AI environmental impacts?**
 
@@ -94,7 +94,7 @@ To see the full list of **generative AI providers** currently supported by EcoLo
     * Do you really need AI to solve your problem?
     * Do you really need GenAI to solve your problem? (you can read this [paper](https://aclanthology.org/2023.emnlp-industry.39.pdf))
     * Use small and specialized models to solve your problem.
-    * Evaluate before, during and after the development of your project the environmental impacts with tools like 🌱 [EcoLogits](https://github.com/genai-impact/ecologits) or [CodeCarbon](https://github.com/mlco2/codecarbon) (see [more tools](https://github.com/samuelrince/awesome-green-ai))
+    * Evaluate before, during and after the development of your project the environmental impacts with tools like 🌱 [EcoLogits](https://github.com/mlco2/ecologits) or [CodeCarbon](https://github.com/mlco2/codecarbon) (see [more tools](https://github.com/samuelrince/awesome-green-ai))
     * Restrict the use case and limit the usage of your tool or feature to the desired purpose.
 * Do NOT buy new GPUs / hardware
     * Hardware manufacturing for data centers is around 50% of the impact.
@@ -111,9 +111,9 @@ EcoLogits is focused on estimating the environmental impacts of generative AI (o
 
 ### 🤗 Contributing 
 
-We are eager to get feedback from the community, don't hesitate to engage the discussion with us on this [GitHub thread](https://github.com/genai-impact/ecologits/discussions/45) or message us on [LinkedIn](https://www.linkedin.com/company/genai-impact/).
+We are eager to get feedback from the community, don't hesitate to engage the discussion with us on this [GitHub thread](https://github.com/mlco2/ecologits/discussions/45) or message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
 
-We also welcome any open-source contributions on 🌱 **[EcoLogits](https://github.com/genai-impact/ecologits)** or on 🧮 **EcoLogits Calculator**.
+We also welcome any open-source contributions on 🌱 **[EcoLogits](https://github.com/mlco2/ecologits)** or on 🧮 **EcoLogits Calculator**.
 
 
 ### ⚖️ License
@@ -132,8 +132,8 @@ We thank [Data For Good](https://dataforgood.fr/) and [Boavizta](https://boavizt
 
 ### 🤝 Contact
 
-For general question on the project, please use the [GitHub thread](https://github.com/genai-impact/ecologits/discussions/45). 
-Otherwise use our contact form on [genai-impact.org/contact](https://genai-impact.org/contact/).
+For general question on the project, please use the [GitHub thread](https://github.com/mlco2/ecologits/discussions/45). 
+Otherwise you can reach out on our [Discord channel](https://discord.gg/GS9js2XkJR).
 """
 
 SUPPORT_TEXT = r"""
@@ -147,8 +147,8 @@ We aim to keep this tool available as a free and open-source resource for the co
 
 3 easy ways to help this project:
 - Give a ❤️ like to this space
-- Give a ⭐ to the EcoLogits repository on [GitHub](https://github.com/genai-impact/ecologits)
-- Follow us on [LinkedIn](https://fr.linkedin.com/company/genai-impact)
+- Give a ⭐ to the EcoLogits repository on [GitHub](https://github.com/mlco2/ecologits)
+- Follow us on [LinkedIn](https://www.linkedin.com/company/ecologits/)
 
 #### If you have 5 minutes
 
@@ -156,18 +156,17 @@ Share your feedback, ask questions, help other members of the community !
 
 Engage the discussion with us:
 - Start a new discussion on this space or on this 
-[GitHub thread](https://github.com/genai-impact/ecologits/discussions/45) 
-- Use the contact form on [GenAI Impact website](https://genai-impact.org/contact/)
-- message us on [LinkedIn](https://www.linkedin.com/company/genai-impact/).
+[GitHub thread](https://github.com/mlco2/ecologits/discussions/45) 
+- message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
 
 #### If you have more to give
 
 ###### As an individual
 
 We welcome any open source contribution ! You can :
-- Contribute on **[EcoLogits](https://github.com/genai-impact/ecologits)** or on 
+- Contribute on **[EcoLogits](https://github.com/mlco2/ecologits)** or on 
 **EcoLogits Calculator**.
-- Become a an active member of [GenAI Impact ](https://genai-impact.org/contact/) non profit. Get involved in our broader mission !
+- Become a an active member of [CodeCarbon](https://codecarbon.io/) non profit. Get involved in our broader mission !
 
 
 ###### As an organization
@@ -176,7 +175,7 @@ If EcoLogits Calculator brings value to your organization, customers or communit
 - Become a **sponsor**
 - Become a **benefactor member** if you are a public sector or non-profit organization or a university.
 
-Contact us on [GenAI Impact](https://genai-impact.org/contact/)
+Contact us on [CodeCarbon](https://codecarbon.io/)
 """
 
 METHODOLOGY_TEXT = r"""
@@ -284,7 +283,7 @@ We compare the 🌍 GHG emissions (scaled) of the request and of a return flight
 
 We divide the scaled GHG emissions by this value to get the equivalent number of return flights.
 
-##### If you are motivated to help us test and enhance this methodology [contact us](https://genai-impact.org/contact/)! 💪
+##### If you are motivated to help us test and enhance this methodology [contact us](https://codecarbon.io)! 💪
 """
 
 CITATION_LABEL = "BibTeX citation for EcoLogits Calculator and the EcoLogits library:"
