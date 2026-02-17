@@ -11,6 +11,7 @@ from src.config.content import (
 )
 from src.ui.calculator import calculator_mode
 from src.ui.company import company_mode
+from src.ui.comparison import model_comparison_mode
 from src.ui.expert import expert_mode
 from src.ui.token_estimator import token_estimator
 
@@ -28,11 +29,21 @@ st.html("""
 
 st.html(HERO_TEXT)
 
-tab_calculator, tab_expert, tab_company, tab_token, tab_method, tab_about, tab_support = st.tabs(
+(
+    tab_calculator,
+    tab_expert,
+    tab_company,
+    tab_model_comparison,
+    tab_token,
+    tab_method,
+    tab_about,
+    tab_support,
+) = st.tabs(
     [
         "🧮 Calculator",
         "🤓 Expert Mode",
         "🏢 Company Mode",
+        "⚖️ Model comparison",
         "🪙 Tokens estimator",
         "📖 Methodology",
         "ℹ️ About",
@@ -45,6 +56,9 @@ with tab_calculator:
 
 with tab_expert:
     expert_mode()
+
+with tab_model_comparison:
+    model_comparison_mode()
 
 with tab_company:
     company_mode()
