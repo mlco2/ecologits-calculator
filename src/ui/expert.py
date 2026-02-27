@@ -81,7 +81,7 @@ def expert_mode():
 
         with prompt_col:
             output_tokens_exp = st.selectbox(
-                label="Example prompt", options=[x[0] for x in PROMPTS], key=3
+                label="Example prompt", options=[x[0] for x in PROMPTS], key="prompt_exp"
             )
 
         with token_col:

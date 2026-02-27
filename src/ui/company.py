@@ -127,9 +127,8 @@ def company_mode():
             )
             display_impacts(impacts)
 
-    except Exception as e:
+    except Exception:
         st.error("Could not find the model in the repository. Please try another model.")
-        raise e
 
     _, col2, _ = st.columns(3)
     with col2:

@@ -68,7 +68,7 @@ def calculator_mode():
                 '<p align = "center">Making this request to the LLM is equivalent to the following actions :</p>',
                 unsafe_allow_html=True,
             )
-            page = st.radio(" ", ["Energy", "GHG"], horizontal=True)
+            page = st.radio("Equivalent to display", ["Energy", "GHG"], horizontal=True, label_visibility="collapsed")
 
         with st.container(border=True):
             if page == "Energy":
@@ -76,6 +76,5 @@ def calculator_mode():
             else:
                 display_equivalent_ghg(impacts)
 
-    except Exception as e:
+    except Exception:
         st.error("Could not find the model in the repository. Please try another model.")
-        raise e
