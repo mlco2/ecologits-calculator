@@ -24,13 +24,10 @@ LICENCE_TEXT = _load("licence.html")
 CITATION_LABEL = "BibTeX citation for EcoLogits Calculator and the EcoLogits library:"
 
 WARNING_CLOSED_SOURCE = (
-    "The model architecture has not been publicly released, "
-    "expect lower precision of estimations."
+    "The model architecture has not been publicly released, expect lower precision of estimations."
 )
 
-WARNING_MULTI_MODAL = (
-    "The model architecture is multimodal, expect lower precision of estimations."
-)
+WARNING_MULTI_MODAL = "The model architecture is multimodal, expect lower precision of estimations."
 
 WARNING_BOTH = (
     "The model architecture has not been publicly released and is multimodal, "

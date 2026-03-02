@@ -68,7 +68,12 @@ def calculator_mode():
                 '<p align = "center">Making this request to the LLM is equivalent to the following actions :</p>',
                 unsafe_allow_html=True,
             )
-            page = st.radio("Equivalent to display", ["Energy", "GHG"], horizontal=True, label_visibility="collapsed")
+            page = st.radio(
+                "Equivalent to display",
+                ["Energy", "GHG"],
+                horizontal=True,
+                label_visibility="collapsed",
+            )
 
         with st.container(border=True):
             if page == "Energy":
