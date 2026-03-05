@@ -104,6 +104,7 @@ function(params) {{
     )
     gb.configure_column(
         _COL_USAGE_INTENSITY,
+        header_name="Usage Intensity (per time horizon)",
         cellEditor="agSelectCellEditor",
         cellEditorParams={"values": intensity_keys},
         minWidth=240,
@@ -357,15 +358,32 @@ def expert_company_mode():
             pd.DataFrame(impact_records), on=_GROUP_COLS, how="left"
         )
 
+    col_rename = {
+        "llm_provider": "Provider",
+        "model_name": "Model",
+        "usage_location": _COL_LOCATION,
+        f"{horizon_key}_input_tokens": f"{time_horizon_label} Input Tokens",
+        f"{horizon_key}_output_tokens": f"{time_horizon_label} Output Tokens",
+        f"{horizon_key}_cached_tokens": f"{time_horizon_label} Cached Tokens",
+        "energy": "Energy",
+        "gwp": "GWP",
+        "adpe": "ADPe",
+        "pe": "PE",
+        "wcf": "WCF",
+    }
+
     with st.container(border=True):
         col_title, col_download = st.columns([3, 1])
         col_title.markdown(f"#### {time_horizon_label} Token Summary (aggregated by model)")
 
-        df_excel = df_summary.copy()
-        df_excel["usage_location"] = df_excel["usage_location"].str.split(" ", n=1).str[1]
+        display_cols = _GROUP_COLS + _TOKEN_COLS + (_IMPACT_COLS if impact_records else [])
+        df_display = df_summary[display_cols].rename(columns=col_rename)
+
+        df_excel = df_display.copy()
+        df_excel[_COL_LOCATION] = df_excel[_COL_LOCATION].str.split(" ", n=1).str[1]
         excel_buf = io.BytesIO()
         with pd.ExcelWriter(excel_buf, engine="openpyxl") as writer:
-            df_excel.to_excel(writer, index=False, sheet_name="Monthly Token Summary")
+            df_excel.to_excel(writer, index=False, sheet_name=f"{time_horizon_label} Token Summary")
         col_download.download_button(
             label="⬇ Download Excel",
             data=excel_buf.getvalue(),
@@ -374,10 +392,7 @@ def expert_company_mode():
             use_container_width=True,
         )
 
-        display_cols = _GROUP_COLS + _TOKEN_COLS + (
-            _IMPACT_COLS if impact_records else []
-        )
-        st.dataframe(df_summary[display_cols], use_container_width=True)
+        st.dataframe(df_display, use_container_width=True)
 
     if all_impacts:
         aggregated = _aggregate_impacts([imp for _, _, imp in all_impacts])

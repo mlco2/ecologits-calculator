@@ -11,10 +11,10 @@ PROMPTS = [
 ]
 
 USAGE_INTENSITY = {
-    "Light (1-3 per day)": 2,
-    "Medium (4-10 per day)": 7,
-    "Heavy (11-25 per day)": 18,
-    "Silicon Valley Tech Bro (26+ per day)": 30,
+    "Light (x1-x3)": 2,
+    "Medium (x4-x10)": 7,
+    "Heavy (x11-x25)": 18,
+    "Silicon Valley Tech Bro (x26+)": 30,
 }
 
 TIME_HORIZONS = {
