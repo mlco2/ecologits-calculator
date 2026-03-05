@@ -12,6 +12,7 @@ from src.config.content import (
 from src.ui.calculator import calculator_mode
 from src.ui.company import company_mode
 from src.ui.expert import expert_mode
+from src.ui.expert_company import expert_company_mode
 from src.ui.token_estimator import token_estimator
 
 st.set_page_config(layout="wide", page_title="EcoLogits Calculator", page_icon="🧮")
@@ -28,11 +29,12 @@ st.html("""
 
 st.html(HERO_TEXT)
 
-tab_calculator, tab_expert, tab_company, tab_token, tab_method, tab_about, tab_support = st.tabs(
+tab_calculator, tab_expert, tab_company, tab_expert_company, tab_token, tab_method, tab_about, tab_support = st.tabs(
     [
         "🧮 Calculator",
         "🤓 Expert Mode",
         "🏢 Company Mode",
+        "👽 Expert Company Mode",
         "🪙 Tokens estimator",
         "📖 Methodology",
         "ℹ️ About",
@@ -48,6 +50,9 @@ with tab_expert:
 
 with tab_company:
     company_mode()
+
+with tab_expert_company:
+    expert_company_mode()
 
 with tab_token:
     token_estimator()

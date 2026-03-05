@@ -25,7 +25,7 @@ def calculator_mode():
 
         with col3:
             output_tokens = st.selectbox(
-                label="Example prompt", options=[x[0] for x in PROMPTS], index=2
+                label="Example prompt", options=[p.label for p in PROMPTS], index=2
             )
 
         # WARNING DISPLAY
@@ -39,7 +39,7 @@ def calculator_mode():
         display_model_warnings(df, provider, model)
 
     try:
-        output_tokens_count = next(x[1] for x in PROMPTS if x[0] == output_tokens)
+        output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,

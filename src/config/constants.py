@@ -1,12 +1,28 @@
+from src.config.models import PromptTemplate
+
 PROMPTS = [
-    ("Write a Tweet", 50),
-    ("Write an email", 170),
-    ("Write an article summary", 250),
-    ("Small conversation with a chatbot", 400),
-    ("Write a report of 5 pages", 5000),
-    ("Write the code for this app", 15000),
+    PromptTemplate("Write a tweet", 50, 50, 0),
+    PromptTemplate("Write an email", 170, 170, 0),
+    PromptTemplate("Write an article summary", 250, 2000, 0),
+    PromptTemplate("Small conversation with a chatbot", 400, 400, 2000),
+    PromptTemplate("Write a 5-page report", 5000, 10000, 100),
+    PromptTemplate("Write the code for a simple app", 15000, 50000, 100000),
+    PromptTemplate("Assist application development", 100000, 1000000, 10000000),
 ]
-PROMPTS = [(s + f" ({v} output tokens)", v) for (s, v) in PROMPTS]
+
+USAGE_INTENSITY = {
+    "Light (1-3 per day)": 2,
+    "Medium (4-10 per day)": 7,
+    "Heavy (11-25 per day)": 18,
+    "Silicon Valley Tech Bro (26+ per day)": 30,
+}
+
+TIME_HORIZONS = {
+    "Daily": 1,
+    "Weekly": 5,
+    "Monthly": 22,
+    "Yearly": 260,
+}
 
 MODEL_REPOSITORY_URL = (
     "https://raw.githubusercontent.com/mlco2/ecologits/refs/heads/main/ecologits/data/models.json"
