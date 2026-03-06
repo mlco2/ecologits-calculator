@@ -2,14 +2,15 @@ import io
 import json
 import math
 import operator
+
 from collections import defaultdict
 from functools import reduce
 
 import pandas as pd
 import streamlit as st
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
 from ecologits.tracers.utils import llm_impacts
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
 from src.config.constants import COUNTRY_CODES, PROMPTS, TIME_HORIZONS, USAGE_INTENSITY
 from src.core.formatting import (
@@ -141,7 +142,13 @@ def _is_empty(value: object) -> bool:
 def _row_is_complete(row: dict) -> bool:
     return all(
         not _is_empty(row.get(col))
-        for col in [_COL_PROVIDER, _COL_MODEL, _COL_USAGE_TYPE, _COL_USAGE_INTENSITY, _COL_NUM_USERS]
+        for col in [
+            _COL_PROVIDER,
+            _COL_MODEL,
+            _COL_USAGE_TYPE,
+            _COL_USAGE_INTENSITY,
+            _COL_NUM_USERS,
+        ]
     )
 
 
@@ -156,7 +163,8 @@ def _compute_row_tokens(row: dict) -> dict[str, int]:
         "output_tokens": prompt.output_tokens * multiplier,
         "input_tokens": prompt.input_tokens * multiplier,
         "cached_tokens": prompt.cached_tokens * multiplier,
-        "total_tokens": (prompt.output_tokens + prompt.input_tokens + prompt.cached_tokens) * multiplier,
+        "total_tokens": (prompt.output_tokens + prompt.input_tokens + prompt.cached_tokens)
+        * multiplier,
     }
 
 
@@ -171,9 +179,7 @@ def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
 
     provider_raw = match["provider"].values[0]
     model_raw = match["name"].values[0]
-    location_code = _LOCATION_LABEL_TO_CODE.get(
-        row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR"
-    )
+    location_code = _LOCATION_LABEL_TO_CODE.get(row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR")
 
     estimated_latency = latency_estimator.estimate(
         provider=provider_raw,
@@ -257,7 +263,7 @@ def expert_company_mode():
     col_add, col_remove, col_run = st.columns([1, 1, 2])
     with col_add:
         if st.button("➕ Add row", width="stretch"):
-            st.session_state["ec_grid_rows"] = updated_df.to_dict("records") + [dict(_EMPTY_ROW)]
+            st.session_state["ec_grid_rows"] = [*updated_df.to_dict("records"), dict(_EMPTY_ROW)]
             st.session_state["ec_grid_version"] += 1
             st.rerun()
 
@@ -306,9 +312,9 @@ def expert_company_mode():
                 "llm_provider": row[_COL_PROVIDER],
                 "model_name": row[_COL_MODEL],
                 "usage_location": row.get(_COL_LOCATION, _DEFAULT_LOCATION),
-                f"{horizon_key}_input_tokens": tokens["input_tokens"] * time_horizon_days,
+                # f"{horizon_key}_input_tokens": tokens["input_tokens"] * time_horizon_days,
                 f"{horizon_key}_output_tokens": tokens["output_tokens"] * time_horizon_days,
-                f"{horizon_key}_cached_tokens": tokens["cached_tokens"] * time_horizon_days,
+                # f"{horizon_key}_cached_tokens": tokens["cached_tokens"] * time_horizon_days,
                 "impacts_available": impacts is not None,
             }
         )
@@ -317,17 +323,15 @@ def expert_company_mode():
 
     horizon_key = time_horizon_label.lower()
     _TOKEN_COLS = [
-        f"{horizon_key}_input_tokens",
+        # f"{horizon_key}_input_tokens",
         f"{horizon_key}_output_tokens",
-        f"{horizon_key}_cached_tokens",
+        # f"{horizon_key}_cached_tokens",
     ]
     _GROUP_COLS = ["llm_provider", "model_name", "usage_location"]
     _IMPACT_COLS = ["energy", "gwp", "adpe", "pe", "wcf"]
 
     df_summary = (
-        pd.DataFrame(summary_records)
-        .groupby(_GROUP_COLS, as_index=False)[_TOKEN_COLS]
-        .sum()
+        pd.DataFrame(summary_records).groupby(_GROUP_COLS, as_index=False)[_TOKEN_COLS].sum()
     )[_GROUP_COLS + _TOKEN_COLS]
 
     group_impacts: dict[tuple, list[QImpacts]] = defaultdict(list)
@@ -338,29 +342,29 @@ def expert_company_mode():
     impact_records = []
     for (provider, model, location), imps in group_impacts.items():
         agg = _aggregate_impacts(imps)
-        impact_records.append({
-            "llm_provider": provider,
-            "model_name": model,
-            "usage_location": location,
-            "energy": f"{agg.energy.magnitude:.3g} {agg.energy.units}",
-            "gwp": f"{agg.gwp.magnitude:.3g} {agg.gwp.units}",
-            "adpe": f"{agg.adpe.magnitude:.3g} {agg.adpe.units}",
-            "pe": f"{agg.pe.magnitude:.3g} {agg.pe.units}",
-            "wcf": f"{agg.wcf.magnitude:.3g} {agg.wcf.units}",
-        })
+        impact_records.append(
+            {
+                "llm_provider": provider,
+                "model_name": model,
+                "usage_location": location,
+                "energy": f"{agg.energy.magnitude:.3g} {agg.energy.units}",
+                "gwp": f"{agg.gwp.magnitude:.3g} {agg.gwp.units}",
+                "adpe": f"{agg.adpe.magnitude:.3g} {agg.adpe.units}",
+                "pe": f"{agg.pe.magnitude:.3g} {agg.pe.units}",
+                "wcf": f"{agg.wcf.magnitude:.3g} {agg.wcf.units}",
+            }
+        )
 
     if impact_records:
-        df_summary = df_summary.merge(
-            pd.DataFrame(impact_records), on=_GROUP_COLS, how="left"
-        )
+        df_summary = df_summary.merge(pd.DataFrame(impact_records), on=_GROUP_COLS, how="left")
 
     col_rename = {
         "llm_provider": "Provider",
         "model_name": "Model",
         "usage_location": _COL_LOCATION,
-        f"{horizon_key}_input_tokens": f"{time_horizon_label} Input Tokens",
+        # f"{horizon_key}_input_tokens": f"{time_horizon_label} Input Tokens",
         f"{horizon_key}_output_tokens": f"{time_horizon_label} Output Tokens",
-        f"{horizon_key}_cached_tokens": f"{time_horizon_label} Cached Tokens",
+        # f"{horizon_key}_cached_tokens": f"{time_horizon_label} Cached Tokens",
         "energy": "Energy",
         "gwp": "GWP",
         "adpe": "ADPe",
@@ -394,8 +398,8 @@ def expert_company_mode():
         aggregated = _aggregate_impacts([imp for _, _, imp in all_impacts])
         with st.container(border=True):
             st.markdown(
-                f"<h5 align='center'>Aggregated Environmental Impacts "
-                f"(all rows · {time_horizon_label.lower()})</h5>",
+                f"<h5 align='center'>Aggregated {time_horizon_label.lower()} environmental impacts</h5>",
+                # f"(all rows · {time_horizon_label.lower()})</h5>",
                 unsafe_allow_html=True,
             )
             display_impacts(aggregated)

@@ -29,7 +29,16 @@ st.html("""
 
 st.html(HERO_TEXT)
 
-tab_calculator, tab_expert, tab_company, tab_expert_company, tab_token, tab_method, tab_about, tab_support = st.tabs(
+(
+    tab_calculator,
+    tab_expert,
+    tab_company,
+    tab_expert_company,
+    tab_token,
+    tab_method,
+    tab_about,
+    tab_support,
+) = st.tabs(
     [
         "🧮 Calculator",
         "🤓 Expert Mode",
