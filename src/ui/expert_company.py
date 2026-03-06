@@ -252,7 +252,7 @@ def expert_company_mode():
     st.session_state["ec_grid_rows"] = updated_df.to_dict("records")
 
     selected_rows: pd.DataFrame = grid_response["selected_rows"]
-    has_selection = isinstance(selected_rows, pd.DataFrame) and not selected_rows.empty
+    has_selection = isinstance(selected_rows, pd.DataFrame) and len(selected_rows) > 0
 
     col_add, col_remove, col_run = st.columns([1, 1, 2])
     with col_add:
@@ -263,12 +263,9 @@ def expert_company_mode():
 
     with col_remove:
         if st.button("🗑 Remove selected", width="stretch", disabled=not has_selection):
-            keep_df = updated_df.merge(
-                selected_rows[[c for c in selected_rows.columns if c in updated_df.columns]],
-                how="left",
-                indicator=True,
-            ).query('_merge == "left_only"').drop(columns="_merge")
-            remaining = keep_df.to_dict("records") or [dict(_EMPTY_ROW)]
+            selected_list = selected_rows.to_dict("records")
+            current_list = updated_df.to_dict("records")
+            remaining = [r for r in current_list if r not in selected_list] or [dict(_EMPTY_ROW)]
             st.session_state["ec_grid_rows"] = remaining
             st.session_state["ec_grid_version"] += 1
             st.rerun()
