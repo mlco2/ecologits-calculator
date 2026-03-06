@@ -256,14 +256,13 @@ def expert_company_mode():
 
     col_add, col_remove, col_run = st.columns([1, 1, 2])
     with col_add:
-        if st.button("➕ Add row", use_container_width=True):
+        if st.button("➕ Add row", width="stretch"):
             st.session_state["ec_grid_rows"] = updated_df.to_dict("records") + [dict(_EMPTY_ROW)]
             st.session_state["ec_grid_version"] += 1
             st.rerun()
 
     with col_remove:
-        if st.button("🗑 Remove selected", use_container_width=True, disabled=not has_selection):
-            # Anti-join: keep only rows not present in selected_rows.
+        if st.button("🗑 Remove selected", width="stretch", disabled=not has_selection):
             keep_df = updated_df.merge(
                 selected_rows[[c for c in selected_rows.columns if c in updated_df.columns]],
                 how="left",
@@ -288,7 +287,7 @@ def expert_company_mode():
         run = st.button(
             "▶ Run calculations",
             type="primary",
-            use_container_width=True,
+            width="stretch",
             disabled=bool(incomplete) or not rows,
         )
 
@@ -389,10 +388,10 @@ def expert_company_mode():
             data=excel_buf.getvalue(),
             file_name="expert_company_token_summary.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
+            width="stretch",
         )
 
-        st.dataframe(df_display, use_container_width=True)
+        st.dataframe(df_display, width="stretch")
 
     if all_impacts:
         aggregated = _aggregate_impacts([imp for _, _, imp in all_impacts])
