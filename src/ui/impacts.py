@@ -124,12 +124,13 @@ def display_equivalent_energy(impacts):
 
     with col2:
         physical_activity, distance = format_energy_eq_physical_activity(impacts.energy)
+        activity_label = str(physical_activity)
         if physical_activity == PhysicalActivity.WALKING:
-            physical_activity = "🚶 " + physical_activity.capitalize()
+            activity_label = "🚶 " + physical_activity.capitalize()
         if physical_activity == PhysicalActivity.RUNNING:
-            physical_activity = "🏃 " + physical_activity.capitalize()
+            activity_label = "🏃 " + physical_activity.capitalize()
 
-        st.markdown(f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True)
+        st.markdown(f'<h4 align="center">{activity_label}</h4>', unsafe_allow_html=True)
         st.markdown(
             f"""<p style='font-size:35px;text-align: center'>≈  {distance.magnitude:.3g} <i>{distance.units} </p>""",
             unsafe_allow_html=True,

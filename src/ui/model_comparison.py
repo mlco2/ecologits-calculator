@@ -146,8 +146,9 @@ def _extract_raw_value(impacts, attr: str) -> float:
     return float(val.mean) if isinstance(val, RangeValue) else float(val)
 
 
-def _run_llm_impacts(df_models: pd.DataFrame, provider_clean: str, model_clean: str,
-                     location_label: str, tokens: int):
+def _run_llm_impacts(
+    df_models: pd.DataFrame, provider_clean: str, model_clean: str, location_label: str, tokens: int
+):
     """Run llm_impacts for a single configuration; returns Impacts or None."""
     mask = (df_models["provider_clean"] == provider_clean) & (
         df_models["name_clean"] == model_clean
@@ -173,11 +174,27 @@ def _run_llm_impacts(df_models: pd.DataFrame, provider_clean: str, model_clean: 
     return None if result.has_errors else result
 
 
+def _fmt_magnitude(x: float) -> str:
+    """Format a number without scientific notation, with appropriate precision."""
+    a = abs(x)
+    if a >= 1000:
+        return f"{x:,.0f}"
+    if a >= 10:
+        return f"{x:.1f}"
+    if a >= 1:
+        return f"{x:.2f}"
+    if a >= 0.001:
+        return f"{x:.3f}"
+    return f"{x:.2e}"
+
+
 def _compute_all_impact_diffs(df_models: pd.DataFrame, row: dict) -> dict[str, dict[str, str]]:
     """Compute abs and pct diff strings for all impact types for one complete row."""
     tokens = int(row[COL_TOKENS])
     orig = _run_llm_impacts(df_models, row[COL_PROVIDER], row[COL_MODEL], row[COL_LOCATION], tokens)
-    new = _run_llm_impacts(df_models, row[COL_NEW_PROVIDER], row[COL_NEW_MODEL], row[COL_NEW_LOCATION], tokens)
+    new = _run_llm_impacts(
+        df_models, row[COL_NEW_PROVIDER], row[COL_NEW_MODEL], row[COL_NEW_LOCATION], tokens
+    )
 
     if orig is None or new is None:
         return dict(_EMPTY_RAW_DIFFS)
@@ -187,9 +204,14 @@ def _compute_all_impact_diffs(df_models: pd.DataFrame, row: dict) -> dict[str, d
         orig_val = _extract_raw_value(orig, attr)
         new_val = _extract_raw_value(new, attr)
         diff = new_val - orig_val
-        qty = fmt_fn(diff)
-        sign = "+" if diff > 0 else ""
-        abs_str = f"{sign}{qty.magnitude:.3g} {qty.units}"
+        # Use abs(diff) so format_* functions pick the correct unit for positive values
+        qty = fmt_fn(abs(diff))
+        sign = ""
+        if diff > 0:
+            sign = "+"
+        if diff < 0:
+            sign = "-"
+        abs_str = f"{sign}{_fmt_magnitude(qty.magnitude)} {qty.units}"
         if orig_val != 0:
             pct = diff / orig_val * 100
             pct_sign = "+" if pct > 0 else ""
@@ -254,8 +276,12 @@ def model_comparison_mode():
     if len(st.session_state["mc_diff_raw"]) != len(rows):
         st.session_state["mc_diff_raw"] = [dict(_EMPTY_RAW_DIFFS)] * len(rows)
 
-    display_diffs = [_to_display_diffs(raw, display_mode) for raw in st.session_state["mc_diff_raw"]]
-    grid_df = pd.DataFrame([{**row, **diffs} for row, diffs in zip(rows, display_diffs)])
+    display_diffs = [
+        _to_display_diffs(raw, display_mode) for raw in st.session_state["mc_diff_raw"]
+    ]
+    grid_df = pd.DataFrame(
+        [{**row, **diffs} for row, diffs in zip(rows, display_diffs, strict=False)]
+    )
 
     grid_options = _build_grid_options(df_models)
 
@@ -277,13 +303,22 @@ def model_comparison_mode():
     has_selection = isinstance(selected_rows, pd.DataFrame) and len(selected_rows) > 0
 
     # Pair each editable row with its raw diffs for aligned remove/duplicate operations
-    current_pairs = list(zip(_strip_diffs(updated_df.to_dict("records")), st.session_state["mc_diff_raw"]))
+    current_pairs = list(
+        zip(
+            _strip_diffs(updated_df.to_dict("records")),
+            st.session_state["mc_diff_raw"],
+            strict=False,
+        )
+    )
 
     col_add, col_remove, col_dup, col_export, col_compute = st.columns([1, 1, 1, 1, 2])
     with col_add:
         if st.button("➕ Add row", width="stretch"):
             st.session_state["mc_grid_rows"] = [*updated_rows, dict(COMPARISON_EMPTY_ROW)]
-            st.session_state["mc_diff_raw"] = [*st.session_state["mc_diff_raw"], dict(_EMPTY_RAW_DIFFS)]
+            st.session_state["mc_diff_raw"] = [
+                *st.session_state["mc_diff_raw"],
+                dict(_EMPTY_RAW_DIFFS),
+            ]
             st.session_state["mc_grid_version"] += 1
             st.rerun()
 
@@ -293,7 +328,7 @@ def model_comparison_mode():
             remaining = [(r, raw) for r, raw in current_pairs if r not in selected_no_diff]
             if not remaining:
                 remaining = [(dict(COMPARISON_EMPTY_ROW), dict(_EMPTY_RAW_DIFFS))]
-            rem_rows, rem_raw = zip(*remaining)
+            rem_rows, rem_raw = zip(*remaining, strict=False)
             st.session_state["mc_grid_rows"] = _apply_autofill(list(rem_rows))
             st.session_state["mc_diff_raw"] = list(rem_raw)
             st.session_state["mc_grid_version"] += 1
@@ -312,12 +347,16 @@ def model_comparison_mode():
 
     with col_export:
         export_records = []
-        for row, raw in zip(st.session_state["mc_grid_rows"], st.session_state["mc_diff_raw"]):
+        for row, raw in zip(
+            st.session_state["mc_grid_rows"], st.session_state["mc_diff_raw"], strict=False
+        ):
             export_row = dict(row)
             for col in DIFF_COLS:
                 abs_val = raw[col]["abs"]
                 pct_val = raw[col]["pct"]
-                export_row[col] = f"{abs_val} ({pct_val})" if abs_val and pct_val else abs_val or pct_val
+                export_row[col] = (
+                    f"{abs_val} ({pct_val})" if abs_val and pct_val else abs_val or pct_val
+                )
             export_records.append(export_row)
         df_export = pd.DataFrame(export_records)
         for col in [COL_LOCATION, COL_NEW_LOCATION]:
@@ -334,7 +373,9 @@ def model_comparison_mode():
             width="stretch",
         )
 
-    incomplete = [i + 1 for i, r in enumerate(st.session_state["mc_grid_rows"]) if not _row_is_complete(r)]
+    incomplete = [
+        i + 1 for i, r in enumerate(st.session_state["mc_grid_rows"]) if not _row_is_complete(r)
+    ]
     with col_compute:
         if st.button(
             "▶ Compute impact difference",
@@ -343,7 +384,9 @@ def model_comparison_mode():
             disabled=bool(incomplete) or not rows,
         ):
             st.session_state["mc_diff_raw"] = [
-                _compute_all_impact_diffs(df_models, row) if _row_is_complete(row) else dict(_EMPTY_RAW_DIFFS)
+                _compute_all_impact_diffs(df_models, row)
+                if _row_is_complete(row)
+                else dict(_EMPTY_RAW_DIFFS)
                 for row in st.session_state["mc_grid_rows"]
             ]
             st.session_state["mc_grid_version"] += 1

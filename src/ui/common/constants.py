@@ -33,6 +33,7 @@ COMPARISON_EMPTY_ROW = {
 }
 EMPTY_DIFFS: dict[str, str] = dict.fromkeys(DIFF_COLS, "")
 
+
 def build_provider_models_map(df: pd.DataFrame) -> dict[str, list[str]]:
     """Build a mapping of provider → sorted list of model names."""
     return {
