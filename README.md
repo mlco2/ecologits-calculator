@@ -16,11 +16,11 @@ license: cc-by-sa-4.0
   <a href="https://ecologits.ai/">
     <img alt="EcoLogits" src="https://raw.githubusercontent.com/mlco2/ecologits-calculator/main/assets/logo.png" width="200" />
   </a>
-  
+
   <br />
-  
+
   **Measure the Environmental Impact of Generative AI**
-  
+
   [![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-blue.svg)](LICENSE)
   [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
   [![Streamlit](https://img.shields.io/badge/built%20with-streamlit-FF4B4B.svg)](https://streamlit.io/)
