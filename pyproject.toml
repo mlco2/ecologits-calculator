@@ -6,10 +6,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "ecologits>=0.9.0,<0.10.0",
+    "openpyxl>=3.1.0",
     "pint>=0.24.4",
     "plotly>=6.2.0",
     "ruff>=0.14.7",
     "streamlit>=1.47.1",
+    "streamlit-aggrid>=1.0.0",
     "tiktoken>=0.9.0",
 ]
 
@@ -54,6 +56,7 @@ ignore = [
     "D104",   # Missing docstring in public package
     "RUF001",
     "D107",   # Missing docstring in __init__
+    "N806",   # Variable in function should be lowercase
 ]
 
 [tool.ruff.lint.pydocstyle]

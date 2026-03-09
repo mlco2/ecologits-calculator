@@ -12,7 +12,10 @@ from src.config.content import (
 from src.ui.calculator import calculator_mode
 from src.ui.company import company_mode
 from src.ui.expert import expert_mode
+from src.ui.expert_company import expert_company_mode
 from src.ui.token_estimator import token_estimator
+
+_MODES = ["😀 Standard", "🤓 Expert"]
 
 st.set_page_config(layout="wide", page_title="EcoLogits Calculator", page_icon="🧮")
 
@@ -28,10 +31,16 @@ st.html("""
 
 st.html(HERO_TEXT)
 
-tab_calculator, tab_expert, tab_company, tab_token, tab_method, tab_about, tab_support = st.tabs(
+(
+    tab_calculator,
+    tab_company,
+    tab_token,
+    tab_method,
+    tab_about,
+    tab_support,
+) = st.tabs(
     [
         "🧮 Calculator",
-        "🤓 Expert Mode",
         "🏢 Company Mode",
         "🪙 Tokens estimator",
         "📖 Methodology",
@@ -41,13 +50,30 @@ tab_calculator, tab_expert, tab_company, tab_token, tab_method, tab_about, tab_s
 )
 
 with tab_calculator:
-    calculator_mode()
-
-with tab_expert:
-    expert_mode()
+    calculator_mode_selection = st.pills(
+        "Calculator mode",
+        _MODES,
+        default="😀 Standard",
+        selection_mode="single",
+        label_visibility="collapsed",
+    )
+    if calculator_mode_selection == "🤓 Expert":
+        expert_mode()
+    else:
+        calculator_mode()
 
 with tab_company:
-    company_mode()
+    company_mode_selection = st.pills(
+        "Company mode",
+        _MODES,
+        default="😀 Standard",
+        selection_mode="single",
+        label_visibility="collapsed",
+    )
+    if company_mode_selection == "🤓 Expert":
+        expert_company_mode()
+    else:
+        company_mode()
 
 with tab_token:
     token_estimator()

@@ -5,7 +5,7 @@ import streamlit as st
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
 
-from src.config.constants import COUNTRY_CODES
+from src.config.constants import COUNTRY_CODES, TIME_HORIZONS
 from src.core.formatting import format_impacts
 from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
@@ -64,20 +64,13 @@ def company_mode():
 
         time_horizon_label = col3.pills(
             label="Time horizon",
-            options=["Daily", "Weekly", "Monthly", "Yearly"],
+            options=list(TIME_HORIZONS.keys()),
             default="Yearly",
             selection_mode="single",
         )
 
         try:
-            # Map labels to number of days
-            time_horizon_mapping = {
-                "Daily": 1,
-                "Weekly": 5,
-                "Monthly": 22,
-                "Yearly": 260,
-            }
-            time_horizon = time_horizon_mapping[time_horizon_label]
+            time_horizon = TIME_HORIZONS[time_horizon_label]
         except KeyError:
             st.error("Invalid time horizon selected. Please choose a valid option.")
             return

@@ -1,5 +1,7 @@
 ecologits==0.9.1
+openpyxl
 pint
 plotly
 streamlit
+streamlit-aggrid
 tiktoken
