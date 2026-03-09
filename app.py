@@ -13,7 +13,6 @@ from src.ui.calculator import calculator_mode
 from src.ui.company import company_mode
 from src.ui.expert import expert_mode
 from src.ui.expert_company import expert_company_mode
-from src.ui.model_comparison import model_comparison_mode
 from src.ui.token_estimator import token_estimator
 
 _MODES = ["😀 Standard", "🤓 Expert"]
@@ -24,20 +23,17 @@ with open("src/ui/style.css") as css:
     st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
 
-st.html(
-    """
+st.html("""
 <div style="background: #00BF63; padding: 10px; border-radius: 10px; margin-bottom: 0px;">
     <p align="center" style="color: white; margin: 0;">📣 EcoLogits is joining CodeCarbon non-profit ! <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank" style="color: white; text-decoration: underline; font-weight: bold;">Full announcement here</a></p>
 </div>
-"""
-)
+""")
 
 st.html(HERO_TEXT)
 
 (
     tab_calculator,
     tab_company,
-    tab_model_comparison,
     tab_token,
     tab_method,
     tab_about,
@@ -46,7 +42,6 @@ st.html(HERO_TEXT)
     [
         "🧮 Calculator",
         "🏢 Company Mode",
-        "⚖️ Model Choice Impact",
         "🪙 Tokens estimator",
         "📖 Methodology",
         "ℹ️ About",
@@ -79,9 +74,6 @@ with tab_company:
         expert_company_mode()
     else:
         company_mode()
-
-with tab_model_comparison:
-    model_comparison_mode()
 
 with tab_token:
     token_estimator()

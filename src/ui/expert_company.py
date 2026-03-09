@@ -1,5 +1,6 @@
 import io
 import json
+import math
 import operator
 
 from collections import defaultdict
@@ -11,7 +12,7 @@ import streamlit as st
 from ecologits.tracers.utils import llm_impacts
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
-from src.config.constants import PROMPTS, TIME_HORIZONS, USAGE_INTENSITY
+from src.config.constants import COUNTRY_CODES, PROMPTS, TIME_HORIZONS, USAGE_INTENSITY
 from src.core.formatting import (
     QImpacts,
     format_adpe,
@@ -23,36 +24,48 @@ from src.core.formatting import (
 )
 from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
-from src.ui.common import (
-    COL_LOCATION,
-    COL_MODEL,
-    COL_PROVIDER,
-    DEFAULT_LOCATION,
-    INCOMPLETE_CELL_STYLE,
-    LOCATION_LABEL_TO_CODE,
-    LOCATION_LABELS,
-    build_provider_models_map,
-    is_empty,
-)
 from src.ui.impacts import display_impacts
 
+_COL_PROVIDER = "Provider"
+_COL_MODEL = "Model"
 _COL_USAGE_TYPE = "Usage Type"
 _COL_USAGE_INTENSITY = "Usage Intensity"
 _COL_NUM_USERS = "Number of Users"
+_COL_LOCATION = "Usage Location"
+
+_LOCATION_LABELS = [label for label, _ in COUNTRY_CODES]
+_LOCATION_LABEL_TO_CODE = dict(COUNTRY_CODES)
+_DEFAULT_LOCATION = _LOCATION_LABELS[0]  # "🌎 World"
 
 _EMPTY_ROW = {
-    COL_PROVIDER: None,
-    COL_MODEL: None,
+    _COL_PROVIDER: None,
+    _COL_MODEL: None,
     _COL_USAGE_TYPE: None,
     _COL_USAGE_INTENSITY: None,
     _COL_NUM_USERS: None,
-    COL_LOCATION: DEFAULT_LOCATION,
+    _COL_LOCATION: _DEFAULT_LOCATION,
 }
+
+_INCOMPLETE_CELL_STYLE = JsCode("""
+function(params) {
+    if (params.value === null || params.value === undefined || params.value === '') {
+        return { backgroundColor: '#ffd6d6', border: '1px solid #ff4444' };
+    }
+    return {};
+}
+""")
+
+
+def _build_provider_models_map(df: pd.DataFrame) -> dict[str, list[str]]:
+    return {
+        provider: sorted(group["name_clean"].unique().tolist())
+        for provider, group in df.groupby("provider_clean")
+    }
 
 
 def _build_grid_options(df: pd.DataFrame) -> dict:
     providers = sorted(df["provider_clean"].unique().tolist())
-    provider_models_map = build_provider_models_map(df)
+    provider_models_map = _build_provider_models_map(df)
     prompt_labels = [p.label for p in PROMPTS]
     intensity_keys = list(USAGE_INTENSITY.keys())
 
@@ -60,7 +73,7 @@ def _build_grid_options(df: pd.DataFrame) -> dict:
         f"""
 function(params) {{
     var providerModelsMap = {json.dumps(provider_models_map)};
-    var provider = params.data["{COL_PROVIDER}"];
+    var provider = params.data["{_COL_PROVIDER}"];
     return {{ values: providerModelsMap[provider] || [] }};
 }}
 """
@@ -70,16 +83,16 @@ function(params) {{
         pd.DataFrame([_EMPTY_ROW]),
         editable=True,
     )
-    gb.configure_default_column(editable=True, resizable=True, cellStyle=INCOMPLETE_CELL_STYLE)
+    gb.configure_default_column(editable=True, resizable=True, cellStyle=_INCOMPLETE_CELL_STYLE)
 
     gb.configure_column(
-        COL_PROVIDER,
+        _COL_PROVIDER,
         cellEditor="agSelectCellEditor",
         cellEditorParams={"values": providers},
         minWidth=150,
     )
     gb.configure_column(
-        COL_MODEL,
+        _COL_MODEL,
         cellEditor="agSelectCellEditor",
         cellEditorParams=model_cell_editor_params,
         minWidth=200,
@@ -105,23 +118,33 @@ function(params) {{
         minWidth=160,
     )
     gb.configure_column(
-        COL_LOCATION,
+        _COL_LOCATION,
         cellEditor="agSelectCellEditor",
-        cellEditorParams={"values": LOCATION_LABELS},
+        cellEditorParams={"values": _LOCATION_LABELS},
         minWidth=200,
     )
     gb.configure_selection(selection_mode="multiple", use_checkbox=True)
     gb.configure_grid_options(singleClickEdit=True, stopEditingWhenCellsLoseFocus=True)
 
-    return gb.build()  # type: ignore[no-any-return]
+    return gb.build()
+
+
+def _is_empty(value: object) -> bool:
+    """Return True for None, empty string, zero, or NaN."""
+    if value is None or value == "":
+        return True
+    try:
+        return math.isnan(float(value))  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return False
 
 
 def _row_is_complete(row: dict) -> bool:
     return all(
-        not is_empty(row.get(col))
+        not _is_empty(row.get(col))
         for col in [
-            COL_PROVIDER,
-            COL_MODEL,
+            _COL_PROVIDER,
+            _COL_MODEL,
             _COL_USAGE_TYPE,
             _COL_USAGE_INTENSITY,
             _COL_NUM_USERS,
@@ -147,8 +170,8 @@ def _compute_row_tokens(row: dict) -> dict[str, int]:
 
 def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
     """Run ecologits llm_impacts for a single row, returning formatted impacts or None."""
-    mask = (df_models["provider_clean"] == row[COL_PROVIDER]) & (
-        df_models["name_clean"] == row[COL_MODEL]
+    mask = (df_models["provider_clean"] == row[_COL_PROVIDER]) & (
+        df_models["name_clean"] == row[_COL_MODEL]
     )
     match = df_models[mask]
     if match.empty:
@@ -156,7 +179,7 @@ def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
 
     provider_raw = match["provider"].values[0]
     model_raw = match["name"].values[0]
-    location_code = LOCATION_LABEL_TO_CODE.get(row.get(COL_LOCATION, DEFAULT_LOCATION), "WOR")
+    location_code = _LOCATION_LABEL_TO_CODE.get(row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR")
 
     estimated_latency = latency_estimator.estimate(
         provider=provider_raw,
@@ -237,18 +260,13 @@ def expert_company_mode():
 
     col_add, col_remove, col_run = st.columns([1, 1, 2])
     with col_add:
-        if st.button("➕ Add row", width="stretch", key="ec_add_row"):
+        if st.button("➕ Add row", width="stretch"):
             st.session_state["ec_grid_rows"] = [*updated_df.to_dict("records"), dict(_EMPTY_ROW)]
             st.session_state["ec_grid_version"] += 1
             st.rerun()
 
     with col_remove:
-        if st.button(
-            "🗑 Remove selected",
-            width="stretch",
-            disabled=not has_selection,
-            key="ec_remove_selected",
-        ):
+        if st.button("🗑 Remove selected", width="stretch", disabled=not has_selection):
             selected_list = selected_rows.to_dict("records")
             current_list = updated_df.to_dict("records")
             remaining = [r for r in current_list if r not in selected_list] or [dict(_EMPTY_ROW)]
@@ -289,9 +307,9 @@ def expert_company_mode():
         horizon_key = time_horizon_label.lower()
         summary_records.append(
             {
-                "llm_provider": row[COL_PROVIDER],
-                "model_name": row[COL_MODEL],
-                "usage_location": row.get(COL_LOCATION, DEFAULT_LOCATION),
+                "llm_provider": row[_COL_PROVIDER],
+                "model_name": row[_COL_MODEL],
+                "usage_location": row.get(_COL_LOCATION, _DEFAULT_LOCATION),
                 # f"{horizon_key}_input_tokens": tokens["input_tokens"] * time_horizon_days,
                 f"{horizon_key}_output_tokens": tokens["output_tokens"] * time_horizon_days,
                 # f"{horizon_key}_cached_tokens": tokens["cached_tokens"] * time_horizon_days,
@@ -316,7 +334,7 @@ def expert_company_mode():
 
     group_impacts: dict[tuple, list[QImpacts]] = defaultdict(list)
     for _, row, imp in all_impacts:
-        key = (row[COL_PROVIDER], row[COL_MODEL], row.get(COL_LOCATION, DEFAULT_LOCATION))
+        key = (row[_COL_PROVIDER], row[_COL_MODEL], row.get(_COL_LOCATION, _DEFAULT_LOCATION))
         group_impacts[key].append(imp)
 
     impact_records = []
@@ -341,7 +359,7 @@ def expert_company_mode():
     col_rename = {
         "llm_provider": "Provider",
         "model_name": "Model",
-        "usage_location": COL_LOCATION,
+        "usage_location": _COL_LOCATION,
         # f"{horizon_key}_input_tokens": f"{time_horizon_label} Input Tokens",
         f"{horizon_key}_output_tokens": f"{time_horizon_label} Output Tokens",
         # f"{horizon_key}_cached_tokens": f"{time_horizon_label} Cached Tokens",
@@ -360,7 +378,7 @@ def expert_company_mode():
         df_display = df_summary[display_cols].rename(columns=col_rename)
 
         df_excel = df_display.copy()
-        df_excel[COL_LOCATION] = df_excel[COL_LOCATION].str.split(" ", n=1).str[1]
+        df_excel[_COL_LOCATION] = df_excel[_COL_LOCATION].str.split(" ", n=1).str[1]
         excel_buf = io.BytesIO()
         with pd.ExcelWriter(excel_buf, engine="openpyxl") as writer:
             df_excel.to_excel(writer, index=False, sheet_name=f"{time_horizon_label} Token Summary")

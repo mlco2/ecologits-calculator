@@ -6,3 +6,4 @@ Chose a provider, a model and an example of usage (prompts).
 2. You can then check for equivalences of these impacts.
 
 3. The calculator will extrapolate your example to simulate how impacts can scale rapidly if only one percent of the world population make the same prompt everyday for one year.
+
