@@ -140,7 +140,7 @@ class TestFormatEnergyEqElectricityProduction:
         energy = q("0.001 kWh")
         prod_type, quantity = format_energy_eq_electricity_production(energy)
         assert prod_type in [EnergyProduction.NUCLEAR, EnergyProduction.WIND]
-        assert isinstance(quantity.magnitude, (int, float))
+        assert isinstance(quantity.magnitude, int | float)
 
     def test_high_energy_returns_nuclear(self):
         """Very high energy should return NUCLEAR production."""

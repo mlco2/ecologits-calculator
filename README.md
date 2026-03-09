@@ -16,11 +16,11 @@ license: cc-by-sa-4.0
   <a href="https://ecologits.ai/">
     <img alt="EcoLogits" src="https://raw.githubusercontent.com/mlco2/ecologits-calculator/main/assets/logo.png" width="200" />
   </a>
-  
+
   <br />
-  
+
   **Measure the Environmental Impact of Generative AI**
-  
+
   [![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-blue.svg)](LICENSE)
   [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
   [![Streamlit](https://img.shields.io/badge/built%20with-streamlit-FF4B4B.svg)](https://streamlit.io/)
@@ -44,6 +44,8 @@ The calculator provides:
 
 - **🧮 Interactive Calculator**: Easily estimate environmental impacts by selecting a provider, model, and example usage
 - **🤓 Expert Mode**: Advanced options for users who want granular control over calculations
+- **🏢 Company Mode**: Estimate the aggregate environmental footprint of AI usage across an organisation
+- **👽 Expert Company Mode**: Multi-model, multi-scenario analysis of token volumes and aggregated environmental impacts.
 - **🪙 Token Estimator**: Understand tokenization and estimate token counts for your inputs
 - **📊 Visualization**: Interactive charts showing environmental equivalences and scaling projections
 - **🌐 Multi-Provider Support**: Evaluate impacts across different AI providers and models
