@@ -18,8 +18,6 @@ from src.ui.impacts import display_impacts
 
 
 def expert_mode():
-    st.markdown("### 🤓 Expert mode")
-
     with st.container(border=True):
         st.markdown("###### Configure the model")
 

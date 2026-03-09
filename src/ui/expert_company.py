@@ -218,8 +218,6 @@ def _aggregate_impacts(impacts_list: list[QImpacts]) -> QImpacts:
 
 def expert_company_mode():
     """Expert Company Mode: multi-model, multi-scenario environmental impact calculator."""
-    st.markdown("### 👽 Expert Company Mode")
-
     col_subtitle, col_horizon = st.columns([3, 1])
     with col_subtitle:
         st.markdown(
