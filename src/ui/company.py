@@ -93,9 +93,6 @@ def company_mode():
             "name"
         ].values[0]
 
-        display_model_warnings(df, provider, model)
-
-    try:
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,
@@ -109,7 +106,9 @@ def company_mode():
             electricity_mix_zone=electricity_mix.zone,
         )
 
-        impacts, _, _ = format_impacts(impacts)
+        display_model_warnings(impacts)
+
+        impacts_formatted, _, _ = format_impacts(impacts)
 
         with st.container(border=True):
             st.markdown(
@@ -118,10 +117,8 @@ def company_mode():
                 f"<p align = 'center'><i>on a {time_horizon_label.lower()} basis in my company</i></p>",
                 unsafe_allow_html=True,
             )
-            display_impacts(impacts)
+            display_impacts(impacts_formatted)
 
-    except Exception:
-        st.error("Could not find the model in the repository. Please try another model.")
 
     _, col2, _ = st.columns(3)
     with col2:

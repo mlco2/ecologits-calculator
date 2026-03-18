@@ -13,102 +13,67 @@ from src.core.equivalences import (
 from src.ui.plotting import range_plot
 
 
-def display_impacts(impacts):
-    st.space(5)
-    _, col_energy, col_gwp, _ = st.columns([1, 2, 2, 1])
+def display_mono_impact(impact_lablel, values, icon):
 
-    with col_energy:
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'>⚡️</p><p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Energy</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown('<p align="center">Electricity consumption</p>', unsafe_allow_html=True)
-        st.latex(rf"\Large {impacts.energy.magnitude:.3g} \ \large {impacts.energy.units}")
-        if impacts.ranges:
-            range_plot(
-                impacts.energy.magnitude,
-                impacts.energy_min.magnitude,
-                impacts.energy_max.magnitude,
-                impacts.energy.units,
+    #st.markdown(f"""<p style='font-size:25px; text-align: left;margin-left: 0px'><strong>{icon} {impact_lablel}</strong></p>""", unsafe_allow_html=True)
+    with st.container(border=True):
+
+        col_impacts, col_mid, col_eq = st.columns([2, 1, 2])
+        col_impacts.markdown(f"""<p style='font-size:25px; text-align: center;margin-left: 0px'>{icon}</p>""", unsafe_allow_html=True)
+        col_impacts.markdown(f"""<p style='font-size:25px; text-align: center;margin-left: 0px'><strong>{impact_lablel}</strong></p>""", unsafe_allow_html=True)
+        col_impacts.latex(rf"\Large {values.magnitude:.3g} \ \large {values.units}", help="Average value from a range compute. Min range : Max range : ")
+
+        #col_mid.markdown("|")
+        #col_mid.
+
+        col_eq.markdown("<p align=center>Equivalent to</p>", unsafe_allow_html=True)
+
+
+def display_impacts(impacts_output = None, impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water"]):
+
+    if len(impacts_to_display) == 0:
+        st.warning("Select at least one impact to display")
+
+    col_left, col_right = st.columns(2)
+
+    if "Electricity" in impacts_to_display:
+        with col_left.container():
+            display_mono_impact(
+                impact_lablel="Electricity consumption",
+                values=impacts_output.energy,
+                icon="⚡️"
             )
 
-    with col_gwp:
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'>🌍️</p><p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>GHG Emissions</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown('<p align="center">Effect on global warming</p>', unsafe_allow_html=True)
-        st.latex(rf"\Large {impacts.gwp.magnitude:.3g} \ \large {impacts.gwp.units}")
-        if impacts.ranges:
-            range_plot(
-                impacts.gwp.magnitude,
-                impacts.gwp_min.magnitude,
-                impacts.gwp_max.magnitude,
-                impacts.gwp.units,
+    if "Carbon Footprint" in impacts_to_display:
+        with col_right.container():
+            display_mono_impact(
+                impact_lablel="Carbon Footprint",
+                values=impacts_output.gwp,
+                icon="🌍️"
             )
 
-    st.space(5)
-
-    col_adpe, col_pe, col_wcf = st.columns(3)
-
-    with col_adpe:
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'>🪨</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Abiotic Resources</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown('<p align="center"> Use of metals and minerals</p>', unsafe_allow_html=True)
-        st.latex(rf"\Large {impacts.adpe.magnitude:.3g} \ \large {impacts.adpe.units}")
-        if impacts.ranges:
-            range_plot(
-                impacts.adpe.magnitude,
-                impacts.adpe_min.magnitude,
-                impacts.adpe_max.magnitude,
-                impacts.adpe.units,
+    if "Water" in impacts_to_display:
+        with col_left.container():
+            display_mono_impact(
+                impact_lablel="Water",
+                values=impacts_output.wcf,
+                icon="🚰"
             )
 
-    with col_pe:
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'>⛽️</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Primary Energy</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<p align="center">Use of natural energy resources</p>',
-            unsafe_allow_html=True,
-        )
-        st.latex(rf"\Large {impacts.pe.magnitude:.3g} \ \large {impacts.pe.units}")
-        if impacts.ranges:
-            range_plot(
-                impacts.pe.magnitude,
-                impacts.pe_min.magnitude,
-                impacts.pe_max.magnitude,
-                impacts.pe.units,
+    if "Metals & Minerals" in impacts_to_display:
+        with col_right.container():
+            display_mono_impact(
+                impact_lablel="Metals & Minerals",
+                values=impacts_output.adpe,
+                icon="🪨"
             )
 
-    with col_wcf:
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'>🚰</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>Water</p>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown('<p align="center">Water consumption</p>', unsafe_allow_html=True)
-        st.latex(rf"\Large {impacts.wcf.magnitude:.3g} \ \large {impacts.wcf.units}")
-        if impacts.ranges:
-            range_plot(
-                impacts.wcf.magnitude,
-                impacts.wcf_min.magnitude,
-                impacts.wcf_max.magnitude,
-                impacts.wcf.units,
+    if "Fossile Fuels" in impacts_to_display:
+        with col_left.container():
+            display_mono_impact(
+                impact_lablel="Fossile fuels",
+                values=impacts_output.pe,
+                icon="⛽️"
             )
 
 

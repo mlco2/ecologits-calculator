@@ -28,6 +28,14 @@ def calculator_mode():
                 label="Example prompt", options=[p.label for p in PROMPTS], index=2
             )
 
+        list_impacts = st.pills(
+            label="Impacts to display",
+            options=["Electricity", "Carbon Footprint", "Water", "Metals & Minerals", "Fossile Fuels"],
+            selection_mode="multi",
+            default=["Electricity", "Carbon Footprint", "Water"],
+            width="stretch"
+        )
+
         # WARNING DISPLAY
         provider_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
             "provider"
@@ -36,10 +44,8 @@ def calculator_mode():
             "name"
         ].values[0]
 
-        display_model_warnings(df, provider, model)
-
-    try:
         output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
+        
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,
@@ -52,34 +58,14 @@ def calculator_mode():
             request_latency=estimated_latency,
         )
 
-        impacts, _, _ = format_impacts(impacts)
+        display_model_warnings(impacts)
 
-        with st.container(border=True):
-            st.markdown(
-                '<h3 align = "center">Environmental impacts</h3>',
-                unsafe_allow_html=True,
-            )
-            # st.markdown('<p align = "center">To understand how the environmental impacts are computed go to the 📖 Methodology tab.</p>', unsafe_allow_html=True)
-            display_impacts(impacts)
+        impacts_formatted, _, _ = format_impacts(impacts)
 
-        with st.container(border=False):
-            st.markdown('<h3 align = "center">Equivalences</h3>', unsafe_allow_html=True)
-            st.markdown(
-                '<p align = "center">Making this request to the LLM is equivalent to the following actions :</p>',
-                unsafe_allow_html=True,
-            )
-            page = st.radio(
-                "Equivalent to display",
-                ["Energy", "GHG"],
-                horizontal=True,
-                label_visibility="collapsed",
-            )
+        #st.write(impacts)
 
-        with st.container(border=True):
-            if page == "Energy":
-                display_equivalent_energy(impacts)
-            else:
-                display_equivalent_ghg(impacts)
-
-    except Exception:
-        st.error("Could not find the model in the repository. Please try another model.")
+        st.markdown(
+            '<h3 align = "center">Environmental impacts</h3>',
+            unsafe_allow_html=True,
+        )
+        display_impacts(impacts_output=impacts_formatted, impacts_to_display=list_impacts)
