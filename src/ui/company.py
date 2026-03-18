@@ -7,7 +7,6 @@ from ecologits.tracers.utils import llm_impacts
 
 from src.config.constants import COUNTRY_CODES
 from src.core.formatting import format_impacts
-from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
     format_country_name,
 )
@@ -103,16 +102,11 @@ def company_mode():
         display_model_warnings(df, provider, model)
 
     try:
-        estimated_latency = latency_estimator.estimate(
-            provider=provider_raw,
-            model_name=model_raw,
-            output_tokens=output_tokens_count * time_horizon,
-        )
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
             output_token_count=output_tokens_count * time_horizon,
-            request_latency=estimated_latency,
+            request_latency=float("inf"),
             electricity_mix_zone=electricity_mix.zone,
         )
 

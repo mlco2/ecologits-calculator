@@ -7,7 +7,6 @@ from src.config.content import (
     HOW_TO_TEXT,
 )
 from src.core.formatting import format_impacts
-from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.impacts import display_equivalent_energy, display_equivalent_ghg, display_impacts
@@ -40,16 +39,11 @@ def calculator_mode():
 
     try:
         output_tokens_count = next(x[1] for x in PROMPTS if x[0] == output_tokens)
-        estimated_latency = latency_estimator.estimate(
-            provider=provider_raw,
-            model_name=model_raw,
-            output_tokens=output_tokens_count,
-        )
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
             output_token_count=output_tokens_count,
-            request_latency=estimated_latency,
+            request_latency=float("inf"),
         )
 
         impacts, _, _ = format_impacts(impacts)
