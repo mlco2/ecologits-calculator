@@ -1,16 +1,16 @@
-from enum import Enum
+from enum import StrEnum
 
 from pint import Quantity
 
 from src.core.units import q
 
 
-class PhysicalActivity(str, Enum):
+class PhysicalActivity(StrEnum):
     RUNNING = "running"
     WALKING = "walking"
 
 
-class EnergyProduction(str, Enum):
+class EnergyProduction(StrEnum):
     NUCLEAR = "nuclear"
     WIND = "wind"
 
