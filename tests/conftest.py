@@ -4,6 +4,14 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+# Patch st.cache_data BEFORE any test module imports src.repositories.models,
+# so the decorator is a no-op instead of the real Streamlit caching wrapper.
+_cache_data_patcher = patch(
+    "streamlit.cache_data",
+    side_effect=lambda f=None, **kwargs: f if f is not None else (lambda f: f),
+)
+_cache_data_patcher.start()
+
 from src.core.units import q
 
 
@@ -76,6 +84,9 @@ def mock_moe_model():
 
 @pytest.fixture
 def streamlit_mock():
-    """Mock Streamlit decorators and functions."""
-    with patch("streamlit.cache_data", lambda **kwargs: lambda f: f):
-        yield
+    """No-op fixture for backward compatibility.
+
+    Streamlit's cache_data is patched at module level above, so this fixture
+    is kept only to avoid breaking test signatures that reference it.
+    """
+    yield
