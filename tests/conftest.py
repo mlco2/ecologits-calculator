@@ -12,7 +12,7 @@ _cache_data_patcher = patch(
 )
 _cache_data_patcher.start()
 
-from src.core.units import q
+from src.core.units import q  # noqa: E402
 
 
 @pytest.fixture
