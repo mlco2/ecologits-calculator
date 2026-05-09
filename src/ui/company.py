@@ -119,7 +119,6 @@ def company_mode():
             )
             display_impacts(impacts_formatted)
 
-
     _, col2, _ = st.columns(3)
     with col2:
         pdf_report = st.button(

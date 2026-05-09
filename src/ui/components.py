@@ -1,12 +1,6 @@
 import pandas as pd
 import streamlit as st
 
-from src.config.content import (
-    WARNING_BOTH,
-    WARNING_CLOSED_SOURCE,
-    WARNING_MULTI_MODAL,
-)
-
 
 def render_model_selector(
     df: pd.DataFrame, col_provider, col_model, key_suffix: str = ""
@@ -38,11 +32,10 @@ def render_model_selector(
 
 def display_model_warnings(impacts) -> None:
     """Display warning messages based on model characteristics."""
-    
     if len(impacts.warnings) == 1:
         st.warning(impacts.warnings[0].message, icon="⚠️")
     elif len(impacts.warnings) == 2:
         st.warning(
             f"{impacts.warnings[0].message.split(',')[0]} and {impacts.warnings[1].message.split(',')[0].lower()}, {impacts.warnings[0].message.split(',')[1]}",
-            icon="⚠️"
+            icon="⚠️",
         )

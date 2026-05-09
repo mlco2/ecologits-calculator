@@ -10,14 +10,19 @@ from src.core.equivalences import (
     format_gwp_eq_airplane_paris_nyc,
     format_gwp_eq_streaming,
 )
-from src.ui.plotting import range_plot
 
 
 def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max=None):
 
     with st.container(border=True):
-        st.markdown(f"""<p style='font-size:25px; text-align: center;margin-left: 0px'>{icon}</p>""", unsafe_allow_html=True)
-        st.markdown(f"""<p style='font-size:25px; text-align: center;margin-left: 0px'><strong>{impact_lablel}</strong></p>""", unsafe_allow_html=True)
+        st.markdown(
+            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'>{icon}</p>""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'><strong>{impact_lablel}</strong></p>""",
+            unsafe_allow_html=True,
+        )
 
         if values_min is not None and values_max is not None:
             help_text = f"Min: {values_min.magnitude:.3g} {values_min.units} — Max: {values_max.magnitude:.3g} {values_max.units}"
@@ -26,7 +31,9 @@ def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max
         st.latex(rf"\Large {values.magnitude:.3g} \ \large {values.units}", help=help_text)
 
 
-def display_impacts(impacts_output = None, impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water"]):
+def display_impacts(
+    impacts_output=None, impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water"]
+):
 
     if len(impacts_to_display) == 0:
         st.warning("Select at least one impact to display")
@@ -36,19 +43,60 @@ def display_impacts(impacts_output = None, impacts_to_display: list = ["Electric
         return
 
     all_impacts = [
-        ("Electricity",       "Electricity consumption", impacts_output.energy, "⚡️", impacts_output.energy_min, impacts_output.energy_max),
-        ("Carbon Footprint",  "Carbon Footprint",        impacts_output.gwp,    "🌍️", impacts_output.gwp_min,    impacts_output.gwp_max),
-        ("Water",             "Water",                   impacts_output.wcf,    "🚰", impacts_output.wcf_min,    impacts_output.wcf_max),
-        ("Metals & Minerals", "Metals & Minerals",       impacts_output.adpe,   "🪨", impacts_output.adpe_min,   impacts_output.adpe_max),
-        ("Fossile Fuels",     "Fossile fuels",           impacts_output.pe,     "⛽️", impacts_output.pe_min,     impacts_output.pe_max),
+        (
+            "Electricity",
+            "Electricity consumption",
+            impacts_output.energy,
+            "⚡️",
+            impacts_output.energy_min,
+            impacts_output.energy_max,
+        ),
+        (
+            "Carbon Footprint",
+            "Carbon Footprint",
+            impacts_output.gwp,
+            "🌍️",
+            impacts_output.gwp_min,
+            impacts_output.gwp_max,
+        ),
+        (
+            "Water",
+            "Water",
+            impacts_output.wcf,
+            "🚰",
+            impacts_output.wcf_min,
+            impacts_output.wcf_max,
+        ),
+        (
+            "Metals & Minerals",
+            "Metals & Minerals",
+            impacts_output.adpe,
+            "🪨",
+            impacts_output.adpe_min,
+            impacts_output.adpe_max,
+        ),
+        (
+            "Fossile Fuels",
+            "Fossile fuels",
+            impacts_output.pe,
+            "⛽️",
+            impacts_output.pe_min,
+            impacts_output.pe_max,
+        ),
     ]
 
-    selected = [(label, values, icon, vmin, vmax) for key, label, values, icon, vmin, vmax in all_impacts if key in impacts_to_display]
+    selected = [
+        (label, values, icon, vmin, vmax)
+        for key, label, values, icon, vmin, vmax in all_impacts
+        if key in impacts_to_display
+    ]
 
     cols = st.columns(3)
     for i, (label, values, icon, vmin, vmax) in enumerate(selected):
         with cols[i % 3].container():
-            display_mono_impact(impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax)
+            display_mono_impact(
+                impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
+            )
 
 
 ############################################################################################################

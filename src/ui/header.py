@@ -1,4 +1,5 @@
 import streamlit as st
+
 from src.config.content import (
     ABOUT_TEXT,
     HERO_TEXT,
@@ -23,24 +24,30 @@ def render_header() -> None:
     _, col_info, col_method, col_support, _ = st.columns([1, 0.66, 0.66, 0.66, 1])
 
     with col_info:
-        @st.dialog(title = "ℹ️ More informations about the calculator", width="medium")
+
+        @st.dialog(title="ℹ️ More informations about the calculator", width="medium")
         def calculator_info():
             st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
+
         if st.button("ℹ️ About", width="stretch"):
-                calculator_info()
+            calculator_info()
 
     with col_method:
-        @st.dialog(title = "📖 About the methodology", width="large")
+
+        @st.dialog(title="📖 About the methodology", width="large")
         def methodology_info():
             st.markdown(METHODOLOGY_TEXT, unsafe_allow_html=True)
+
         if st.button("📖 Methodology", width="stretch"):
-                methodology_info()
+            methodology_info()
 
     with col_support:
-        @st.dialog(title = "🩷 Support us !", width="medium")
+
+        @st.dialog(title="🩷 Support us !", width="medium")
         def support_info():
             st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
+
         if st.button("🩷 Support us !", width="stretch"):
-                support_info()
+            support_info()
 
     st.divider()

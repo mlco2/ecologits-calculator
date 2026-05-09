@@ -10,7 +10,7 @@ from src.core.formatting import format_impacts
 from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.components import display_model_warnings, render_model_selector
-from src.ui.impacts import display_equivalent_energy, display_equivalent_ghg, display_impacts
+from src.ui.impacts import display_impacts
 
 
 def calculator_mode():
@@ -30,10 +30,16 @@ def calculator_mode():
 
         list_impacts = st.pills(
             label="Impacts to display",
-            options=["Electricity", "Carbon Footprint", "Water", "Metals & Minerals", "Fossile Fuels"],
+            options=[
+                "Electricity",
+                "Carbon Footprint",
+                "Water",
+                "Metals & Minerals",
+                "Fossile Fuels",
+            ],
             selection_mode="multi",
             default=["Electricity", "Carbon Footprint", "Water"],
-            width="stretch"
+            width="stretch",
         )
 
         # WARNING DISPLAY
@@ -62,7 +68,7 @@ def calculator_mode():
 
         impacts_formatted, _, _ = format_impacts(impacts)
 
-        #st.write(impacts)
+        # st.write(impacts)
 
         st.markdown(
             '<h3 align = "center">Environmental impacts</h3>',
