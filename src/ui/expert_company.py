@@ -22,7 +22,7 @@ from src.core.formatting import (
     format_pe,
     format_wcf,
 )
-from src.core.latency_estimator import latency_estimator
+#from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.impacts import display_impacts
 
@@ -181,16 +181,16 @@ def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
     model_raw = match["name"].values[0]
     location_code = _LOCATION_LABEL_TO_CODE.get(row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR")
 
-    estimated_latency = latency_estimator.estimate(
-        provider=provider_raw,
-        model_name=model_raw,
-        output_tokens=output_token_count,
-    )
+    # estimated_latency = latency_estimator.estimate(
+    #     provider=provider_raw,
+    #     model_name=model_raw,
+    #     output_tokens=output_token_count,
+    #
     result = llm_impacts(
         provider=provider_raw,
         model_name=model_raw,
         output_token_count=output_token_count,
-        request_latency=estimated_latency,
+        request_latency=float("inf"),
         electricity_mix_zone=location_code,
     )
     if result.has_errors:

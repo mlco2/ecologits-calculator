@@ -92,11 +92,11 @@ def company_mode():
             "name"
         ].values[0]
 
-        estimated_latency = latency_estimator.estimate(
-            provider=provider_raw,
-            model_name=model_raw,
-            output_tokens=output_tokens_count * time_horizon,
-        )
+        # estimated_latency = latency_estimator.estimate(
+        #     provider=provider_raw,
+        #     model_name=model_raw,
+        #     output_tokens=output_tokens_count * time_horizon,
+        # 
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,

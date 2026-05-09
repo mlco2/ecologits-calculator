@@ -51,16 +51,11 @@ def calculator_mode():
 
         output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
 
-<<<<<<< feat/advanced-company-calculator
-        estimated_latency = latency_estimator.estimate(
-            provider=provider_raw,
-            model_name=model_raw,
-            output_tokens=output_tokens_count,
-        )
-=======
-    try:
-        output_tokens_count = next(x[1] for x in PROMPTS if x[0] == output_tokens)
->>>>>>> main
+        # estimated_latency = latency_estimator.estimate(
+        #     provider=provider_raw,
+        #     model_name=model_raw,
+        #     output_tokens=output_tokens_count,
+        #
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
