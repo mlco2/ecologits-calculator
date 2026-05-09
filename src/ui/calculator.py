@@ -45,7 +45,7 @@ def calculator_mode():
         ].values[0]
 
         output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
-        
+
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,
