@@ -5,7 +5,7 @@ import streamlit as st
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
 
-from src.config.constants import COUNTRY_CODES
+from src.config.constants import COUNTRY_CODES, TIME_HORIZONS
 from src.core.formatting import format_impacts
 from src.repositories.electricity_mix import (
     format_country_name,
@@ -63,20 +63,13 @@ def company_mode():
 
         time_horizon_label = col3.pills(
             label="Time horizon",
-            options=["Daily", "Weekly", "Monthly", "Yearly"],
+            options=list(TIME_HORIZONS.keys()),
             default="Yearly",
             selection_mode="single",
         )
 
         try:
-            # Map labels to number of days
-            time_horizon_mapping = {
-                "Daily": 1,
-                "Weekly": 5,
-                "Monthly": 22,
-                "Yearly": 260,
-            }
-            time_horizon = time_horizon_mapping[time_horizon_label]
+            time_horizon = TIME_HORIZONS[time_horizon_label]
         except KeyError:
             st.error("Invalid time horizon selected. Please choose a valid option.")
             return
@@ -99,9 +92,11 @@ def company_mode():
             "name"
         ].values[0]
 
-        display_model_warnings(df, provider, model)
-
-    try:
+        estimated_latency = latency_estimator.estimate(
+            provider=provider_raw,
+            model_name=model_raw,
+            output_tokens=output_tokens_count * time_horizon,
+        )
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
@@ -110,7 +105,9 @@ def company_mode():
             electricity_mix_zone=electricity_mix.zone,
         )
 
-        impacts, _, _ = format_impacts(impacts)
+        display_model_warnings(impacts)
+
+        impacts_formatted, _, _ = format_impacts(impacts)
 
         with st.container(border=True):
             st.markdown(
@@ -119,10 +116,7 @@ def company_mode():
                 f"<p align = 'center'><i>on a {time_horizon_label.lower()} basis in my company</i></p>",
                 unsafe_allow_html=True,
             )
-            display_impacts(impacts)
-
-    except Exception:
-        st.error("Could not find the model in the repository. Please try another model.")
+            display_impacts(impacts_formatted)
 
     _, col2, _ = st.columns(3)
     with col2:

@@ -17,8 +17,6 @@ from src.ui.impacts import display_impacts
 
 
 def expert_mode():
-    st.markdown("### 🤓 Expert mode")
-
     with st.container(border=True):
         st.markdown("###### Configure the model")
 
@@ -86,14 +84,14 @@ def expert_mode():
 
         with prompt_col:
             output_tokens_exp = st.selectbox(
-                label="Example prompt", options=[x[0] for x in PROMPTS], key="prompt_exp"
+                label="Example prompt", options=[p.label for p in PROMPTS], key="prompt_exp"
             )
 
         with token_col:
             output_tokens = st.number_input(
                 label="Output completion tokens",
                 min_value=0,
-                value=next(x[1] for x in PROMPTS if x[0] == output_tokens_exp),
+                value=next(p.output_tokens for p in PROMPTS if p.label == output_tokens_exp),
             )
 
     with st.container(border=True):
