@@ -72,6 +72,8 @@ def load_models(filter_main=True) -> pd.DataFrame:
                 "architecture_type": m.architecture.type.value,
                 "total_parameters": total_parameters,
                 "active_parameters": active_parameters,
+                "tps": m.deployment.tps,
+                "ttft": m.deployment.ttft,
                 "warning_arch": warning_arch,
                 "warning_multi_modal": warning_multi_modal,
             }

@@ -7,7 +7,6 @@ from src.config.content import (
     HOW_TO_TEXT,
 )
 from src.core.formatting import format_impacts
-from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.impacts import display_impacts
@@ -52,16 +51,21 @@ def calculator_mode():
 
         output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
 
+<<<<<<< feat/advanced-company-calculator
         estimated_latency = latency_estimator.estimate(
             provider=provider_raw,
             model_name=model_raw,
             output_tokens=output_tokens_count,
         )
+=======
+    try:
+        output_tokens_count = next(x[1] for x in PROMPTS if x[0] == output_tokens)
+>>>>>>> main
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
             output_token_count=output_tokens_count,
-            request_latency=estimated_latency,
+            request_latency=float("inf"),
         )
 
         display_model_warnings(impacts)

@@ -7,7 +7,6 @@ from ecologits.impacts.llm import compute_llm_impacts
 
 from src.config.constants import COUNTRY_CODES, PROMPTS
 from src.core.formatting import format_impacts
-from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
     format_country_name,
     format_electricity_mix_criterion,
@@ -55,13 +54,12 @@ def expert_mode():
                 / 2
             )
 
-        provider_raw = df_filtered["provider"].values[0]
-        model_name_raw = df_filtered["name"].values[0]
-        tps_raw = latency_estimator.get_throughput(provider_raw, model_name_raw)
+        tps_raw = df_filtered["tps"].values[0]
+        ttft_raw = df_filtered["ttft"].values[0]
 
         ########## Model parameters ##########
 
-        active_params_col, total_params_col, throughput_col = st.columns(3)
+        active_params_col, total_params_col, tps_col, ttft_col = st.columns(4)
 
         with active_params_col:
             active_params = st.number_input("Active parameters (B)", 0, None, active_params)
@@ -69,8 +67,15 @@ def expert_mode():
         with total_params_col:
             total_params = st.number_input("Total parameters (B)", 0, None, total_params)
 
-        with throughput_col:
-            throughput = st.number_input("Average TPS", 1.0, None, tps_raw)
+        with tps_col:
+            tps = st.number_input(
+                "Average TPS", 1.0, None, float(tps_raw) if tps_raw is not None else 80.0
+            )
+
+        with ttft_col:
+            ttft = st.number_input(
+                "Average TTFT (s)", 0.0, None, float(ttft_raw) if ttft_raw is not None else 0.5
+            )
 
     with st.container(border=True):
         st.markdown("###### Configure the prompt")
@@ -134,18 +139,12 @@ def expert_mode():
                 format="%0.3f",
             )
 
-    estimated_latency = latency_estimator.estimate(
-        provider=provider_raw,
-        model_name=model_name_raw,
-        output_tokens=output_tokens,
-        throughput=throughput,
-    )
-
     impacts = compute_llm_impacts(
         model_active_parameter_count=active_params,
         model_total_parameter_count=total_params,
         output_token_count=output_tokens,
-        request_latency=estimated_latency,
+        tps=tps,
+        ttft=ttft,
         if_electricity_mix_gwp=em_gwp,
         if_electricity_mix_adpe=em_adpe,
         if_electricity_mix_pe=em_pe,

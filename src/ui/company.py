@@ -7,7 +7,6 @@ from ecologits.tracers.utils import llm_impacts
 
 from src.config.constants import COUNTRY_CODES, TIME_HORIZONS
 from src.core.formatting import format_impacts
-from src.core.latency_estimator import latency_estimator
 from src.repositories.electricity_mix import (
     format_country_name,
 )
@@ -102,7 +101,7 @@ def company_mode():
             provider=provider_raw,
             model_name=model_raw,
             output_token_count=output_tokens_count * time_horizon,
-            request_latency=estimated_latency,
+            request_latency=float("inf"),
             electricity_mix_zone=electricity_mix.zone,
         )
 
