@@ -37,7 +37,7 @@ def calculator_mode():
                 "Fossile Fuels",
             ],
             selection_mode="multi",
-            default=["Electricity", "Carbon Footprint", "Water"],
+            default=["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"],
             width="stretch",
         )
 
@@ -74,3 +74,9 @@ def calculator_mode():
             unsafe_allow_html=True,
         )
         display_impacts(impacts_output=impacts_formatted, impacts_to_display=list_impacts)
+
+        # col_eq_energy, col_eq_ghg = st.columns(2)
+        # with col_eq_energy:
+        #     display_equivalent_energy(impacts_formatted)
+        # with col_eq_ghg:
+        #     display_equivalent_ghg(impacts_formatted)

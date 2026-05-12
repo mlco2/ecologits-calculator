@@ -22,7 +22,8 @@ from src.core.formatting import (
     format_pe,
     format_wcf,
 )
-#from src.core.latency_estimator import latency_estimator
+
+# from src.core.latency_estimator import latency_estimator
 from src.repositories.models import load_models
 from src.ui.impacts import display_impacts
 
@@ -279,7 +280,7 @@ def expert_company_mode():
 
     if incomplete:
         st.warning(
-            f"Row(s) {incomplete} have incomplete fields (highlighted in red). "
+            f"Some row(s) {incomplete} have incomplete fields (highlighted in red). "
             "Fill all columns before running calculations.",
             icon="⚠️",
         )
@@ -400,7 +401,16 @@ def expert_company_mode():
                 # f"(all rows · {time_horizon_label.lower()})</h5>",
                 unsafe_allow_html=True,
             )
-            display_impacts(aggregated)
+            display_impacts(
+                aggregated,
+                impacts_to_display=[
+                    "Electricity",
+                    "Carbon Footprint",
+                    "Water",
+                    "Metals & Minerals",
+                    "Fossile Fuels",
+                ],
+            )
 
     failed = [
         r["llm_provider"] + "/" + r["model_name"]

@@ -96,7 +96,7 @@ def company_mode():
         #     provider=provider_raw,
         #     model_name=model_raw,
         #     output_tokens=output_tokens_count * time_horizon,
-        # 
+        #
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
@@ -116,7 +116,16 @@ def company_mode():
                 f"<p align = 'center'><i>on a {time_horizon_label.lower()} basis in my company</i></p>",
                 unsafe_allow_html=True,
             )
-            display_impacts(impacts_formatted)
+            display_impacts(
+                impacts_formatted,
+                impacts_to_display=[
+                    "Electricity",
+                    "Carbon Footprint",
+                    "Water",
+                    "Metals & Minerals",
+                    "Fossile Fuels",
+                ],
+            )
 
     _, col2, _ = st.columns(3)
     with col2:

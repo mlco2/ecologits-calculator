@@ -264,3 +264,5 @@ dmypy.json
 cython_debug/
 
 .ruff_cache/
+
+improvements.md

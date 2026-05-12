@@ -32,7 +32,8 @@ def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max
 
 
 def display_impacts(
-    impacts_output=None, impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water"]
+    impacts_output=None,
+    impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"],
 ):
 
     if len(impacts_to_display) == 0:
@@ -91,9 +92,9 @@ def display_impacts(
         if key in impacts_to_display
     ]
 
-    cols = st.columns(3)
+    cols = st.columns(2)
     for i, (label, values, icon, vmin, vmax) in enumerate(selected):
-        with cols[i % 3].container():
+        with cols[i % 2].container():
             display_mono_impact(
                 impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
             )
