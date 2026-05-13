@@ -63,7 +63,8 @@ def calculator_mode():
             request_latency=float("inf"),
         )
 
-        display_model_warnings(impacts)
+        if impacts.warnings:
+            display_model_warnings(impacts)
 
         impacts_formatted, _, _ = format_impacts(impacts)
 
