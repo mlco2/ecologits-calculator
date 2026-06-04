@@ -56,6 +56,8 @@ def extract_param_value(value: float | dict) -> int:
 
 def expert_mode():
     with st.container(border=True):
+        st.markdown('<h3 align="center">Calculator Expert Mode</h3>', unsafe_allow_html=True)
+
         st.markdown("###### Configure the model")
 
         ########## Model info ##########

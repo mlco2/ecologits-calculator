@@ -23,32 +23,42 @@ def main():
 
     render_header()
 
-    _, col_selector, col_modes, _ = st.columns([1, 1.65, 0.35, 1])
+    _, col_selector, _ = st.columns([1, 2, 1])
+
+    # Initialize session state for mode tracking
+    if "current_mode" not in st.session_state:
+        st.session_state.current_mode = "calculator"
+    if "is_expert" not in st.session_state:
+        st.session_state.is_expert = False
 
     with col_selector:
         st.space(size=1)
-        mode = st.pills(
-            label="Select the mode",
-            options=["🧮 Calculator", "🏢 Company Mode"],
-            default="🧮 Calculator",
-            width="stretch",
-            label_visibility="collapsed",
-        )
+        # Determine button label based on current mode
+        if st.session_state.current_mode == "calculator":
+            button_label = "🏢 Switch to Company Mode"
+        else:
+            button_label = "🧮 Switch to Calculator Mode"
 
-    if mode == "🧮 Calculator":
-        calculator_mode_selection = col_modes.radio(
-            "Calculator mode", _MODES, index=0, label_visibility="collapsed", width="stretch"
-        )
-        if calculator_mode_selection == "🤓 Expert":
+        if st.button(button_label, use_container_width=True):
+            if st.session_state.current_mode == "calculator":
+                st.session_state.current_mode = "company"
+            else:
+                st.session_state.current_mode = "calculator"
+            st.rerun()
+
+    mode = st.session_state.current_mode
+
+    # Expert mode toggle
+    st.session_state.is_expert = st.toggle("🤓 Expert Mode", value=st.session_state.is_expert)
+
+    if mode == "calculator":
+        if st.session_state.is_expert:
             expert_mode()
         else:
             calculator_mode()
 
-    elif mode == "🏢 Company Mode":
-        company_mode_selection = col_modes.radio(
-            "Company mode", _MODES, index=0, label_visibility="collapsed", width="stretch"
-        )
-        if company_mode_selection == "🤓 Expert":
+    elif mode == "company":
+        if st.session_state.is_expert:
             expert_company_mode()
         else:
             company_mode()

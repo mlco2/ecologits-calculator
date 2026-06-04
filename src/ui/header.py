@@ -62,4 +62,4 @@ def render_header() -> None:
         if st.button("🩷 Support us !", width="stretch"):
             support_info()
 
-    st.divider()
+    st.space(size="small")

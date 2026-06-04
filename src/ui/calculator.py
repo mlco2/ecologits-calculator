@@ -16,6 +16,7 @@ def calculator_mode():
     st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
 
     with st.container(border=True):
+        # st.markdown('<h3 align="center">Calculator</h3>', unsafe_allow_html=True)
         df = load_models(filter_main=True)
 
         col1, col2, col3 = st.columns(3)
