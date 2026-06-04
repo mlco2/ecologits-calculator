@@ -10,6 +10,7 @@ from ecologits.impacts.modeling import (
     Impacts,
     Usage,
 )
+from ecologits.tracers.utils import ImpactsOutput
 from pint import Quantity
 
 from src.core.units import q
@@ -88,7 +89,7 @@ def format_wcf(wcf_value: float, wcf_unit: str | None = None) -> Quantity:
     return val
 
 
-def format_impacts(impacts: Impacts) -> tuple[QImpacts, Usage, Embodied]:
+def format_impacts(impacts: Impacts | ImpactsOutput) -> tuple[QImpacts, Usage, Embodied]:
     if isinstance(impacts.energy.value, float):
         return (
             QImpacts(
