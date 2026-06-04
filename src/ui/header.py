@@ -6,6 +6,7 @@ from src.config.content import (
     METHODOLOGY_TEXT,
     SUPPORT_TEXT,
 )
+from src.ui.token_estimator import token_estimator
 from src.ui.utils import reduce_top_padding
 
 
@@ -21,7 +22,7 @@ def render_header() -> None:
 
     st.html(HERO_TEXT)
 
-    _, col_info, col_method, col_support, _ = st.columns([1, 0.66, 0.66, 0.66, 1])
+    _, col_info, col_method, col_token_estimator, col_support, _ = st.columns([1, 0.50, 0.50, 0.50, 0.50, 1])
 
     with col_info:
 
@@ -40,6 +41,15 @@ def render_header() -> None:
 
         if st.button("📖 Methodology", width="stretch"):
             methodology_info()
+
+    with col_token_estimator:
+
+        @st.dialog(title="🪙 Tokens estimator", width="medium")
+        def token_estimator_info():
+            token_estimator()
+
+        if st.button("🪙 Tokens ?", width="stretch"):
+            token_estimator_info()
 
     with col_support:
 

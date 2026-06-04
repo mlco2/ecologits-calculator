@@ -12,7 +12,6 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
 
 
 def token_estimator():
-    st.markdown("### 🪙 Tokens estimator")
 
     st.markdown(
         "As our methodology deeply relies on the number of tokens processed by the model *(and as no-one is token-fluent)*, we provide you with a tool to estimate the number of tokens in a given text."
@@ -25,7 +24,7 @@ def token_estimator():
         "EcoLogits is a great project!",
     )
 
-    _, col2, _ = st.columns([2, 1, 2])
+    _, col2, _ = st.columns(3)
 
     with col2:
         st.metric(

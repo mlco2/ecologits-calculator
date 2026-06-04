@@ -30,7 +30,7 @@ def main():
         st.space(size=1)
         mode = st.pills(
             label="Select the mode",
-            options=["🧮 Calculator", "🏢 Company Mode", "🪙 Tokens estimator"],
+            options=["🧮 Calculator", "🏢 Company Mode"],
             default="🧮 Calculator",
             width="stretch",
             label_visibility="collapsed",
@@ -53,9 +53,6 @@ def main():
             expert_company_mode()
         else:
             company_mode()
-
-    elif mode == "🪙 Tokens estimator":
-        token_estimator()
 
     with st.expander("📚 Citation"):
         st.html(CITATION_LABEL)
