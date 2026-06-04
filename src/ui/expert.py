@@ -7,8 +7,6 @@ import streamlit as st
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
 
-logger = logging.getLogger(__name__)
-
 from src.config.constants import COUNTRY_CODES, PROMPTS
 from src.core.formatting import format_impacts
 from src.repositories.electricity_mix import (
@@ -18,6 +16,42 @@ from src.repositories.electricity_mix import (
 from src.repositories.models import load_models
 from src.ui.components import render_model_selector
 from src.ui.impacts import display_impacts
+
+logger = logging.getLogger(__name__)
+
+
+def extract_param_value(value: float | dict) -> int:
+    """Extract parameter count from scalar or RangeValue dict.
+
+    Args:
+        value: Either a scalar (int/float) or dict with 'min'/'max' keys.
+
+    Returns:
+        int: The parameter value or mean of min/max range.
+
+    Raises:
+        ValueError: If value type is invalid or dict lacks required keys.
+    """
+    if value is None:
+        raise ValueError("Parameter value is None")
+
+    if isinstance(value, dict):
+        if not isinstance(value.get("min"), (int, float)) or not isinstance(
+            value.get("max"), (int, float)
+        ):
+            raise ValueError(f"RangeValue dict missing valid 'min' or 'max' keys: {value}")
+        return int((value["min"] + value["max"]) / 2)
+
+    if isinstance(value, bool):
+        raise ValueError(f"Parameter value must be int, float, or dict, got {type(value).__name__}")
+
+    if not isinstance(value, (int, float)):
+        raise ValueError(f"Parameter value must be int, float, or dict, got {type(value).__name__}")
+
+    try:
+        return int(value)
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"Cannot convert {value!r} to int: {e}") from e
 
 
 def expert_mode():
@@ -39,29 +73,6 @@ def expert_mode():
         if df_filtered.empty:
             st.error("Selected model not found. Please select a different model.")
             return
-
-        def extract_param_value(value: float | dict) -> int:
-            """Extract parameter count from scalar or RangeValue dict.
-            
-            Args:
-                value: Either a scalar (int/float) or dict with 'min'/'max' keys.
-                
-            Returns:
-                int: The parameter value or mean of min/max range.
-                
-            Raises:
-                ValueError: If value type is invalid or dict lacks required keys.
-            """
-            if isinstance(value, dict):
-                if "min" not in value or "max" not in value:
-                    raise ValueError(
-                        f"RangeValue dict missing 'min' or 'max' key: {value}"
-                    )
-                return int((value["min"] + value["max"]) / 2)
-            try:
-                return int(value)
-            except (TypeError, ValueError) as e:
-                raise ValueError(f"Cannot convert {value!r} to int: {e}") from e
 
         try:
             total_params = extract_param_value(df_filtered["total_parameters"].iloc[0])
