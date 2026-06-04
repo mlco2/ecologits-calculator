@@ -10,7 +10,7 @@ from src.core.formatting import format_impacts
 from src.repositories.electricity_mix import (
     format_country_name,
 )
-from src.repositories.models import load_models
+from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.impacts import (
     display_impacts,
@@ -85,12 +85,11 @@ def company_mode():
         electricity_mix = electricity_mixes.find_electricity_mix(dc_location)
 
         # WARNING DISPLAY
-        df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
-        if df_filtered.empty:
+        raw_names = get_raw_model_names(df, provider, model)
+        if raw_names is None:
             st.error("Selected model not found. Please select a different model.")
             return
-        provider_raw = df_filtered["provider"].iloc[0]
-        model_raw = df_filtered["name"].iloc[0]
+        provider_raw, model_raw = raw_names
 
         # estimated_latency = latency_estimator.estimate(
         #     provider=provider_raw,

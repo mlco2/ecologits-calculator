@@ -7,7 +7,7 @@ from src.config.content import (
     HOW_TO_TEXT,
 )
 from src.core.formatting import format_impacts
-from src.repositories.models import load_models
+from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.impacts import display_impacts
 
@@ -42,12 +42,11 @@ def calculator_mode():
         )
 
         # WARNING DISPLAY
-        df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
-        if df_filtered.empty:
+        raw_names = get_raw_model_names(df, provider, model)
+        if raw_names is None:
             st.error("Selected model not found. Please select a different model.")
             return
-        provider_raw = df_filtered["provider"].iloc[0]
-        model_raw = df_filtered["name"].iloc[0]
+        provider_raw, model_raw = raw_names
 
         output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
 

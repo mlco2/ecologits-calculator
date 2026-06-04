@@ -80,3 +80,23 @@ def load_models(filter_main=True) -> pd.DataFrame:
         )
 
     return pd.DataFrame(data)
+
+
+def get_raw_model_names(
+    df: pd.DataFrame, provider_clean: str, model_clean: str
+) -> tuple[str, str] | None:
+    """Extract raw provider and model names from filtered models dataframe.
+
+    Args:
+        df: DataFrame with model data containing 'provider_clean', 'name_clean',
+            'provider', and 'name' columns.
+        provider_clean: The cleaned provider name to search for.
+        model_clean: The cleaned model name to search for.
+
+    Returns:
+        Tuple of (provider_raw, model_raw) if found, None otherwise.
+    """
+    df_filtered = df[(df["provider_clean"] == provider_clean) & (df["name_clean"] == model_clean)]
+    if df_filtered.empty:
+        return None
+    return df_filtered["provider"].iloc[0], df_filtered["name"].iloc[0]

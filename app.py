@@ -10,7 +10,6 @@ from src.ui.company import company_mode
 from src.ui.expert import expert_mode
 from src.ui.expert_company import expert_company_mode
 from src.ui.header import render_header
-from src.ui.token_estimator import token_estimator
 
 _MODES = ["😀 Standard", "🤓 Expert"]
 

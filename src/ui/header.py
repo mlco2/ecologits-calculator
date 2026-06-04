@@ -22,7 +22,9 @@ def render_header() -> None:
 
     st.html(HERO_TEXT)
 
-    _, col_info, col_method, col_token_estimator, col_support, _ = st.columns([1, 0.50, 0.50, 0.50, 0.50, 1])
+    _, col_info, col_method, col_token_estimator, col_support, _ = st.columns(
+        [1, 0.50, 0.50, 0.50, 0.50, 1]
+    )
 
     with col_info:
 

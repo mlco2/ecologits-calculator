@@ -13,7 +13,7 @@ from src.repositories.electricity_mix import (
     format_country_name,
     format_electricity_mix_criterion,
 )
-from src.repositories.models import load_models
+from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components import render_model_selector
 from src.ui.impacts import display_impacts
 
@@ -68,11 +68,12 @@ def expert_mode():
             df, provider_col, model_col, key_suffix="exp"
         )
 
-        df_filtered = df[(df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)]
-
-        if df_filtered.empty:
+        raw_names = get_raw_model_names(df, provider_exp, model_exp)
+        if raw_names is None:
             st.error("Selected model not found. Please select a different model.")
             return
+        _, _ = raw_names  # Unused in expert mode, but validate the lookup worked
+        df_filtered = df[(df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)]
 
         try:
             total_params = extract_param_value(df_filtered["total_parameters"].iloc[0])

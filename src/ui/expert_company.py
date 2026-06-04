@@ -24,7 +24,7 @@ from src.core.formatting import (
 )
 
 # from src.core.latency_estimator import latency_estimator
-from src.repositories.models import load_models
+from src.repositories.models import get_raw_model_names, load_models
 from src.ui.impacts import display_impacts
 
 _COL_PROVIDER = "Provider"
@@ -182,15 +182,10 @@ def _compute_row_tokens(row: dict) -> dict[str, int]:
 
 def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
     """Run ecologits llm_impacts for a single row, returning formatted impacts or None."""
-    mask = (df_models["provider_clean"] == row[_COL_PROVIDER]) & (
-        df_models["name_clean"] == row[_COL_MODEL]
-    )
-    match = df_models[mask]
-    if match.empty:
+    raw_names = get_raw_model_names(df_models, row[_COL_PROVIDER], row[_COL_MODEL])
+    if raw_names is None:
         return None
-
-    provider_raw = match["provider"].values[0]
-    model_raw = match["name"].values[0]
+    provider_raw, model_raw = raw_names
     location_code = _LOCATION_LABEL_TO_CODE.get(row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR")
 
     # estimated_latency = latency_estimator.estimate(
