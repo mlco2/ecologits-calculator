@@ -155,9 +155,20 @@ def _row_is_complete(row: dict) -> bool:
 
 def _compute_row_tokens(row: dict) -> dict[str, int]:
     """Compute daily token counts for a single filled row."""
-    prompt = next(p for p in PROMPTS if p.label == row[_COL_USAGE_TYPE])
+    prompt = next(p for p in PROMPTS if p.name == row[_COL_USAGE_TYPE])
     daily_count = USAGE_INTENSITY[row[_COL_USAGE_INTENSITY]]
-    num_users = int(row[_COL_NUM_USERS])
+
+    # Validate and convert num_users to int
+    num_users_str = row[_COL_NUM_USERS]
+    if num_users_str is None or num_users_str == "":
+        raise ValueError("Number of users cannot be empty or None")
+
+    try:
+        num_users = int(num_users_str)
+        if num_users < 0:
+            raise ValueError(f"Number of users must be non-negative, got {num_users}")
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"Invalid number of users value '{num_users_str}': {e}") from e
 
     multiplier = daily_count * num_users
     return {
