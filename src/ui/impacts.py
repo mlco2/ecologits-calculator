@@ -102,17 +102,18 @@ def display_impacts(
         if key in impacts_to_display
     ]
 
-    if mode == "expert":
-        cols = st.columns(2)
-        for i, (label, values, icon, vmin, vmax) in enumerate(selected):
-            with cols[i % 2].container():
-                display_mono_impact(
-                    impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
-                )
-    else:
+    if mode == "calculator":
         cols = st.columns(len(selected))
         for i, (label, values, icon, vmin, vmax) in enumerate(selected):
             with cols[i].container():
+                display_mono_impact(
+                    impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
+                )
+
+    else:
+        cols = st.columns(2)
+        for i, (label, values, icon, vmin, vmax) in enumerate(selected):
+            with cols[i % 2].container():
                 display_mono_impact(
                     impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
                 )

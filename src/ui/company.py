@@ -124,6 +124,7 @@ def company_mode():
                     "Metals & Minerals",
                     "Fossile Fuels",
                 ],
+                mode="company",
             )
 
     _, col2, _ = st.columns(3)

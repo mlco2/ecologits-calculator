@@ -407,6 +407,7 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
                     "Metals & Minerals",
                     "Fossile Fuels",
                 ],
+                mode="company"
             )
 
     failed = [
