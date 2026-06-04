@@ -25,7 +25,7 @@ def calculator_mode():
 
         with col3:
             output_tokens = st.selectbox(
-                label="Example prompt", options=[p.label for p in PROMPTS], index=2
+                label="Usage scenario", options=[p.label for p in PROMPTS], index=2
             )
 
         # Display only electricity, carbon footprint, water, and minerals

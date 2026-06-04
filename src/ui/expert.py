@@ -121,7 +121,7 @@ def expert_mode():
 
         with prompt_col:
             output_tokens_exp = st.selectbox(
-                label="Example prompt", options=[p.label for p in PROMPTS], key="prompt_exp"
+                label="Usage scenario", options=[p.label for p in PROMPTS], key="prompt_exp"
             )
 
         with token_col:
@@ -193,13 +193,13 @@ def expert_mode():
     impacts, usage, embodied = format_impacts(impacts)
 
     with st.container(border=True):
-        st.markdown('<h3 align="center">Environmental Impacts</h2>', unsafe_allow_html=True)
+        st.markdown('<h3 align="center">Environmental Impacts</h3>', unsafe_allow_html=True)
 
         display_impacts(impacts, mode="expert")
 
     with st.expander("⚖️ Usage vs Embodied"):
         st.markdown(
-            '<h3 align="center">Embodied vs Usage comparison</h2>',
+            '<h3 align="center">Embodied vs Usage comparison</h3>',
             unsafe_allow_html=True,
         )
 

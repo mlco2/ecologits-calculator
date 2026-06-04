@@ -38,7 +38,13 @@ def display_impacts(
 ):
 
     if impacts_to_display is None:
-        impacts_to_display = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals", "Fossile Fuels"]
+        impacts_to_display = [
+            "Electricity",
+            "Carbon Footprint",
+            "Water",
+            "Metals & Minerals",
+            "Fossile Fuels",
+        ]
 
     if len(impacts_to_display) == 0:
         st.warning("Select at least one impact to display")

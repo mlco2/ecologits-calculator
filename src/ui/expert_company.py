@@ -450,4 +450,5 @@ def expert_company_mode():
     if not grid_state["run"]:
         return
 
-    _aggregate_and_display(df_models, grid_state["rows"], time_horizon_label)
+    with st.spinner("Computing impacts…"):
+        _aggregate_and_display(df_models, grid_state["rows"], time_horizon_label)

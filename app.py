@@ -35,9 +35,9 @@ def main():
         st.space(size=1)
         # Determine button label based on current mode
         if st.session_state.current_mode == "calculator":
-            button_label = "🏢 Switch to Company Mode"
+            button_label = "🏢 Switch to **Company Mode**"
         else:
-            button_label = "🧮 Switch to Calculator Mode"
+            button_label = "🧮 Switch to **Calculator Mode**"
 
         if st.button(button_label, use_container_width=True):
             if st.session_state.current_mode == "calculator":

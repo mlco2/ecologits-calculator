@@ -37,7 +37,7 @@ def company_mode():
         )
 
         output_method = col1.pills(
-            label="Calculation basis",
+            label="Measure usage by",
             options=["Daily pages", "Daily tokens"],
             default="Daily pages",
             selection_mode="single",
@@ -79,7 +79,7 @@ def company_mode():
             options=[c[1] for c in COUNTRY_CODES],
             format_func=format_country_name,
             index=0,
-            help="If you dont know, the WORLD average is a good first approximate.",
+            help="If you dont know, the WORLD average is a good first approximation.",
         )
 
         electricity_mix = electricity_mixes.find_electricity_mix(dc_location)
@@ -132,7 +132,8 @@ def company_mode():
             "Generate PDF report",
             type="primary",
             width="stretch",
-            help="Download a PDF report summarizing the estimated environmental impacts of your organization.",
+            disabled=True,
+            help="Coming soon — export your results as a formatted PDF.",
         )
     if pdf_report:
         st.info("PDF report generation is not yet implemented. Stay tuned!", icon="🧑‍🔧")
