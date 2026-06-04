@@ -12,7 +12,7 @@ class TestComputeRowTokens:
     def test_valid_input(self):
         """Test with valid input values."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": "100",
         }
@@ -27,7 +27,7 @@ class TestComputeRowTokens:
         result = _compute_row_tokens(row)
 
         # Find the prompt
-        prompt = next(p for p in PROMPTS if p.name == "Write a tweet")
+        prompt = next(p for p in PROMPTS if p.label == "Write a tweet (50 output tokens)")
         daily_count = USAGE_INTENSITY["Light (x1-x3)"]
         num_users = 100
 
@@ -45,7 +45,7 @@ class TestComputeRowTokens:
     def test_empty_num_users(self):
         """Test with empty number of users."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": "",
         }
@@ -62,7 +62,7 @@ class TestComputeRowTokens:
     def test_none_num_users(self):
         """Test with None number of users."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": None,
         }
@@ -79,7 +79,7 @@ class TestComputeRowTokens:
     def test_negative_num_users(self):
         """Test with negative number of users."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": "-100",
         }
@@ -96,7 +96,7 @@ class TestComputeRowTokens:
     def test_invalid_num_users_string(self):
         """Test with invalid string for number of users."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": "not_a_number",
         }
@@ -113,7 +113,7 @@ class TestComputeRowTokens:
     def test_zero_num_users(self):
         """Test with zero number of users (should be valid)."""
         row = {
-            "_COL_USAGE_TYPE": "Write a tweet",
+            "_COL_USAGE_TYPE": "Write a tweet (50 output tokens)",
             "_COL_USAGE_INTENSITY": "Light (x1-x3)",
             "_COL_NUM_USERS": "0",
         }

@@ -155,7 +155,7 @@ def _row_is_complete(row: dict) -> bool:
 
 def _compute_row_tokens(row: dict) -> dict[str, int]:
     """Compute daily token counts for a single filled row."""
-    prompt = next(p for p in PROMPTS if p.name == row[_COL_USAGE_TYPE])
+    prompt = next(p for p in PROMPTS if p.label == row[_COL_USAGE_TYPE])
     daily_count = USAGE_INTENSITY[row[_COL_USAGE_INTENSITY]]
 
     # Validate and convert num_users to int
