@@ -36,57 +36,86 @@ class QImpacts:
     wcf_max: Quantity | None = None
 
 
+# Thresholds for automatic unit scaling
+THRESHOLDS: dict[str, list[tuple[Quantity, str]]] = {
+    "energy": [
+        (q("1 kWh"), "Wh"),
+        (q("1 Wh"), "mWh"),
+    ],
+    "gwp": [
+        (q("1 kgCO2eq"), "gCO2eq"),
+        (q("1 gCO2eq"), "mgCO2eq"),
+    ],
+    "adpe": [
+        (q("1 kgSbeq"), "gSbeq"),
+        (q("1 gSbeq"), "mgSbeq"),
+        (q("1 mgSbeq"), "µgSbeq"),
+    ],
+    "pe": [
+        (q("1 MJ"), "kJ"),
+    ],
+    "wcf": [
+        (q("1 L"), "mL"),
+    ],
+}
+
+
+def auto_scale(value: Quantity, thresholds: list[tuple[Quantity, str]]) -> Quantity:
+    """Scale a quantity to an appropriate unit based on thresholds.
+
+    Parameters
+    ----------
+    value : Quantity
+        The quantity to scale.
+    thresholds : list[tuple[Quantity, str]]
+        List of (threshold, target_unit) tuples. Applied sequentially; if the
+        value is below a threshold, it is converted to that unit and the next
+        threshold is checked with the converted value.
+
+    Returns:
+    -------
+    Quantity
+        The scaled quantity in the appropriate unit.
+    """
+    for limit, unit in thresholds:
+        if value < limit:
+            value = value.to(unit)
+    return value
+
+
 def format_energy(energy_value: float, energy_unit: str | None = None) -> Quantity:
     if energy_unit is None:
         energy_unit = Energy(value=0.0).unit
     val = q(energy_value, energy_unit)
-    if val < q("1 kWh"):
-        val = val.to("Wh")
-    if val < q("1 Wh"):
-        val = val.to("mWh")
-    return val
+    return auto_scale(val, THRESHOLDS["energy"])
 
 
 def format_gwp(gwp_value: float, gwp_unit: str | None = None) -> Quantity:
     if gwp_unit is None:
         gwp_unit = GWP(value=0.0).unit
     val = q(gwp_value, gwp_unit)
-    if val < q("1 kgCO2eq"):
-        val = val.to("gCO2eq")
-    if val < q("1 gCO2eq"):
-        val = val.to("mgCO2eq")
-    return val
+    return auto_scale(val, THRESHOLDS["gwp"])
 
 
 def format_adpe(adpe_value: float, adpe_unit: str | None = None) -> Quantity:
     if adpe_unit is None:
         adpe_unit = ADPe(value=0.0).unit
     val = q(adpe_value, adpe_unit)
-    if val < q("1 kgSbeq"):
-        val = val.to("gSbeq")
-    if val < q("1 gSbeq"):
-        val = val.to("mgSbeq")
-    if val < q("1 mgSbeq"):
-        val = val.to("µgSbeq")
-    return val
+    return auto_scale(val, THRESHOLDS["adpe"])
 
 
 def format_pe(pe_value: float, pe_unit: str | None = None) -> Quantity:
     if pe_unit is None:
         pe_unit = PE(value=0.0).unit
     val = q(pe_value, pe_unit)
-    if val < q("1 MJ"):
-        val = val.to("kJ")
-    return val
+    return auto_scale(val, THRESHOLDS["pe"])
 
 
 def format_wcf(wcf_value: float, wcf_unit: str | None = None) -> Quantity:
     if wcf_unit is None:
         wcf_unit = WCF(value=0.0).unit
     val = q(wcf_value, wcf_unit)
-    if val < q("1 L"):
-        val = val.to("mL")
-    return val
+    return auto_scale(val, THRESHOLDS["wcf"])
 
 
 def format_impacts(impacts: Impacts | ImpactsOutput) -> tuple[QImpacts, Usage, Embodied]:
