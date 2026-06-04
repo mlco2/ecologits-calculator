@@ -223,29 +223,14 @@ def _aggregate_impacts(impacts_list: list[QImpacts]) -> QImpacts:
     )
 
 
-def expert_company_mode():
-    """Expert Company Mode: multi-model, multi-scenario environmental impact calculator."""
-    col_subtitle, col_horizon = st.columns([3, 1])
-    with col_subtitle:
-        st.markdown(
-            "Configure multiple LLM models with different usage scenarios and user counts "
-            "to estimate combined token usage and environmental impacts."
-        )
-    with col_horizon:
-        time_horizon_label = st.pills(
-            label="Time horizon",
-            options=list(TIME_HORIZONS.keys()),
-            default="Monthly",
-            selection_mode="single",
-        )
+def _render_grid(df_models: pd.DataFrame) -> dict:
+    """Render the multi-row grid UI and handle Add/Remove/Run buttons.
 
-    df_models = load_models(filter_main=False)
-
-    if "ec_grid_rows" not in st.session_state:
-        st.session_state["ec_grid_rows"] = [dict(_EMPTY_ROW)]
-    if "ec_grid_version" not in st.session_state:
-        st.session_state["ec_grid_version"] = 0
-
+    Returns a dict with keys:
+    - 'rows': current grid rows from session state
+    - 'incomplete': list of row indices (1-based) with incomplete fields
+    - 'run': bool indicating whether Run button was pressed
+    """
     grid_df = pd.DataFrame(st.session_state["ec_grid_rows"])
     grid_options = _build_grid_options(df_models)
 
@@ -299,9 +284,15 @@ def expert_company_mode():
             disabled=bool(incomplete) or not rows,
         )
 
-    if not run:
-        return
+    return {
+        "rows": rows,
+        "incomplete": incomplete,
+        "run": run,
+    }
 
+
+def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_label: str) -> None:
+    """Compute impacts for all rows, aggregate by provider/model/location, and display results."""
     time_horizon_days = TIME_HORIZONS.get(time_horizon_label, TIME_HORIZONS["Monthly"])
 
     summary_records = []
@@ -429,3 +420,34 @@ def expert_company_mode():
             "These models may not be in the ecologits repository.",
             icon="⚠️",
         )
+
+
+def expert_company_mode():
+    """Expert Company Mode: multi-model, multi-scenario environmental impact calculator."""
+    col_subtitle, col_horizon = st.columns([3, 1])
+    with col_subtitle:
+        st.markdown(
+            "Configure multiple LLM models with different usage scenarios and user counts "
+            "to estimate combined token usage and environmental impacts."
+        )
+    with col_horizon:
+        time_horizon_label = st.pills(
+            label="Time horizon",
+            options=list(TIME_HORIZONS.keys()),
+            default="Monthly",
+            selection_mode="single",
+        )
+
+    df_models = load_models(filter_main=False)
+
+    if "ec_grid_rows" not in st.session_state:
+        st.session_state["ec_grid_rows"] = [dict(_EMPTY_ROW)]
+    if "ec_grid_version" not in st.session_state:
+        st.session_state["ec_grid_version"] = 0
+
+    grid_state = _render_grid(df_models)
+
+    if not grid_state["run"]:
+        return
+
+    _aggregate_and_display(df_models, grid_state["rows"], time_horizon_label)
