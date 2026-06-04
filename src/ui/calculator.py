@@ -28,19 +28,8 @@ def calculator_mode():
                 label="Example prompt", options=[p.label for p in PROMPTS], index=2
             )
 
-        list_impacts = st.pills(
-            label="Impacts to display",
-            options=[
-                "Electricity",
-                "Carbon Footprint",
-                "Water",
-                "Metals & Minerals",
-                "Fossile Fuels",
-            ],
-            selection_mode="multi",
-            default=["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"],
-            width="stretch",
-        )
+        # Display only electricity, carbon footprint, water, and minerals
+        list_impacts = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"]
 
         # WARNING DISPLAY
         raw_names = get_raw_model_names(df, provider, model)

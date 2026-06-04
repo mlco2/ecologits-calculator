@@ -195,7 +195,7 @@ def expert_mode():
     with st.container(border=True):
         st.markdown('<h3 align="center">Environmental Impacts</h2>', unsafe_allow_html=True)
 
-        display_impacts(impacts)
+        display_impacts(impacts, mode="expert")
 
     with st.expander("⚖️ Usage vs Embodied"):
         st.markdown(
