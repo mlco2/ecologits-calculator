@@ -33,8 +33,11 @@ def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max
 
 def display_impacts(
     impacts_output=None,
-    impacts_to_display: list = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"],
+    impacts_to_display: list | None = None,
 ):
+
+    if impacts_to_display is None:
+        impacts_to_display = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"]
 
     if len(impacts_to_display) == 0:
         st.warning("Select at least one impact to display")

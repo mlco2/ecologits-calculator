@@ -85,12 +85,12 @@ def company_mode():
         electricity_mix = electricity_mixes.find_electricity_mix(dc_location)
 
         # WARNING DISPLAY
-        provider_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
-            "provider"
-        ].values[0]
-        model_raw = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)][
-            "name"
-        ].values[0]
+        df_filtered = df[(df["provider_clean"] == provider) & (df["name_clean"] == model)]
+        if df_filtered.empty:
+            st.error("Selected model not found. Please select a different model.")
+            return
+        provider_raw = df_filtered["provider"].iloc[0]
+        model_raw = df_filtered["name"].iloc[0]
 
         # estimated_latency = latency_estimator.estimate(
         #     provider=provider_raw,

@@ -32,13 +32,17 @@ def expert_mode():
 
         df_filtered = df[(df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)]
 
+        if df_filtered.empty:
+            st.error("Selected model not found. Please select a different model.")
+            return
+
         try:
             total_params = int(df_filtered["total_parameters"].iloc[0])
         except Exception:
             total_params = int(
                 (
-                    df_filtered["total_parameters"].values[0]["min"]
-                    + df_filtered["total_parameters"].values[0]["max"]
+                    df_filtered["total_parameters"].iloc[0]["min"]
+                    + df_filtered["total_parameters"].iloc[0]["max"]
                 )
                 / 2
             )
@@ -48,14 +52,14 @@ def expert_mode():
         except Exception:
             active_params = int(
                 (
-                    df_filtered["active_parameters"].values[0]["min"]
-                    + df_filtered["active_parameters"].values[0]["max"]
+                    df_filtered["active_parameters"].iloc[0]["min"]
+                    + df_filtered["active_parameters"].iloc[0]["max"]
                 )
                 / 2
             )
 
-        tps_raw = df_filtered["tps"].values[0]
-        ttft_raw = df_filtered["ttft"].values[0]
+        tps_raw = df_filtered["tps"].iloc[0]
+        ttft_raw = df_filtered["ttft"].iloc[0]
 
         ########## Model parameters ##########
 
