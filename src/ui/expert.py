@@ -1,9 +1,13 @@
+import logging
+
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
+
+logger = logging.getLogger(__name__)
 
 from src.config.constants import COUNTRY_CODES, PROMPTS
 from src.core.formatting import format_impacts
@@ -36,27 +40,42 @@ def expert_mode():
             st.error("Selected model not found. Please select a different model.")
             return
 
-        try:
-            total_params = int(df_filtered["total_parameters"].iloc[0])
-        except Exception:
-            total_params = int(
-                (
-                    df_filtered["total_parameters"].iloc[0]["min"]
-                    + df_filtered["total_parameters"].iloc[0]["max"]
-                )
-                / 2
-            )
+        def extract_param_value(value: float | dict) -> int:
+            """Extract parameter count from scalar or RangeValue dict.
+            
+            Args:
+                value: Either a scalar (int/float) or dict with 'min'/'max' keys.
+                
+            Returns:
+                int: The parameter value or mean of min/max range.
+                
+            Raises:
+                ValueError: If value type is invalid or dict lacks required keys.
+            """
+            if isinstance(value, dict):
+                if "min" not in value or "max" not in value:
+                    raise ValueError(
+                        f"RangeValue dict missing 'min' or 'max' key: {value}"
+                    )
+                return int((value["min"] + value["max"]) / 2)
+            try:
+                return int(value)
+            except (TypeError, ValueError) as e:
+                raise ValueError(f"Cannot convert {value!r} to int: {e}") from e
 
         try:
-            active_params = int(df_filtered["active_parameters"].iloc[0])
-        except Exception:
-            active_params = int(
-                (
-                    df_filtered["active_parameters"].iloc[0]["min"]
-                    + df_filtered["active_parameters"].iloc[0]["max"]
-                )
-                / 2
-            )
+            total_params = extract_param_value(df_filtered["total_parameters"].iloc[0])
+        except ValueError as e:
+            logger.error(f"Failed to extract total_parameters: {e}")
+            st.error(f"Unable to extract model parameters: {e}")
+            return
+
+        try:
+            active_params = extract_param_value(df_filtered["active_parameters"].iloc[0])
+        except ValueError as e:
+            logger.error(f"Failed to extract active_parameters: {e}")
+            st.error(f"Unable to extract model parameters: {e}")
+            return
 
         tps_raw = df_filtered["tps"].iloc[0]
         ttft_raw = df_filtered["ttft"].iloc[0]
@@ -242,14 +261,14 @@ def expert_mode():
             default=["FRA", "USA", "CHN"],
         )
 
-        try:
-            impact_type = st.selectbox(
-                label="Select an impact type to compare",
-                options=["gwp", "adpe", "pe", "wue"],
-                format_func=format_electricity_mix_criterion,
-                index=0,
-            )
+        impact_type = st.selectbox(
+            label="Select an impact type to compare",
+            options=["gwp", "adpe", "pe", "wue"],
+            format_func=format_electricity_mix_criterion,
+            index=0,
+        )
 
+        try:
             df_comp = pd.DataFrame(
                 [
                     em
@@ -257,6 +276,10 @@ def expert_mode():
                     if em.zone in countries_to_compare
                 ]
             )
+            if df_comp.empty:
+                st.warning("No electricity mix data available for selected countries.")
+                return
+
             df_comp = df_comp.sort_values(by=impact_type, ascending=True)
 
             fig_2 = px.bar(
@@ -269,5 +292,12 @@ def expert_mode():
 
             st.plotly_chart(fig_2)
 
-        except Exception:
-            st.warning("Can't display chart with no values.")
+        except KeyError as e:
+            logger.error(f"Missing column in electricity mix data: {e}")
+            st.warning(f"Unable to display chart: missing data column {e}")
+        except ValueError as e:
+            logger.error(f"Invalid data for chart rendering: {e}")
+            st.warning(f"Unable to display chart: {e}")
+        except Exception as e:
+            logger.exception(f"Unexpected error rendering location impact chart: {e}")
+            st.warning("An unexpected error occurred while rendering the chart.")
