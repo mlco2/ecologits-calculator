@@ -39,10 +39,6 @@
     },
     {
       "provider": "openai",
-      "name": "gpt-4.1-2025-04-14"
-    },
-    {
-      "provider": "openai",
       "name": "gpt-4.1-mini"
     },
     {
@@ -207,15 +203,7 @@
     },
     {
       "provider": "mistralai",
-      "name": "codestral-2508"
-    },
-    {
-      "provider": "mistralai",
       "name": "codestral-latest"
-    },
-    {
-      "provider": "mistralai",
-      "name": "devstral-2512"
     },
     {
       "provider": "mistralai",
@@ -260,10 +248,6 @@
     {
       "provider": "mistralai",
       "name": "mistral-large-latest"
-    },
-    {
-      "provider": "mistralai",
-      "name": "mistral-medium-2505"
     },
     {
       "provider": "mistralai",
