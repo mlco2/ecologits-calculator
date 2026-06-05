@@ -42,15 +42,30 @@ def load_models(filter_main=True) -> pd.DataFrame:
             active_parameters = total_parameters
 
         elif m.architecture.type == ArchitectureTypes.MOE:
-            if isinstance(m.architecture.parameters.total, RangeValue):
-                total_parameters = dict(m.architecture.parameters.total)
-            else:
-                total_parameters = m.architecture.parameters.total
+            # Handle ParametersMoE objects
+            if hasattr(m.architecture.parameters, "total") and hasattr(
+                m.architecture.parameters, "active"
+            ):
+                # This is a ParametersMoE object
+                total_param = m.architecture.parameters.total
+                active_param = m.architecture.parameters.active
 
-            if isinstance(m.architecture.parameters.active, RangeValue):
-                active_parameters = dict(m.architecture.parameters.active)
+                if isinstance(total_param, RangeValue):
+                    total_parameters = dict(total_param)
+                else:
+                    total_parameters = total_param
+
+                if isinstance(active_param, RangeValue):
+                    active_parameters = dict(active_param)
+                else:
+                    active_parameters = active_param
             else:
-                active_parameters = m.architecture.parameters.active
+                # This is a simple number (int/float)
+                if isinstance(m.architecture.parameters, RangeValue):
+                    total_parameters = dict(m.architecture.parameters)
+                else:
+                    total_parameters = m.architecture.parameters
+                active_parameters = total_parameters
 
         else:
             continue  # Ignore model

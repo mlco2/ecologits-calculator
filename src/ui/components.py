@@ -39,3 +39,15 @@ def display_model_warnings(impacts) -> None:
             f"{impacts.warnings[0].message.split(',')[0]} and {impacts.warnings[1].message.split(',')[0].lower()}, {impacts.warnings[0].message.split(',')[1]}",
             icon="⚠️",
         )
+
+
+def display_electricity_mix_warnings(electricity_mix) -> None:
+    """Display warning messages based on electricity mix characteristics."""
+    if electricity_mix and electricity_mix.has_warnings:
+        warning_messages = [str(warning) for warning in electricity_mix.warnings]
+        if len(warning_messages) == 1:
+            st.warning(warning_messages[0], icon="⚠️")
+        else:
+            # Combine multiple warnings into a single message
+            combined_message = "\n".join([f"• {msg}" for msg in warning_messages])
+            st.warning(f"Electricity mix warnings:\n{combined_message}", icon="⚠️")

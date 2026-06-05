@@ -9,6 +9,7 @@ from functools import reduce
 import pandas as pd
 import streamlit as st
 
+from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
@@ -294,6 +295,23 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
 def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_label: str) -> None:
     """Compute impacts for all rows, aggregate by provider/model/location, and display results."""
     time_horizon_days = TIME_HORIZONS.get(time_horizon_label, TIME_HORIZONS["Monthly"])
+
+    # Check for electricity mix warnings in selected locations
+    selected_locations = {row.get(_COL_LOCATION, _DEFAULT_LOCATION) for row in rows}
+    location_codes = [_LOCATION_LABEL_TO_CODE.get(loc, "WOR") for loc in selected_locations]
+
+    has_electricity_warnings = any(
+        electricity_mixes.find_electricity_mix(code).has_warnings
+        for code in location_codes
+        if electricity_mixes.find_electricity_mix(code) is not None
+    )
+
+    if has_electricity_warnings:
+        st.info(
+            "⚠️ Some selected locations use default electricity mix values, which may affect precision. "
+            "Hover over location names in the results for more details.",
+            icon="ℹ️",
+        )
 
     summary_records = []
     all_impacts = []

@@ -11,7 +11,11 @@ from src.repositories.electricity_mix import (
     format_country_name,
 )
 from src.repositories.models import get_raw_model_names, load_models
-from src.ui.components import display_model_warnings, render_model_selector
+from src.ui.components import (
+    display_electricity_mix_warnings,
+    display_model_warnings,
+    render_model_selector,
+)
 from src.ui.impacts import (
     display_impacts,
 )
@@ -105,6 +109,10 @@ def company_mode():
         )
 
         display_model_warnings(impacts)
+
+        # Display electricity mix warnings if any
+        if electricity_mix and electricity_mix.has_warnings:
+            display_electricity_mix_warnings(electricity_mix)
 
         impacts_formatted, _, _ = format_impacts(impacts)
 
