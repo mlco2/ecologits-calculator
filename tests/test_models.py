@@ -60,7 +60,7 @@ class TestLoadModels:
         mock_repo.list_models.return_value = [mock_model]
 
         # Import after mocking to clear the cache
-        with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
+        with patch("src.repositories.model_config.load_main_models", return_value=["gpt-4"]):
             result = load_models(filter_main=True)
 
         assert isinstance(result, pd.DataFrame)
@@ -80,7 +80,7 @@ class TestLoadModels:
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
 
-        with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
+        with patch("src.repositories.model_config.load_main_models", return_value=["gpt-4"]):
             result = load_models(filter_main=True)
 
         if len(result) > 0:
@@ -112,7 +112,7 @@ class TestLoadModels:
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
 
-        with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
+        with patch("src.repositories.model_config.load_main_models", return_value=["gpt-4"]):
             result = load_models(filter_main=True)
 
         if len(result) > 0:
@@ -133,7 +133,7 @@ class TestLoadModels:
         mock_repo.list_models.return_value = [mock_model]
         mock_repo.ArchitectureTypes = ArchitectureTypes
 
-        with patch("src.repositories.models.MAIN_MODELS", ["gpt-4"]):
+        with patch("src.repositories.model_config.load_main_models", return_value=["gpt-4"]):
             result = load_models(filter_main=True)
 
         if len(result) > 0:

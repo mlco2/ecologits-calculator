@@ -1,0 +1,321 @@
+{
+  "last_updated": "2024-06-05",
+  "models": [
+    {
+      "provider": "anthropic",
+      "name": "claude-opus-4-1-20250805"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-opus-4-5-20251101"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-opus-4-6"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-opus-4-7"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-opus-4-8"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-sonnet-4-5-20250929"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-sonnet-4-6"
+    },
+    {
+      "provider": "anthropic",
+      "name": "claude-haiku-4-5-20251001"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-4.1"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-4.1-2025-04-14"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-4.1-mini"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-4.1-nano"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5-mini"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5-nano"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5-pro"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5-codex"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5-search-api"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.1"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.1-codex"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.1-codex-max"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.1-codex-mini"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.2"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.2-codex"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.2-pro"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.3-codex"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.4"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.4-mini"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.4-nano"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.4-pro"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.5"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-5.5-pro"
+    },
+    {
+      "provider": "openai",
+      "name": "o4-mini"
+    },
+    {
+      "provider": "openai",
+      "name": "o4-mini-2025-04-16"
+    },
+    {
+      "provider": "openai",
+      "name": "o4-mini-deep-research"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-oss-120b"
+    },
+    {
+      "provider": "openai",
+      "name": "gpt-oss-20b"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-2.5-flash"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-2.5-flash-image"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-2.5-flash-lite"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-2.5-pro"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3-flash-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3-pro-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3-pro-image-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3.1-flash-image-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3.1-flash-lite"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3.1-flash-lite-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3.1-pro-preview"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemini-3.5-flash"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemma-4-26b-a4b-it"
+    },
+    {
+      "provider": "google_genai",
+      "name": "gemma-4-31b-it"
+    },
+    {
+      "provider": "mistralai",
+      "name": "codestral-2508"
+    },
+    {
+      "provider": "mistralai",
+      "name": "codestral-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "devstral-2512"
+    },
+    {
+      "provider": "mistralai",
+      "name": "devstral-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "devstral-medium-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "magistral-medium-2509"
+    },
+    {
+      "provider": "mistralai",
+      "name": "magistral-medium-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "magistral-small-2509"
+    },
+    {
+      "provider": "mistralai",
+      "name": "magistral-small-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "ministral-14b-2512"
+    },
+    {
+      "provider": "mistralai",
+      "name": "ministral-3b-2512"
+    },
+    {
+      "provider": "mistralai",
+      "name": "ministral-8b-2512"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-large-2512"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-large-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-medium-2505"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-medium-2508"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-medium-2604"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-medium-3"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-medium-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-small-2506"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-small-2603"
+    },
+    {
+      "provider": "mistralai",
+      "name": "mistral-small-latest"
+    },
+    {
+      "provider": "mistralai",
+      "name": "voxtral-mini-2509"
+    },
+    {
+      "provider": "mistralai",
+      "name": "voxtral-small-2507"
+    },
+    {
+      "provider": "cohere",
+      "name": "command-a-plus-05-2026"
+    },
+    {
+      "provider": "cohere",
+      "name": "command-a-reasoning-08-2025"
+    },
+    {
+      "provider": "cohere",
+      "name": "command-a-translate-08-2025"
+    },
+    {
+      "provider": "cohere",
+      "name": "command-a-vision-07-2025"
+    }
+  ]
+}

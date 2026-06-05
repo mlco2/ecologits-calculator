@@ -9,7 +9,7 @@ from ecologits.status_messages import (
 )
 from ecologits.utils.range_value import RangeValue
 
-from src.config.constants import MAIN_MODELS
+from src.repositories.model_config import load_main_models
 
 PROVIDERS_FORMAT = {
     "anthropic": "Anthropic",
@@ -21,17 +21,30 @@ PROVIDERS_FORMAT = {
 
 
 def clean_model_name(model_name: str) -> str:
-    model_name = model_name.replace("latest", "")
-    model_name = model_name.replace("-", " ")
-    model_name = model_name.replace("_", " ")
-    return model_name
+    # Define a mapping of characters to replace
+    replacements = {
+        "latest": "",
+        "-": " ",
+        "_": " ",
+        "preview": "",
+    }
+
+    # Apply replacements using a loop
+    for old, new in replacements.items():
+        model_name = model_name.replace(old, new)
+
+    # Join and split to handle multiple spaces
+    return " ".join(model_name.split())
 
 
 @st.cache_data
 def load_models(filter_main=True) -> pd.DataFrame:
     data = []
+    # Load main models list (will be cached)
+    main_models = load_main_models() if filter_main else None
+
     for m in model_repository.list_models():
-        if filter_main and m.name not in MAIN_MODELS:
+        if filter_main and m.name not in main_models:
             continue  # Ignore "not main" models when filter is enabled
 
         if m.architecture.type == ArchitectureTypes.DENSE:
