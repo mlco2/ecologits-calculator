@@ -1,24 +1,20 @@
 """Tests for src/core/equivalences.py."""
 
 from src.core.equivalences import (
-    AIRPLANE_PARIS_NYC_GWP_EQ,
-    DAYS_IN_YEAR,
-    EV_ENERGY_EQ,
-    ONE_PERCENT_WORLD_POPULATION,
-    RUNNING_ENERGY_EQ,
-    STREAMING_GWP_EQ,
-    WALKING_ENERGY_EQ,
-    YEARLY_IRELAND_ELECTRICITY_CONSUMPTION,
-    YEARLY_NUCLEAR_ENERGY_EQ,
-    YEARLY_WIND_ENERGY_EQ,
     EnergyProduction,
     PhysicalActivity,
+    electricity_consumption,
+    electricity_production,
+    energy_activity,
     format_energy_eq_electric_vehicle,
     format_energy_eq_electricity_consumption_ireland,
     format_energy_eq_electricity_production,
     format_energy_eq_physical_activity,
     format_gwp_eq_airplane_paris_nyc,
     format_gwp_eq_streaming,
+    global_stats,
+    media_consumption,
+    transportation,
 )
 from src.core.units import q
 
@@ -208,40 +204,40 @@ class TestConstants:
 
     def test_running_energy_eq_has_correct_unit(self):
         """RUNNING_ENERGY_EQ should be in kJ/km."""
-        assert "kJ" in str(RUNNING_ENERGY_EQ.units)
+        assert "kJ" in str(energy_activity.RUNNING_ENERGY_EQ.units)
 
     def test_walking_energy_eq_has_correct_unit(self):
         """WALKING_ENERGY_EQ should be in kJ/km."""
-        assert "kJ" in str(WALKING_ENERGY_EQ.units)
+        assert "kJ" in str(energy_activity.WALKING_ENERGY_EQ.units)
 
     def test_ev_energy_eq_has_correct_unit(self):
         """EV_ENERGY_EQ should be in kWh/km."""
-        assert "kWh" in str(EV_ENERGY_EQ.units)
+        assert "kWh" in str(transportation.EV_ENERGY_EQ.units)
 
     def test_streaming_gwp_eq_has_correct_unit(self):
         """STREAMING_GWP_EQ should be in h/kgCO2eq."""
-        assert "h" in str(STREAMING_GWP_EQ.units)
+        assert "h" in str(media_consumption.STREAMING_GWP_EQ.units)
 
     def test_one_percent_world_population_magnitude(self):
         """ONE_PERCENT_WORLD_POPULATION should be reasonable."""
-        assert 70_000_000 < ONE_PERCENT_WORLD_POPULATION < 90_000_000
+        assert 70_000_000 < global_stats.ONE_PERCENT_WORLD_POPULATION < 90_000_000
 
     def test_days_in_year_equals_365(self):
         """DAYS_IN_YEAR should be 365."""
-        assert DAYS_IN_YEAR == 365
+        assert global_stats.DAYS_IN_YEAR == 365
 
     def test_yearly_nuclear_energy_in_twh(self):
         """YEARLY_NUCLEAR_ENERGY_EQ should be in TWh."""
-        assert "TWh" in str(YEARLY_NUCLEAR_ENERGY_EQ.units)
+        assert "TWh" in str(electricity_production.YEARLY_NUCLEAR_ENERGY_EQ.units)
 
     def test_yearly_wind_energy_in_gwh(self):
         """YEARLY_WIND_ENERGY_EQ should be in GWh."""
-        assert "GWh" in str(YEARLY_WIND_ENERGY_EQ.units)
+        assert "GWh" in str(electricity_production.YEARLY_WIND_ENERGY_EQ.units)
 
     def test_ireland_electricity_consumption_in_twh(self):
         """YEARLY_IRELAND_ELECTRICITY_CONSUMPTION should be in TWh."""
-        assert "TWh" in str(YEARLY_IRELAND_ELECTRICITY_CONSUMPTION.units)
+        assert "TWh" in str(electricity_consumption.YEARLY_IRELAND_ELECTRICITY_CONSUMPTION.units)
 
     def test_airplane_gwp_eq_reasonable_magnitude(self):
         """AIRPLANE_PARIS_NYC_GWP_EQ should be a large value."""
-        assert AIRPLANE_PARIS_NYC_GWP_EQ.magnitude > 100000
+        assert transportation.AIRPLANE_PARIS_NYC_GWP_EQ.magnitude > 100000

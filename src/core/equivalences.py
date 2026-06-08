@@ -48,6 +48,17 @@ IRELAND_POPULATION_MILLION = 5
 # 1.77t for one passenger (round-trip) x 100 passenger
 AIRPLANE_PARIS_NYC_GWP_EQ = q("177000 kgCO2eq")
 
+# From https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html
+# ADPE for building a NVIDIA H100 80GB = 0.00895 kgSbeq
+NVIDIA_H100 = q("8.95 gSbeq")
+
+# https://en.wikipedia.org/wiki/Olympic-size_swimming_pool
+# Olympic pool liters
+OLYMPIC_POOL = q("2500000 L")
+
+# https://en.wikipedia.org/wiki/Drop_(unit)
+# water drop volume
+WATER_DROP = q("0.05 mL")
 
 def format_energy_eq_physical_activity(
     energy: Quantity,
@@ -102,3 +113,21 @@ def format_gwp_eq_airplane_paris_nyc(gwp: Quantity) -> Quantity:
     gwp_eq = gwp * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     gwp_eq = gwp_eq.to("kgCO2eq")
     return gwp_eq / AIRPLANE_PARIS_NYC_GWP_EQ
+
+
+def format_adpe_eq_nvidia(adpe: Quantity) -> Quantity:
+    adpe_eq = adpe * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    adpe_eq = adpe_eq.to("gSbeq")
+    return adpe_eq / NVIDIA_H100
+
+
+def format_wue_eq_pools(wcf: Quantity) -> Quantity:
+    wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    wue_eq = wue_eq.to("L")
+    return wue_eq / OLYMPIC_POOL
+
+
+def format_wue_eq_drops(wcf: Quantity) -> Quantity:
+    #wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    wue_eq = wcf.to("mL")
+    return wue_eq / WATER_DROP

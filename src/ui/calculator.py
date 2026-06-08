@@ -9,6 +9,7 @@ from src.config.content import (
 from src.core.formatting import format_impacts
 from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components import display_model_warnings, render_model_selector
+from src.ui.equivalents import display_equivalent_energy, display_equivalent_ghg, display_equivalents
 from src.ui.impacts import display_impacts
 
 
@@ -65,8 +66,14 @@ def calculator_mode():
         )
         display_impacts(impacts_output=impacts_formatted, impacts_to_display=list_impacts)
 
-        # col_eq_energy, col_eq_ghg = st.columns(2)
-        # with col_eq_energy:
-        #     display_equivalent_energy(impacts_formatted)
-        # with col_eq_ghg:
-        #     display_equivalent_ghg(impacts_formatted)
+        with st.container(border=True):
+            st.session_state.impacts_at_scale = True
+            st.session_state.impacts_at_scale = st.toggle(
+                label="Display impacts at scale",
+                value=st.session_state.impacts_at_scale,
+                help="The scale we implemented is a daily replication of the given usage by 1% of the world population.",
+            )
+            if st.session_state.impacts_at_scale:
+                display_equivalents(impacts_formatted, how="at_scale")
+            else:
+                display_equivalents(impacts_formatted, how="unit")

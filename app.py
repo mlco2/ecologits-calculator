@@ -32,7 +32,7 @@ def main():
         st.session_state.is_expert = False
 
     with col_selector:
-        st.space(size=1)
+        st.space(size="xsmall")
         # Determine button label based on current mode
         if st.session_state.current_mode == "calculator":
             button_label = "🏢 Switch to **Company Mode**"
