@@ -17,17 +17,17 @@ We aim to keep this tool available as a free and open-source resource for the co
 Share your feedback, ask questions, help other members of the community !
 
 Engage the discussion with us:
+- Join our [Discord server](https://discord.gg/7KPzAfcN) and come have a chat !
 - Start a new discussion on this space or on this
 [GitHub thread](https://github.com/mlco2/ecologits/discussions/45)
-- message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
+- Message us on [LinkedIn](https://www.linkedin.com/company/ecologits/).
 
 #### If you have more to give
 
 ###### As an individual
 
 We welcome any open source contribution ! You can :
-- Contribute on **[EcoLogits](https://github.com/mlco2/ecologits)** or on
-**EcoLogits Calculator**.
+- Contribute on **[EcoLogits](https://github.com/mlco2/ecologits)**, our [calculator](https://github.com/mlco2/ecologits-calculator) or even on our [API](https://github.com/mlco2/ecologits-api).
 - Become a an active member of [CodeCarbon](https://codecarbon.io/) non profit. Get involved in our broader mission !
 
 
