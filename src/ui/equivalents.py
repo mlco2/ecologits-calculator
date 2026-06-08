@@ -3,43 +3,44 @@ import streamlit as st
 from src.core.equivalences import (
     EnergyProduction,
     PhysicalActivity,
+    format_adpe_eq_nvidia,
     format_energy_eq_electric_vehicle,
     format_energy_eq_electricity_consumption_ireland,
     format_energy_eq_electricity_production,
     format_energy_eq_physical_activity,
     format_gwp_eq_airplane_paris_nyc,
     format_gwp_eq_streaming,
-    format_adpe_eq_nvidia,
+    format_wue_eq_drops,
     format_wue_eq_pools,
-    format_wue_eq_drops
 )
 
 eq_kpis = {
-    "at_scale":{
+    "at_scale": {
         "title": "<h3 align='center'>What if 1% of the planet does the same everyday for 1 year ?</h3>",
         "help": "1% of 8 billion people x 365 days",
         "energy": "EPROD",
         "ghg": "PLANE",
         "water": "POOL",
-        "adpe": "NVIDIA"
+        "adpe": "NVIDIA",
     },
-    "unit":{
+    "unit": {
         "title": "<h3 align='center'>Request Equivalents</h3><p align='center'>Even if these equivalents might look small, it's all about the scale !</p>",
         "help": "Unit equivalents only for the selected usage",
         "energy": "EV",
         "ghg": "STREAMING",
         "water": "DROP",
-        "adpe": "IPHONE"
+        "adpe": "IPHONE",
     },
 }
 
-def display_equivalents(impacts, how = "at_scale"):
+
+def display_equivalents(impacts, how="at_scale"):
 
     st.markdown(
-        f'{eq_kpis[how]["title"]}',
+        f"{eq_kpis[how]['title']}",
         unsafe_allow_html=True,
-        help=f"{eq_kpis[how]["help"]}",
-        #width="content"
+        help=f"{eq_kpis[how]['help']}",
+        # width="content"
     )
 
     st.space()
@@ -56,7 +57,7 @@ def display_equivalents(impacts, how = "at_scale"):
         display_equivalent_adpe(impacts, type=eq_kpis[how]["adpe"])
 
 
-def render_equivalent(value, emoji = "", name = "", text = ""):
+def render_equivalent(value, emoji="", name="", text=""):
 
     st.markdown(
         f'<h2 align="center">{value}</h2>',
@@ -69,17 +70,16 @@ def render_equivalent(value, emoji = "", name = "", text = ""):
     st.markdown(f'<p align="center">{text}</p>', unsafe_allow_html=True)
 
 
-def display_equivalent_energy(impacts, type = "EV"):
+def display_equivalent_energy(impacts, type="EV"):
 
     with st.container(border=True):
-
         if type == "EV":
             ev_eq = format_energy_eq_electric_vehicle(impacts.energy)
             render_equivalent(
                 value=f"{ev_eq.magnitude:.2f} {ev_eq.units}",
                 emoji="🔋",
                 name="with an electric vehicle",
-                text="(based on electricity consumption)"
+                text="(based on electricity consumption)",
             )
 
         elif type == "SPORT":
@@ -96,7 +96,7 @@ def display_equivalent_energy(impacts, type = "EV"):
             )
             render_equivalent(
                 value=f"{distance.magnitude:.3g} <i>{distance.units} </p>",
-                name = physical_activity,
+                name=physical_activity,
             )
 
         elif type == "EPROD":
@@ -111,7 +111,7 @@ def display_equivalent_energy(impacts, type = "EV"):
                 value=f"{int(count.magnitude):,}",
                 emoji=emoji,
                 name=name,
-                text="(yearly energy production)"
+                text="(yearly energy production)",
             )
 
         elif type == "ECONS":
@@ -126,17 +126,16 @@ def display_equivalent_energy(impacts, type = "EV"):
             )
 
 
-def display_equivalent_ghg(impacts, type = "PLANE"):
+def display_equivalent_ghg(impacts, type="PLANE"):
 
     with st.container(border=True):
-
         if type == "STREAMING":
             streaming_eq = format_gwp_eq_streaming(impacts.gwp)
             render_equivalent(
                 value=f"{streaming_eq.magnitude:.2f} {streaming_eq.units}",
                 emoji="⏯️",
                 name="streaming videos",
-                text="(based on GHG emissions)"
+                text="(based on GHG emissions)",
             )
 
         elif type == "PLANE":
@@ -145,35 +144,33 @@ def display_equivalent_ghg(impacts, type = "PLANE"):
                 value=f"{int(paris_nyc_airplane.magnitude):,}",
                 emoji="✈️",
                 name="Paris ↔ NYC",
-                text="(based on GHG emissions)"
+                text="(based on GHG emissions)",
             )
 
 
-def display_equivalent_adpe(impacts, type = "NVIDIA"):
+def display_equivalent_adpe(impacts, type="NVIDIA"):
 
     with st.container(border=True):
-
         if type == "NVIDIA":
             nvdia_eq = format_adpe_eq_nvidia(impacts.adpe)
             render_equivalent(
                 value=f"{int(nvdia_eq.magnitude):,}",
                 emoji="🕹️",
                 name="NVIDIA H100",
-                text="(based on metals & minerals use)"
+                text="(based on metals & minerals use)",
             )
 
 
-def display_equivalent_wue(impacts, type = "POOL"):
+def display_equivalent_wue(impacts, type="POOL"):
 
     with st.container(border=True):
-
         if type == "POOL":
             pool_eq = format_wue_eq_pools(impacts.wcf)
             render_equivalent(
                 value=f"{int(pool_eq.magnitude):,}",
                 emoji="🏊🏼‍♂️",
                 name="Olympic pools",
-                text="(based on water use)"
+                text="(based on water use)",
             )
 
         if type == "DROP":
@@ -182,5 +179,5 @@ def display_equivalent_wue(impacts, type = "POOL"):
                 value=f"{int(pool_eq.magnitude):,}",
                 emoji="💦",
                 name="Rain drops",
-                text="(based on water use)"
+                text="(based on water use)",
             )

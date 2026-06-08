@@ -60,6 +60,7 @@ OLYMPIC_POOL = q("2500000 L")
 # water drop volume
 WATER_DROP = q("0.05 mL")
 
+
 def format_energy_eq_physical_activity(
     energy: Quantity,
 ) -> tuple[PhysicalActivity, Quantity]:
@@ -128,6 +129,6 @@ def format_wue_eq_pools(wcf: Quantity) -> Quantity:
 
 
 def format_wue_eq_drops(wcf: Quantity) -> Quantity:
-    #wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    # wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     wue_eq = wcf.to("mL")
     return wue_eq / WATER_DROP
