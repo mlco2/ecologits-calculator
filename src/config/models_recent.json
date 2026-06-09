@@ -3,10 +3,6 @@
   "models": [
     {
       "provider": "anthropic",
-      "name": "claude-opus-4-1-20250805"
-    },
-    {
-      "provider": "anthropic",
       "name": "claude-opus-4-5-20251101"
     },
     {
@@ -67,10 +63,6 @@
     },
     {
       "provider": "openai",
-      "name": "gpt-5-search-api"
-    },
-    {
-      "provider": "openai",
       "name": "gpt-5.1"
     },
     {
@@ -128,10 +120,6 @@
     {
       "provider": "openai",
       "name": "o4-mini"
-    },
-    {
-      "provider": "openai",
-      "name": "o4-mini-2025-04-16"
     },
     {
       "provider": "openai",
