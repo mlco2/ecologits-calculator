@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 from pint import Quantity
-
+from src.config.constants import *
 from src.core.units import q
 
 
@@ -15,50 +15,48 @@ class EnergyProduction(StrEnum):
     WIND = "wind"
 
 
-# From https://www.runningtools.com/energyusage.htm
-RUNNING_ENERGY_EQ = q("294 kJ / km")  # running 1 km at 10 km/h with a weight of 70 kg
-WALKING_ENERGY_EQ = q("196 kJ / km")  # walking 1 km at 3 km/h with a weight of 70 kg
+from enum import Enum
 
-# From https://selectra.info/energie/actualites/insolite/consommation-vehicules-electriques-france-2040
-# and https://www.tesla.com/fr_fr/support/power-consumption
-EV_ENERGY_EQ = q("0.17 kWh / km")
+class EquivalentType(Enum):
+    EV = "EV"
+    SPORT = "SPORT"
+    EPROD = "EPROD"
+    ECONS = "ECONS"
+    STREAMING = "STREAMING"
+    PLANE = "PLANE"
+    THERMIC_VEHICLE = "THERMIC_VEHICLE"
+    NVIDIA = "NVIDIA"
+    POOL = "POOL"
+    DROP = "DROP"
+    IPHONE = "IPHONE"
+    PINTS = "PINTS"
 
-# From https://impactco2.fr/outils/comparateur?value=1&comparisons=streamingvideo
-STREAMING_GWP_EQ = q("15.6 h / kgCO2eq")
-
-# From https://ourworldindata.org/population-growth
-ONE_PERCENT_WORLD_POPULATION = 80_000_000
-
-DAYS_IN_YEAR = 365
-
-# For a 900 MW nuclear plant -> 500 000 MWh / month
-# From https://www.edf.fr/groupe-edf/espaces-dedies/jeunes-enseignants/pour-les-jeunes/lenergie-de-a-a-z/produire-de-lelectricite/le-nucleaire-en-chiffres
-YEARLY_NUCLEAR_ENERGY_EQ = q("6 TWh")
-
-# For a 2MW wind turbine
-# https://www.ecologie.gouv.fr/eolien-terrestre
-YEARLY_WIND_ENERGY_EQ = q("4.2 GWh")
-
-# Ireland yearly electricity consumption
-# From https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption
-YEARLY_IRELAND_ELECTRICITY_CONSUMPTION = q("33 TWh")
-IRELAND_POPULATION_MILLION = 5
-
-# From https://impactco2.fr/outils/comparateur?value=1&comparisons=&equivalent=avion-pny
-# 1.77t for one passenger (round-trip) x 100 passenger
-AIRPLANE_PARIS_NYC_GWP_EQ = q("177000 kgCO2eq")
-
-# From https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html
-# ADPE for building a NVIDIA H100 80GB = 0.00895 kgSbeq
-NVIDIA_H100 = q("8.95 gSbeq")
-
-# https://en.wikipedia.org/wiki/Olympic-size_swimming_pool
-# Olympic pool liters
-OLYMPIC_POOL = q("2500000 L")
-
-# https://en.wikipedia.org/wiki/Drop_(unit)
-# water drop volume
-WATER_DROP = q("0.05 mL")
+EQ_KPIS = {
+    "at_scale": {
+        "title": "<h3 align='center'>What if 1% of the planet does the same everyday for 1 year ?</h3>",
+        "help": "1% of 8 billion people x 365 days",
+        "energy": EquivalentType.EPROD,
+        "ghg": EquivalentType.PLANE,
+        "wcf": EquivalentType.POOL,
+        "adpe": EquivalentType.IPHONE,
+    },
+    "unit": {
+        "title": "<h3 align='center'>Equivalents for the environment</h3><p align='center'>Even if these equivalents might look small, it's all about the scale !</p>",
+        "help": "Unit equivalents only for the selected usage",
+        "energy": EquivalentType.EV,
+        "ghg": EquivalentType.THERMIC_VEHICLE,
+        "wcf": EquivalentType.DROP,
+        "adpe": EquivalentType.IPHONE,
+    },
+    "company": {
+        "title": "<h4 align='center'>Equivalents for the environment</h4>",
+        "help": "Unit equivalents only for the selected usage",
+        "energy": EquivalentType.EV,
+        "ghg": EquivalentType.THERMIC_VEHICLE,
+        "wcf": EquivalentType.PINTS,
+        "adpe": EquivalentType.IPHONE,
+    },
+}
 
 
 def format_energy_eq_physical_activity(
@@ -93,10 +91,19 @@ def format_gwp_eq_streaming(gwp: Quantity) -> Quantity:
     return streaming_eq
 
 
+def format_gwp_eq_vehicle(gwp: Quantity) -> Quantity:
+    gwp = gwp.to("gCO2eq")
+    thermic_vehicle_eq = gwp / THERMIC_VEHICLE_GHG_EQ
+    if thermic_vehicle_eq < q("1 km"):
+        thermic_vehicle_eq = thermic_vehicle_eq.to("meter")
+    return thermic_vehicle_eq
+
+
 def format_energy_eq_electricity_production(
-    energy: Quantity,
+    energy: Quantity
 ) -> tuple[EnergyProduction, Quantity]:
-    electricity_eq = energy * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    electricity_eq = energy
+    electricity_eq = electricity_eq * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     electricity_eq = electricity_eq.to("TWh")
     if electricity_eq > YEARLY_NUCLEAR_ENERGY_EQ:
         return EnergyProduction.NUCLEAR, electricity_eq / YEARLY_NUCLEAR_ENERGY_EQ
@@ -122,6 +129,12 @@ def format_adpe_eq_nvidia(adpe: Quantity) -> Quantity:
     return adpe_eq / NVIDIA_H100
 
 
+def format_adpe_eq_iphone(adpe: Quantity) -> Quantity:
+    adpe_eq = adpe * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    adpe_eq = adpe_eq.to("gSbeq")
+    return adpe_eq / IPHONE
+
+
 def format_wue_eq_pools(wcf: Quantity) -> Quantity:
     wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     wue_eq = wue_eq.to("L")
@@ -129,6 +142,10 @@ def format_wue_eq_pools(wcf: Quantity) -> Quantity:
 
 
 def format_wue_eq_drops(wcf: Quantity) -> Quantity:
-    # wue_eq = wcf * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     wue_eq = wcf.to("mL")
     return wue_eq / WATER_DROP
+
+
+def format_wue_eq_pints(wcf: Quantity) -> Quantity:
+    wue_eq = wcf.to("L")
+    return wue_eq / BEER_PINT
