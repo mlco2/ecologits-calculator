@@ -8,7 +8,7 @@ def render_model_selector(
     with col_provider:
         providers_clean = sorted(df["provider_clean"].unique())
         # Default to OpenAI if available
-        default_index = providers_clean.index("OpenAI") if "OpenAI" in providers_clean else 0
+        default_index = providers_clean.index("Anthropic") if "Anthropic" in providers_clean else 0
 
         provider = st.selectbox(
             label="Provider",
@@ -25,7 +25,8 @@ def render_model_selector(
                 if x in df[df["provider_clean"] == provider]["name_clean"].unique()
             ]
         )
-        model = st.selectbox(label="Model", options=models_clean, key=f"model_select_{key_suffix}")
+        default_model_index = models_clean.index("Claude sonnet 4 6") if "Claude sonnet 4 6" in models_clean else 0
+        model = st.selectbox(label="Model", options=models_clean, key=f"model_select_{key_suffix}", index=default_model_index)
 
     return provider, model
 

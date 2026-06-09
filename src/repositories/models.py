@@ -34,7 +34,7 @@ def clean_model_name(model_name: str) -> str:
     for old, new in replacements.items():
         model_name = model_name.replace(old, new)
     model_name = re.sub(r"\d{8}", "", model_name)
-    return " ".join(model_name.split())
+    return " ".join(model_name.capitalize().split())
 
 
 @st.cache_data
