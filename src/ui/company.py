@@ -16,9 +16,8 @@ from src.ui.components import (
     display_model_warnings,
     render_model_selector,
 )
-from src.ui.impacts import (
-    display_impacts,
-)
+from src.ui.impacts import display_impacts
+from src.ui.equivalents import display_equivalents
 
 
 def company_mode():
@@ -95,11 +94,6 @@ def company_mode():
             return
         provider_raw, model_raw = raw_names
 
-        # estimated_latency = latency_estimator.estimate(
-        #     provider=provider_raw,
-        #     model_name=model_raw,
-        #     output_tokens=output_tokens_count * time_horizon,
-        #
         impacts = llm_impacts(
             provider=provider_raw,
             model_name=model_raw,
@@ -107,8 +101,8 @@ def company_mode():
             request_latency=float("inf"),
             electricity_mix_zone=electricity_mix.zone,
         )
-
-        display_model_warnings(impacts)
+        if impacts.warnings:
+            display_model_warnings(impacts)
 
         # Display electricity mix warnings if any
         if electricity_mix and electricity_mix.has_warnings:
@@ -130,10 +124,12 @@ def company_mode():
                     "Carbon Footprint",
                     "Water",
                     "Metals & Minerals",
-                    "Fossile Fuels",
                 ],
-                mode="company",
+                mode="basic",
             )
+
+        with st.container(border=True):
+            display_equivalents(impacts_formatted, how="company")
 
     _, col2, _ = st.columns(3)
     with col2:
