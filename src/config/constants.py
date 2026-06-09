@@ -7,8 +7,8 @@ PROMPTS = [
     PromptTemplate("Write an article summary", 250, 2000, 0),
     PromptTemplate("Small conversation with a chatbot", 400, 400, 2000),
     PromptTemplate("Write a 5-page report", 5000, 10000, 100),
-    PromptTemplate("Write the code for a simple app", 15000, 50000, 100000),
     PromptTemplate("Assist application development", 100000, 1000000, 10000000),
+    PromptTemplate("Re-write the Lord Of The Rings trilogy", 500000, 500000, 500000),
 ]
 
 USAGE_INTENSITY = {
