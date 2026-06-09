@@ -15,8 +15,8 @@ def render_header() -> None:
     reduce_top_padding()
 
     st.html("""
-    <div style="background: #00BF63; padding: 10px; border-radius: 10px; margin-bottom: 0px;">
-        <p align="center" style="color: white; margin: 0;">📣 EcoLogits is joining CodeCarbon non-profit ! <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank" style="color: white; text-decoration: underline; font-weight: bold;">Full announcement here</a></p>
+    <div style="background: rgba(0, 191, 99, 0.05); padding: 10px; border-radius: 10px; margin-bottom: 0px; border: 2px solid #00BF63;">
+    <p align="center" style="color: #0b3b36; margin: 0;">📣 EcoLogits is joining CodeCarbon non-profit ! <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank" style="color: #0b3b36; text-decoration: underline; font-weight: bold;">Full announcement here</a></p>
     </div>
     """)
 
