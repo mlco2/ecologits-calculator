@@ -1,7 +1,6 @@
 from src.config.models import PromptTemplate
 from src.core.units import q
 
-
 PROMPTS = [
     PromptTemplate("Write a tweet", 50, 50, 0),
     PromptTemplate("Write an email", 170, 170, 0),

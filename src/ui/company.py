@@ -16,8 +16,8 @@ from src.ui.components import (
     display_model_warnings,
     render_model_selector,
 )
-from src.ui.impacts import display_impacts
 from src.ui.equivalents import display_equivalents
+from src.ui.impacts import display_impacts
 
 
 def company_mode():

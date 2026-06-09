@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 import streamlit as st
 
@@ -29,11 +31,9 @@ def clean_model_name(model_name: str) -> str:
         "preview": "",
     }
 
-    # Apply replacements using a loop
     for old, new in replacements.items():
         model_name = model_name.replace(old, new)
-
-    # Join and split to handle multiple spaces
+    model_name = re.sub(r"\d{8}", "", model_name)
     return " ".join(model_name.split())
 
 

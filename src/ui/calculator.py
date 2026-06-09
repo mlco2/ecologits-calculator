@@ -28,7 +28,7 @@ def calculator_mode():
 
         with col3:
             output_tokens = st.selectbox(
-                label="Usage scenario", options=[p.label for p in PROMPTS], index=2
+                label="Usage scenario", options=[p.label for p in PROMPTS], index=3
             )
 
         # Display only electricity, carbon footprint, water, and minerals
@@ -66,7 +66,9 @@ def calculator_mode():
             '<h3 align = "center">Environmental impacts</h3>',
             unsafe_allow_html=True,
         )
-        display_impacts(impacts_output=impacts_formatted, impacts_to_display=list_impacts)
+        display_impacts(
+            impacts_output=impacts_formatted, impacts_to_display=list_impacts, mode="basic"
+        )
 
         with st.container(border=True):
             st.session_state.impacts_at_scale = True

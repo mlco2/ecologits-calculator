@@ -1,6 +1,7 @@
 from enum import StrEnum
 
 from pint import Quantity
+
 from src.config.constants import *
 from src.core.units import q
 
@@ -17,6 +18,7 @@ class EnergyProduction(StrEnum):
 
 from enum import Enum
 
+
 class EquivalentType(Enum):
     EV = "EV"
     SPORT = "SPORT"
@@ -30,6 +32,7 @@ class EquivalentType(Enum):
     DROP = "DROP"
     IPHONE = "IPHONE"
     PINTS = "PINTS"
+
 
 EQ_KPIS = {
     "at_scale": {
@@ -99,9 +102,7 @@ def format_gwp_eq_vehicle(gwp: Quantity) -> Quantity:
     return thermic_vehicle_eq
 
 
-def format_energy_eq_electricity_production(
-    energy: Quantity
-) -> tuple[EnergyProduction, Quantity]:
+def format_energy_eq_electricity_production(energy: Quantity) -> tuple[EnergyProduction, Quantity]:
     electricity_eq = energy
     electricity_eq = electricity_eq * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
     electricity_eq = electricity_eq.to("TWh")

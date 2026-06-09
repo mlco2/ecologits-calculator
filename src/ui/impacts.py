@@ -23,7 +23,7 @@ def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max
 def display_impacts(
     impacts_output=None,
     impacts_to_display: list | None = None,
-    mode: str = "calculator",
+    mode: str = "basic",
 ):
 
     if impacts_to_display is None:
@@ -91,7 +91,7 @@ def display_impacts(
         if key in impacts_to_display
     ]
 
-    if mode == "calculator":
+    if mode == "basic":
         cols = st.columns(len(selected))
         for i, (label, values, icon, vmin, vmax) in enumerate(selected):
             with cols[i].container():

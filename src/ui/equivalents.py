@@ -1,8 +1,12 @@
 # src/equivalents/display.py
 import streamlit as st
+
 from src.core.equivalences import (
+    EQ_KPIS,
     EnergyProduction,
+    EquivalentType,
     PhysicalActivity,
+    format_adpe_eq_iphone,
     format_adpe_eq_nvidia,
     format_energy_eq_electric_vehicle,
     format_energy_eq_electricity_consumption_ireland,
@@ -10,13 +14,11 @@ from src.core.equivalences import (
     format_energy_eq_physical_activity,
     format_gwp_eq_airplane_paris_nyc,
     format_gwp_eq_streaming,
-    format_wue_eq_drops,
-    format_wue_eq_pools,
     format_gwp_eq_vehicle,
+    format_wue_eq_drops,
     format_wue_eq_pints,
-    format_adpe_eq_iphone
+    format_wue_eq_pools,
 )
-from src.core.equivalences import EQ_KPIS, EquivalentType
 
 
 def render_equivalent(value, emoji="", name="", text=""):
@@ -34,7 +36,6 @@ def render_equivalent(value, emoji="", name="", text=""):
 def display_equivalent_energy(impacts, type=EquivalentType.EV, how="unit"):
 
     with st.container(border=True):
-
         if type == EquivalentType.EV:
             ev_eq = format_energy_eq_electric_vehicle(impacts.energy)
             render_equivalent(
