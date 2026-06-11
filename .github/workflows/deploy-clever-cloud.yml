@@ -1,0 +1,38 @@
+name: Deploy to Clever Cloud
+
+on:
+  workflow_run:
+    workflows: ["Tests"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clever-cloud-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: clever-cloud-production
+      url: https://calculator.ecologits.ai
+
+    steps:
+      - name: Check out tested commit
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Deploy to Clever Cloud
+        env:
+          CLEVER_TOKEN: ${{ secrets.CLEVER_TOKEN }}
+          CLEVER_SECRET: ${{ secrets.CLEVER_SECRET }}
+          CLEVER_APP_ID: ${{ secrets.CLEVER_APP_ID }}
+        run: |
+          npx --yes clever-tools@4.10.0 link "$CLEVER_APP_ID"
+          npx --yes clever-tools@4.10.0 deploy --force
