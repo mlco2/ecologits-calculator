@@ -3,9 +3,6 @@ import streamlit as st
 from ecologits.tracers.utils import llm_impacts
 
 from src.config.constants import PROMPTS
-from src.config.content import (
-    HOW_TO_TEXT,
-)
 from src.core.formatting import format_impacts
 from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components import display_model_warnings, render_model_selector
@@ -16,8 +13,6 @@ from src.ui.impacts import display_impacts
 
 
 def calculator_mode():
-    st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
-
     with st.container(border=True):
         # st.markdown('<h3 align="center">Calculator</h3>', unsafe_allow_html=True)
         df = load_models(filter_main=True)
