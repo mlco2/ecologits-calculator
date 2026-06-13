@@ -120,7 +120,7 @@ def main():
 
     _initialize_navigation_state()
     st.logo(
-        "assets/ecologits-logo.png",
+        "assets/logo.png",
         size="medium",
         link="https://ecologits.ai/",
     )
