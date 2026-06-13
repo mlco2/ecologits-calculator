@@ -1,10 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 html, body, [class*="css"] {
-    font-family: 'Montserrat', sans-serif; 
+    font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     font-weight: 500;
     color: #062522;
+}
+
+[data-testid="stMainBlockContainer"]:has(.announcement) {
+    padding-top: 2.75rem;
+}
+
+.announcement {
+    background: rgba(0, 191, 99, 0.06);
+    border-bottom: 1px solid rgba(0, 191, 99, 0.35);
+    border-top: 1px solid rgba(0, 191, 99, 0.35);
+    box-sizing: border-box;
+    color: #0b3b36;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+    padding: 0.55rem 0.8rem;
+    position: relative;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+    width: 100vw;
+}
+
+.announcement a {
+    color: #087f4f;
+    font-weight: 700;
+    margin-left: 0.25rem;
+    text-decoration: none;
+}
+
+.announcement a:hover {
+    text-decoration: underline;
+}
+
+[data-testid="stTopNavLinkContainer"]:has(
+    [data-testid="stTopNavLink"][href$="token-estimator"]
+) {
+    margin-left: auto;
+}
+
+.st-key-mode_toggles {
+    margin-bottom: -0.5rem;
+    margin-top: 0.75rem;
+}
+
+.st-key-mode_toggles [data-testid="stToggle"] {
+    flex: 0 0 auto;
 }
 
 [data-testid="metric-container"] {
