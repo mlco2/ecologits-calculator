@@ -79,32 +79,83 @@ def _render_calculator() -> None:
         else:
             company_mode()
 
-    with st.expander("📚 Citation"):
-        st.html(CITATION_LABEL)
-        st.code(CITATION_TEXT, language="bibtex")
-
-    st.html(LICENCE_TEXT)
-
-
 def _about_page() -> None:
-    st.title("About us")
-    st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("About us")
+        st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
 
 
 def _methodology_page() -> None:
-    st.title("Methodology")
-    content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
-    st.markdown(content, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("Methodology")
+        content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
+        st.markdown(content, unsafe_allow_html=True)
 
 
 def _token_estimator_page() -> None:
-    st.title("Token estimator")
-    token_estimator()
+    with st.container(key="reading_page"):
+        st.title("Token estimator")
+        token_estimator()
 
 
 def _support_page() -> None:
-    st.title("Support us")
-    st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("Support us")
+        st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
+
+
+def _render_footer() -> None:
+    with st.container(key="app_footer"):
+        licence, citation = st.columns(
+            [2.5, 0.8],
+            gap="large",
+            vertical_alignment="center",
+        )
+
+        with licence:
+            st.html(f'<div class="footer-licence">{LICENCE_TEXT}</div>')
+
+        with citation.container(horizontal=True, horizontal_alignment="right"):
+            with st.popover(
+                "Cite EcoLogits",
+                icon=":material/format_quote:",
+                width="content",
+            ):
+                st.html(CITATION_LABEL)
+                st.code(CITATION_TEXT, language="bibtex")
+
+        st.html('<hr class="footer-divider">')
+
+        brand, about, links = st.columns(
+            [1.1, 1.4, 0.8],
+            gap="large",
+            vertical_alignment="center",
+        )
+
+        with brand:
+            st.image("assets/logo.png", width=400)
+
+        with about:
+            st.markdown(
+                """
+                **Making the environmental footprint of generative AI visible.**
+
+                EcoLogits is an open-source project developed by
+                [CodeCarbon](https://codecarbon.io/); visit
+                [ecologits.ai](https://ecologits.ai/) to discover our other projects.
+                """
+            )
+
+        with links:
+            st.markdown(
+                """
+                **Follow the project**
+
+                - [GitHub](https://github.com/mlco2/ecologits)
+                - [LinkedIn](https://www.linkedin.com/company/ecologits/)
+                - [Discord](https://discord.gg/7KPzAfcN)
+                """
+            )
 
 
 def main():
@@ -120,8 +171,8 @@ def main():
 
     _initialize_navigation_state()
     st.logo(
-        "assets/logo.png",
-        size="medium",
+        "assets/ecologits-logo.png",
+        size="small",
         link="https://ecologits.ai/",
     )
 
@@ -145,6 +196,7 @@ def main():
         position="top",
     )
     page.run()
+    _render_footer()
 
 
 if __name__ == "__main__":

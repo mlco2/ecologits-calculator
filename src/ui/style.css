@@ -1,10 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 html, body, [class*="css"] {
-    font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     font-weight: 500;
     color: #062522;
+}
+
+[data-testid="stTopNavLink"] {
+    font-family: 'Montserrat', sans-serif;
+}
+
+[data-testid="stLogoLink"] {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+}
+
+[data-testid="stLogo"] {
+    display: block;
 }
 
 [data-testid="stMainBlockContainer"]:has(.announcement) {
@@ -42,6 +55,38 @@ html, body, [class*="css"] {
     [data-testid="stTopNavLink"][href$="token-estimator"]
 ) {
     margin-left: auto;
+}
+
+.st-key-reading_page {
+    width: 60%;
+}
+
+@media (max-width: 900px) {
+    .st-key-reading_page {
+        width: 100%;
+    }
+}
+
+.st-key-app_footer {
+    margin-top: 8rem;
+    padding-bottom: 1rem;
+}
+
+.footer-licence p {
+    margin: 0;
+}
+
+.footer-divider {
+    border: 0;
+    border-top: 1px solid rgba(49, 51, 63, 0.2);
+    margin: -0.5rem 0 1rem;
+}
+
+@media (max-width: 900px) {
+    .st-key-app_footer {
+        margin-top: 5rem;
+    }
+
 }
 
 .st-key-mode_toggles {
