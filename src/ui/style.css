@@ -54,6 +54,28 @@ html, body, [class*="css"] {
     }
 }
 
+.st-key-app_footer {
+    margin-top: 8rem;
+    padding-bottom: 1rem;
+}
+
+.footer-licence p {
+    margin: 0;
+}
+
+.footer-divider {
+    border: 0;
+    border-top: 1px solid rgba(49, 51, 63, 0.2);
+    margin: -0.5rem 0 1rem;
+}
+
+@media (max-width: 900px) {
+    .st-key-app_footer {
+        margin-top: 5rem;
+    }
+
+}
+
 .st-key-mode_toggles {
     margin-bottom: -0.5rem;
     margin-top: 0.75rem;
