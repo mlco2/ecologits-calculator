@@ -87,24 +87,28 @@ def _render_calculator() -> None:
 
 
 def _about_page() -> None:
-    st.title("About us")
-    st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("About us")
+        st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
 
 
 def _methodology_page() -> None:
-    st.title("Methodology")
-    content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
-    st.markdown(content, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("Methodology")
+        content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
+        st.markdown(content, unsafe_allow_html=True)
 
 
 def _token_estimator_page() -> None:
-    st.title("Token estimator")
-    token_estimator()
+    with st.container(key="reading_page"):
+        st.title("Token estimator")
+        token_estimator()
 
 
 def _support_page() -> None:
-    st.title("Support us")
-    st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
+    with st.container(key="reading_page"):
+        st.title("Support us")
+        st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
 
 
 def main():

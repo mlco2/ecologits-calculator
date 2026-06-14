@@ -44,6 +44,16 @@ html, body, [class*="css"] {
     margin-left: auto;
 }
 
+.st-key-reading_page {
+    width: 60%;
+}
+
+@media (max-width: 900px) {
+    .st-key-reading_page {
+        width: 100%;
+    }
+}
+
 .st-key-mode_toggles {
     margin-bottom: -0.5rem;
     margin-top: 0.75rem;
