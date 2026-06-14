@@ -10,6 +10,16 @@ html, body, [class*="css"] {
     font-family: 'Montserrat', sans-serif;
 }
 
+[data-testid="stLogoLink"] {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+}
+
+[data-testid="stLogo"] {
+    display: block;
+}
+
 [data-testid="stMainBlockContainer"]:has(.announcement) {
     padding-top: 2.75rem;
 }

@@ -141,9 +141,8 @@ def _render_footer() -> None:
                 **Making the environmental footprint of generative AI visible.**
 
                 EcoLogits is an open-source project developed by
-                [CodeCarbon](https://codecarbon.io/).
-
-                Visit [ecologits.ai](https://ecologits.ai/) to discover our other projects.
+                [CodeCarbon](https://codecarbon.io/); visit
+                [ecologits.ai](https://ecologits.ai/) to discover our other projects.
                 """
             )
 
@@ -172,8 +171,8 @@ def main():
 
     _initialize_navigation_state()
     st.logo(
-        "assets/logo.png",
-        size="medium",
+        "assets/ecologits-logo.png",
+        size="small",
         link="https://ecologits.ai/",
     )
 
