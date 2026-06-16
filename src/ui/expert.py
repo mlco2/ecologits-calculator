@@ -6,6 +6,7 @@ import streamlit as st
 
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
+from ecologits.utils.range_value import RangeValue
 
 from src.config.constants import COUNTRY_CODES, PROMPTS
 from src.core.formatting import format_impacts
@@ -54,6 +55,15 @@ def extract_param_value(value: float | dict) -> int:
         raise ValueError(f"Cannot convert {value!r} to int: {e}") from e
 
 
+def impact_param_value(raw_value: float | dict, displayed_value: int):
+    """Preserve model parameter ranges unless the expert input was changed."""
+    default_value = extract_param_value(raw_value)
+    if displayed_value != default_value or not isinstance(raw_value, dict):
+        return displayed_value
+
+    return RangeValue(min=raw_value["min"], max=raw_value["max"])
+
+
 def expert_mode():
     with st.container(border=True):
         st.markdown('<h3 align="center">Calculator Expert Mode</h3>', unsafe_allow_html=True)
@@ -77,15 +87,18 @@ def expert_mode():
         _, _ = raw_names  # Unused in expert mode, but validate the lookup worked
         df_filtered = df[(df["provider_clean"] == provider_exp) & (df["name_clean"] == model_exp)]
 
+        total_params_raw = df_filtered["total_parameters"].iloc[0]
+        active_params_raw = df_filtered["active_parameters"].iloc[0]
+
         try:
-            total_params = extract_param_value(df_filtered["total_parameters"].iloc[0])
+            total_params = extract_param_value(total_params_raw)
         except ValueError as e:
             logger.error(f"Failed to extract total_parameters: {e}")
             st.error(f"Unable to extract model parameters: {e}")
             return
 
         try:
-            active_params = extract_param_value(df_filtered["active_parameters"].iloc[0])
+            active_params = extract_param_value(active_params_raw)
         except ValueError as e:
             logger.error(f"Failed to extract active_parameters: {e}")
             st.error(f"Unable to extract model parameters: {e}")
@@ -181,8 +194,8 @@ def expert_mode():
             display_electricity_mix_warnings(electricity_mix)
 
     impacts = compute_llm_impacts(
-        model_active_parameter_count=active_params,
-        model_total_parameter_count=total_params,
+        model_active_parameter_count=impact_param_value(active_params_raw, active_params),
+        model_total_parameter_count=impact_param_value(total_params_raw, total_params),
         output_token_count=output_tokens,
         tps=tps,
         ttft=ttft,

@@ -72,7 +72,7 @@ def display_impacts(
         ),
         (
             "Water",
-            "Water",
+            "Water consumption",
             impacts_output.wcf,
             "🚰",
             impacts_output.wcf_min,
