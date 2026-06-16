@@ -156,3 +156,75 @@ html, body, [class*="css"] {
     width: fit-content;
     margin: auto;
 }
+
+.environment-card {
+    padding: 0.35rem 0.15rem 0.75rem;
+}
+
+.environment-card-header {
+    align-items: center;
+    color: #0b3b36;
+    display: flex;
+    font-size: 1.05rem;
+    font-weight: 500;
+    gap: 0.45rem;
+    line-height: 1.25;
+    margin-bottom: 2.1rem;
+    text-align: left;
+    width: fit-content;
+}
+
+.environment-card-icon {
+    flex: 0 0 auto;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.environment-card-title {
+    min-width: 0;
+}
+
+.environment-card-value {
+    align-items: baseline;
+    color: #062522;
+    display: flex;
+    gap: 0.35rem;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    text-align: left;
+    width: fit-content;
+}
+
+.environment-card-number {
+    font-size: 1.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.environment-card-unit {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.environment-card-subtext {
+    color: rgba(6, 37, 34, 0.72);
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    text-align: left;
+}
+
+@media (max-width: 900px) {
+    .environment-card-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .environment-card-number {
+        font-size: 1.65rem;
+    }
+
+    .environment-card-unit {
+        font-size: 0.9rem;
+    }
+}

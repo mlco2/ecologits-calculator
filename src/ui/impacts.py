@@ -1,23 +1,34 @@
 import streamlit as st
 
+from src.ui.components import render_environment_card
+
+
+def _format_quantity_value(value) -> str:
+    return f"{value.magnitude:.3g}"
+
+
+def _format_quantity_unit(value) -> str:
+    return f"{value.units:~}"
+
+
+def _format_impact_subtext(values_min, values_max) -> str:
+    if values_min is None or values_max is None:
+        return ""
+
+    unit = _format_quantity_unit(values_min)
+    return f"between {_format_quantity_value(values_min)}-{_format_quantity_value(values_max)} {unit}"
+
 
 def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max=None):
 
     with st.container(border=True):
-        st.markdown(
-            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'>{icon}</p>""",
-            unsafe_allow_html=True,
+        render_environment_card(
+            title=impact_lablel,
+            value=_format_quantity_value(values),
+            unit=_format_quantity_unit(values),
+            emoji=icon,
+            subtext=_format_impact_subtext(values_min, values_max),
         )
-        st.markdown(
-            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'><strong>{impact_lablel}</strong></p>""",
-            unsafe_allow_html=True,
-        )
-
-        if values_min is not None and values_max is not None:
-            help_text = f"Min: {values_min.magnitude:.3g} {values_min.units} — Max: {values_max.magnitude:.3g} {values_max.units}"
-        else:
-            help_text = None
-        st.latex(rf"\Large {values.magnitude:.3g} \ \large {values.units}", help=help_text)
 
 
 def display_impacts(

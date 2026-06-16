@@ -1,4 +1,3 @@
-# src/equivalents/display.py
 import streamlit as st
 
 from src.core.equivalences import (
@@ -19,18 +18,17 @@ from src.core.equivalences import (
     format_wue_eq_pints,
     format_wue_eq_pools,
 )
+from src.ui.components import render_environment_card
 
 
-def render_equivalent(value, emoji="", name="", text=""):
-    st.markdown(
-        f'<h2 align="center">{value}</h2>',
-        unsafe_allow_html=True,
+def render_equivalent(value, unit="", emoji="", name="", text=""):
+    render_environment_card(
+        title=name,
+        value=value,
+        unit=unit,
+        emoji=emoji,
+        subtext=text,
     )
-    st.markdown(
-        f'<h4 align="center">{emoji} {name}</h4>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(f'<p align="center">{text}</p>', unsafe_allow_html=True)
 
 
 def display_equivalent_energy(impacts, type=EquivalentType.EV, how="unit"):
@@ -39,26 +37,26 @@ def display_equivalent_energy(impacts, type=EquivalentType.EV, how="unit"):
         if type == EquivalentType.EV:
             ev_eq = format_energy_eq_electric_vehicle(impacts.energy)
             render_equivalent(
-                value=f"{ev_eq.magnitude:.1f} {ev_eq.units}",
+                value=f"{ev_eq.magnitude:.1f}",
+                unit=f"{ev_eq.units:~}",
                 emoji="🔋",
                 name="with an electric vehicle",
-                text="(based on electricity consumption)",
+                text="based on electricity consumption",
             )
 
         elif type == EquivalentType.SPORT:
             physical_activity, distance = format_energy_eq_physical_activity(impacts.energy)
             if physical_activity == PhysicalActivity.WALKING:
-                physical_activity = "🚶 " + physical_activity.capitalize()
-            if physical_activity == PhysicalActivity.RUNNING:
-                physical_activity = "🏃 " + physical_activity.capitalize()
-            st.markdown(f'<h4 align="center">{physical_activity}</h4>', unsafe_allow_html=True)
-            st.markdown(
-                f"""<p style='font-size:35px;text-align: center'>≈  {distance.magnitude:.3g} <i>{distance.units} </p>""",
-                unsafe_allow_html=True,
-            )
+                emoji = "🚶"
+            elif physical_activity == PhysicalActivity.RUNNING:
+                emoji = "🏃"
+            else:
+                emoji = ""
             render_equivalent(
-                value=f"{distance.magnitude:.3g} <i>{distance.units}</p>",
-                name=physical_activity,
+                value=f"≈ {distance.magnitude:.3g}",
+                unit=f"{distance.units:~}",
+                emoji=emoji,
+                name=physical_activity.capitalize(),
             )
 
         elif type == EquivalentType.EPROD:
@@ -73,18 +71,16 @@ def display_equivalent_energy(impacts, type=EquivalentType.EV, how="unit"):
                 value=f"{int(count.magnitude):,}",
                 emoji=emoji,
                 name=name,
-                text="(yearly energy production)",
+                text="yearly energy production",
             )
 
         elif type == EquivalentType.ECONS:
             ireland_count = format_energy_eq_electricity_consumption_ireland(impacts.energy)
-            st.markdown(
-                f'<h4 align="center">⚡️ 🇮🇪 {ireland_count.magnitude:.3f} x Ireland </h4>',
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                '<p align="center">Yearly electricity consumption</p>',
-                unsafe_allow_html=True,
+            render_equivalent(
+                value=f"{ireland_count.magnitude:.3f}",
+                unit="x Ireland",
+                emoji="⚡️ 🇮🇪",
+                name="Yearly electricity consumption",
             )
 
 
@@ -93,10 +89,11 @@ def display_equivalent_ghg(impacts, type=EquivalentType.PLANE):
         if type == EquivalentType.STREAMING:
             streaming_eq = format_gwp_eq_streaming(impacts.gwp)
             render_equivalent(
-                value=f"{streaming_eq.magnitude:.2f} {streaming_eq.units}",
+                value=f"{streaming_eq.magnitude:.2f}",
+                unit=f"{streaming_eq.units:~}",
                 emoji="⏯️",
                 name="streaming videos",
-                text="(based on GHG emissions)",
+                text="based on GHG emissions",
             )
         elif type == EquivalentType.PLANE:
             paris_nyc_airplane = format_gwp_eq_airplane_paris_nyc(impacts.gwp)
@@ -104,15 +101,16 @@ def display_equivalent_ghg(impacts, type=EquivalentType.PLANE):
                 value=f"{int(paris_nyc_airplane.magnitude):,}",
                 emoji="✈️",
                 name="Paris ↔ NYC",
-                text="(based on GHG emissions)",
+                text="based on GHG emissions",
             )
         elif type == EquivalentType.THERMIC_VEHICLE:
             thermic_vehicle_eq = format_gwp_eq_vehicle(impacts.gwp)
             render_equivalent(
-                value=f"{thermic_vehicle_eq.magnitude:.1f} {thermic_vehicle_eq.units}",
+                value=f"{thermic_vehicle_eq.magnitude:.1f}",
+                unit=f"{thermic_vehicle_eq.units:~}",
                 emoji="🏎️",
                 name="with a thermic vehicle",
-                text="(based on GHG emissions)",
+                text="based on GHG emissions",
             )
 
 
@@ -124,7 +122,7 @@ def display_equivalent_adpe(impacts, type=EquivalentType.NVIDIA):
                 value=f"{int(nvdia_eq.magnitude):,}",
                 emoji="🕹️",
                 name="NVIDIA H100",
-                text="(based on metals & minerals use)",
+                text="based on metals & minerals use",
             )
 
         elif type == EquivalentType.IPHONE:
@@ -133,7 +131,7 @@ def display_equivalent_adpe(impacts, type=EquivalentType.NVIDIA):
                 value=f"{int(iphone_eq.magnitude):,}",
                 emoji="📱",
                 name="Iphones",
-                text="(based on metals & minerals use)",
+                text="based on metals & minerals use",
             )
 
 
@@ -145,7 +143,7 @@ def display_equivalent_wcf(impacts, type=EquivalentType.POOL):
                 value=f"{int(pool_eq.magnitude):,}",
                 emoji="🏊🏼‍♂️",
                 name="Olympic pools",
-                text="(based on water use)",
+                text="based on water use",
             )
         elif type == EquivalentType.DROP:
             drop_eq = format_wue_eq_drops(impacts.wcf)
@@ -153,7 +151,7 @@ def display_equivalent_wcf(impacts, type=EquivalentType.POOL):
                 value=f"{int(drop_eq.magnitude):,}",
                 emoji="💦",
                 name="Rain drops",
-                text="(based on water use)",
+                text="based on water use",
             )
         elif type == EquivalentType.PINTS:
             pint_eq = format_wue_eq_pints(impacts.wcf)
@@ -161,7 +159,7 @@ def display_equivalent_wcf(impacts, type=EquivalentType.POOL):
                 value=f"{int(pint_eq.magnitude):,}",
                 emoji="🍺",
                 name="pints of content",
-                text="(based on water use)",
+                text="based on water use",
             )
 
 
