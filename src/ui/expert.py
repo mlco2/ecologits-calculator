@@ -210,7 +210,10 @@ def expert_mode():
     impacts, usage, embodied = format_impacts(impacts)
 
     with st.container(border=True):
-        st.markdown('<h3 align="center">Environmental Impacts</h3>', unsafe_allow_html=True)
+        st.markdown(
+            '<h3 class="section-title section-title-impacts">Environmental impacts</h3>',
+            unsafe_allow_html=True,
+        )
 
         display_impacts(impacts, mode="expert")
 

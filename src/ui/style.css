@@ -157,6 +157,24 @@ html, body, [class*="css"] {
     margin: auto;
 }
 
+.section-title {
+    text-align: left;
+}
+
+.section-title-impacts {
+    margin: 2.8rem 0 0.85rem !important;
+}
+
+.section-title-equivalents {
+    margin: 2.8rem 0 0.85rem !important;
+}
+
+.section-subtitle {
+    color: rgba(6, 37, 34, 0.72);
+    margin: -0.45rem 0 0.85rem !important;
+    text-align: left;
+}
+
 .environment-card-grid {
     display: grid;
     gap: 1rem;

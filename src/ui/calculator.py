@@ -8,6 +8,7 @@ from src.repositories.video_models import load_video_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.equivalents import (
     display_equivalents,
+    render_equivalents_title,
 )
 from src.ui.impacts import display_impacts
 
@@ -74,21 +75,21 @@ def calculator_mode():
         # st.write(impacts)
 
         st.markdown(
-            '<h3 align = "center">Environmental impacts</h3>',
+            '<h3 class="section-title section-title-impacts">Environmental impacts</h3>',
             unsafe_allow_html=True,
         )
         display_impacts(
             impacts_output=impacts_formatted, impacts_to_display=list_impacts, mode="basic"
         )
 
-        with st.container(border=True):
+        if "impacts_at_scale" not in st.session_state:
             st.session_state.impacts_at_scale = True
-            st.session_state.impacts_at_scale = st.toggle(
-                label="Display impacts at scale",
-                value=st.session_state.impacts_at_scale,
-                help="The scale we implemented is a daily replication of the given usage by 1% of the world population.",
-            )
-            if st.session_state.impacts_at_scale:
-                display_equivalents(impacts_formatted, how="at_scale")
-            else:
-                display_equivalents(impacts_formatted, how="unit")
+
+        equivalents_mode = "at_scale" if st.session_state.impacts_at_scale else "unit"
+        render_equivalents_title(equivalents_mode)
+        st.toggle(
+            label="Display impacts at scale",
+            key="impacts_at_scale",
+            help="The scale we implemented is a daily replication of the given usage by 1% of the world population.",
+        )
+        display_equivalents(impacts_formatted, how=equivalents_mode, show_title=False)
