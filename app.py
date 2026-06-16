@@ -29,10 +29,10 @@ def _render_announcement() -> None:
     st.html(
         """
         <div class="announcement">
-            EcoLogits is joining the CodeCarbon non-profit.
-            <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank">
-                Read the announcement
-            </a>
+            <strong>EcoLogits now supports AI-generated videos 🎬.
+            <a href="https://ecologits.ai/blog/" target="_blank">
+                Read our blog post.
+            </a></strong>
         </div>
         """
     )
