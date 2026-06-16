@@ -72,6 +72,14 @@ html, body, [class*="css"] {
     padding-bottom: 1rem;
 }
 
+.st-key-footer_citation {
+    justify-content: flex-end;
+}
+
+.st-key-footer_brand img {
+    max-width: 100%;
+}
+
 .footer-licence p {
     margin: 0;
 }
@@ -84,9 +92,45 @@ html, body, [class*="css"] {
 
 @media (max-width: 900px) {
     .st-key-app_footer {
-        margin-top: 5rem;
+        margin-top: 4rem;
     }
 
+    .st-key-app_footer [data-testid="stHorizontalBlock"] {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .st-key-app_footer [data-testid="stColumn"] {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .st-key-footer_licence {
+        font-size: 0.95rem;
+        line-height: 1.45;
+    }
+
+    .st-key-footer_citation {
+        justify-content: flex-start;
+    }
+
+    .st-key-footer_brand {
+        margin-top: 0.75rem;
+        text-align: center;
+    }
+
+    .st-key-footer_brand img {
+        height: auto;
+        width: min(100%, 20rem) !important;
+    }
+
+    .st-key-footer_about,
+    .st-key-footer_links {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
 }
 
 .st-key-mode_toggles {

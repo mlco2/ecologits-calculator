@@ -79,6 +79,7 @@ def _render_calculator() -> None:
         else:
             company_mode()
 
+
 def _about_page() -> None:
     with st.container(key="reading_page"):
         st.title("About us")
@@ -113,16 +114,22 @@ def _render_footer() -> None:
         )
 
         with licence:
-            st.html(f'<div class="footer-licence">{LICENCE_TEXT}</div>')
+            with st.container(key="footer_licence"):
+                st.html(f'<div class="footer-licence">{LICENCE_TEXT}</div>')
 
-        with citation.container(horizontal=True, horizontal_alignment="right"):
-            with st.popover(
-                "Cite EcoLogits",
-                icon=":material/format_quote:",
-                width="content",
+        with citation:
+            with st.container(
+                key="footer_citation",
+                horizontal=True,
+                horizontal_alignment="right",
             ):
-                st.html(CITATION_LABEL)
-                st.code(CITATION_TEXT, language="bibtex")
+                with st.popover(
+                    "Cite EcoLogits",
+                    icon=":material/format_quote:",
+                    width="content",
+                ):
+                    st.html(CITATION_LABEL)
+                    st.code(CITATION_TEXT, language="bibtex")
 
         st.html('<hr class="footer-divider">')
 
@@ -133,29 +140,32 @@ def _render_footer() -> None:
         )
 
         with brand:
-            st.image("assets/logo.png", width=400)
+            with st.container(key="footer_brand"):
+                st.image("assets/logo.png", width=400)
 
         with about:
-            st.markdown(
-                """
-                **Making the environmental footprint of generative AI visible.**
+            with st.container(key="footer_about"):
+                st.markdown(
+                    """
+                    **Making the environmental footprint of generative AI visible.**
 
-                EcoLogits is an open-source project developed by
-                [CodeCarbon](https://codecarbon.io/); visit
-                [ecologits.ai](https://ecologits.ai/) to discover our other projects.
-                """
-            )
+                    EcoLogits is an open-source project developed by
+                    [CodeCarbon](https://codecarbon.io/); visit
+                    [ecologits.ai](https://ecologits.ai/) to discover our other projects.
+                    """
+                )
 
         with links:
-            st.markdown(
-                """
-                **Follow the project**
+            with st.container(key="footer_links"):
+                st.markdown(
+                    """
+                    **Follow the project**
 
-                - [GitHub](https://github.com/mlco2/ecologits)
-                - [LinkedIn](https://www.linkedin.com/company/ecologits/)
-                - [Discord](https://discord.gg/7KPzAfcN)
-                """
-            )
+                    - [GitHub](https://github.com/mlco2/ecologits)
+                    - [LinkedIn](https://www.linkedin.com/company/ecologits/)
+                    - [Discord](https://discord.gg/7KPzAfcN)
+                    """
+                )
 
 
 def main():
