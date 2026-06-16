@@ -1,10 +1,10 @@
 import streamlit as st
 
-from ecologits.tracers.utils import llm_impacts
-
-from src.config.constants import PROMPTS
+from src.config.scenarios import SCENARIOS, Scenario
 from src.core.formatting import format_impacts
+from src.core.impact_calculator import compute_scenario_impacts
 from src.repositories.models import get_raw_model_names, load_models
+from src.repositories.video_models import load_video_models
 from src.ui.components import display_model_warnings, render_model_selector
 from src.ui.equivalents import (
     display_equivalents,
@@ -12,19 +12,43 @@ from src.ui.equivalents import (
 from src.ui.impacts import display_impacts
 
 
+def _render_scenario_selector() -> Scenario:
+    scenario_label = st.selectbox(
+        label="Task",
+        options=[scenario.label for scenario in SCENARIOS],
+        index=0,
+    )
+    return next(scenario for scenario in SCENARIOS if scenario.label == scenario_label)
+
+
+def _load_compatible_models(scenario: Scenario):
+    if scenario.modality == "video":
+        return load_video_models(resolution=scenario.resolution)
+    return load_models(filter_main=True)
+
+
+def _render_scenario_context(scenario: Scenario) -> None:
+    if scenario.modality == "video":
+        st.caption(
+            f"{scenario.resolution}, {scenario.duration}s"
+            + (" with audio" if scenario.with_audio else "")
+        )
+    elif scenario.output_token_count is not None:
+        st.caption(f"{scenario.output_token_count:,} output tokens")
+
+
 def calculator_mode():
     with st.container(border=True):
         # st.markdown('<h3 align="center">Calculator</h3>', unsafe_allow_html=True)
-        df = load_models(filter_main=True)
-
         col1, col2, col3 = st.columns(3)
 
-        provider, model = render_model_selector(df, col1, col2, key_suffix="calc")
+        with col1:
+            scenario = _render_scenario_selector()
+            _render_scenario_context(scenario)
 
-        with col3:
-            output_tokens = st.selectbox(
-                label="Usage scenario", options=[p.label for p in PROMPTS], index=3
-            )
+        df = _load_compatible_models(scenario)
+
+        provider, model = render_model_selector(df, col2, col3, key_suffix="calc")
 
         # Display only electricity, carbon footprint, water, and minerals
         list_impacts = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"]
@@ -36,18 +60,10 @@ def calculator_mode():
             return
         provider_raw, model_raw = raw_names
 
-        output_tokens_count = next(p.output_tokens for p in PROMPTS if p.label == output_tokens)
-
-        # estimated_latency = latency_estimator.estimate(
-        #     provider=provider_raw,
-        #     model_name=model_raw,
-        #     output_tokens=output_tokens_count,
-        #
-        impacts = llm_impacts(
+        impacts = compute_scenario_impacts(
+            scenario=scenario,
             provider=provider_raw,
             model_name=model_raw,
-            output_token_count=output_tokens_count,
-            request_latency=float("inf"),
         )
 
         if impacts.warnings:
