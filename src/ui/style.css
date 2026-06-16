@@ -158,18 +158,19 @@ html, body, [class*="css"] {
 }
 
 .environment-card {
-    padding: 0.35rem 0.15rem 0.75rem;
+    padding: 0.35rem 0.15rem 0.45rem;
 }
 
 .environment-card-header {
-    align-items: center;
+    align-items: flex-start;
     color: #0b3b36;
     display: flex;
     font-size: 1.05rem;
     font-weight: 500;
     gap: 0.45rem;
     line-height: 1.25;
-    margin-bottom: 2.1rem;
+    margin-bottom: 1.2rem;
+    min-height: 2.65rem;
     text-align: left;
     width: fit-content;
 }
@@ -178,6 +179,7 @@ html, body, [class*="css"] {
     flex: 0 0 auto;
     font-size: 1rem;
     line-height: 1;
+    padding-top: 0.15rem;
 }
 
 .environment-card-title {
@@ -212,6 +214,7 @@ html, body, [class*="css"] {
     font-size: 0.72rem !important;
     line-height: 1.25 !important;
     margin: 0 !important;
+    min-height: 1.6rem;
     text-align: left;
 }
 
