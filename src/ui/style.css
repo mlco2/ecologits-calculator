@@ -175,6 +175,13 @@ html, body, [class*="css"] {
     text-align: left;
 }
 
+.section-description {
+    color: rgba(6, 37, 34, 0.62);
+    font-size: 0.82rem;
+    margin: -0.55rem 0 0.85rem !important;
+    text-align: left;
+}
+
 .environment-card-grid {
     display: grid;
     gap: 1rem;

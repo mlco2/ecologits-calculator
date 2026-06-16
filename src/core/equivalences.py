@@ -36,7 +36,7 @@ class EquivalentType(Enum):
 
 EQ_KPIS = {
     "at_scale": {
-        "title": "<h3 align='center'>What if 1% of the planet does the same everyday for 1 year ?</h3>",
+        "title": "<h3 align='center'>What if 1% of the planet does the same everyday for 1 year?</h3>",
         "help": "1% of 8 billion people x 365 days",
         "energy": EquivalentType.EPROD,
         "ghg": EquivalentType.PLANE,
@@ -44,7 +44,7 @@ EQ_KPIS = {
         "adpe": EquivalentType.IPHONE,
     },
     "unit": {
-        "title": "<h3 align='center'>Equivalents for the environment</h3><p align='center'>Even if these equivalents might look small, it's all about the scale !</p>",
+        "title": "<h3 align='center'>Equivalents for the environment</h3><p align='center'>Even if these equivalents might look small, it's all about the scale!</p>",
         "help": "Unit equivalents only for the selected usage",
         "energy": EquivalentType.EV,
         "ghg": EquivalentType.THERMIC_VEHICLE,

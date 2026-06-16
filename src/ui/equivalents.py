@@ -22,12 +22,12 @@ from src.ui.components import render_environment_card
 
 EQUIVALENT_TITLES = {
     "at_scale": {
-        "title": "What if 1% of the planet does the same everyday for 1 year ?",
+        "title": "What if 1% of the planet does the same everyday for 1 year?",
         "subtitle": "",
     },
     "unit": {
         "title": "Equivalents for the environment",
-        "subtitle": "Even if these equivalents might look small, it's all about the scale !",
+        "subtitle": "Even if these equivalents might look small, it's all about the scale!",
     },
     "company": {
         "title": "Equivalents for the environment",
@@ -39,15 +39,16 @@ EQUIVALENT_TITLES = {
 def render_equivalents_title(how="at_scale") -> None:
     title = EQUIVALENT_TITLES[how]["title"]
     subtitle = EQUIVALENT_TITLES[how]["subtitle"]
+    description = EQ_KPIS[how]["help"]
     subtitle_html = f'<p class="section-subtitle">{subtitle}</p>' if subtitle else ""
 
     st.markdown(
         f"""
         <h3 class="section-title section-title-equivalents">{title}</h3>
+        <p class="section-description">{description}</p>
         {subtitle_html}
         """,
         unsafe_allow_html=True,
-        help=f"{EQ_KPIS[how]['help']}",
     )
 
 
