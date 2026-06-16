@@ -157,8 +157,18 @@ html, body, [class*="css"] {
     margin: auto;
 }
 
+.environment-card-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(var(--environment-card-desktop-columns), minmax(0, 1fr));
+}
+
 .environment-card {
-    padding: 0.35rem 0.15rem 0.45rem;
+    border: 1px solid rgba(49, 51, 63, 0.2);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 1.4rem 1.35rem 1.05rem;
 }
 
 .environment-card-header {
@@ -219,6 +229,10 @@ html, body, [class*="css"] {
 }
 
 @media (max-width: 900px) {
+    .environment-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .environment-card-header {
         margin-bottom: 1.5rem;
     }
@@ -229,5 +243,15 @@ html, body, [class*="css"] {
 
     .environment-card-unit {
         font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .environment-card-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .environment-card {
+        padding: 1.15rem 1rem 0.9rem;
     }
 }

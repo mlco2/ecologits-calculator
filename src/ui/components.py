@@ -12,15 +12,31 @@ def render_environment_card(
     unit: str = "",
     subtext: str = "",
 ) -> None:
-    unit_html = (
-        f'<span class="environment-card-unit">{escape(unit)}</span>' if unit else ""
+    st.html(
+        render_environment_card_html(
+            title=title,
+            value=value,
+            emoji=emoji,
+            unit=unit,
+            subtext=subtext,
+        )
     )
+
+
+def render_environment_card_html(
+    *,
+    title: str,
+    value: str,
+    emoji: str = "",
+    unit: str = "",
+    subtext: str = "",
+) -> str:
+    unit_html = f'<span class="environment-card-unit">{escape(unit)}</span>' if unit else ""
     subtext_html = (
         f'<p class="environment-card-subtext">{escape(subtext)}</p>' if subtext else ""
     )
 
-    st.html(
-        f"""
+    return f"""
         <div class="environment-card">
             <div class="environment-card-header">
                 <span class="environment-card-icon">{escape(emoji)}</span>
@@ -33,7 +49,6 @@ def render_environment_card(
             {subtext_html}
         </div>
         """
-    )
 
 
 def render_model_selector(
