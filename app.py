@@ -44,7 +44,7 @@ def _calculator_page() -> None:
 
 def _render_calculator() -> None:
     _render_announcement()
-    st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
+    st.html(HOW_TO_TEXT)
 
     with st.container(
         key="mode_toggles",

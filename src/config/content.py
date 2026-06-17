@@ -12,7 +12,7 @@ def _load(filename: str) -> str:
 
 
 HERO_TEXT = _load("hero.html")
-HOW_TO_TEXT = _load("how_to.md")
+HOW_TO_TEXT = _load("how_to.html")
 TOKEN_ESTIMATOR_TEXT = _load("token_estimator.md")
 ABOUT_TEXT = _load("about.md")
 SUPPORT_TEXT = _load("support.md")

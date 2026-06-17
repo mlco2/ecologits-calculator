@@ -21,8 +21,6 @@ from src.ui.impacts import display_impacts
 
 
 def company_mode():
-    # st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
-
     with st.container(border=True):
         df = load_models(filter_main=True)
 
