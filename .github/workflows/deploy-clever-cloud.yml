@@ -1,10 +1,9 @@
 name: Deploy to Clever Cloud
 
 on:
-  workflow_run:
-    workflows: ["Tests"]
-    types: [completed]
+  push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,11 +20,10 @@ jobs:
       url: https://calculator.ecologits.ai
 
     steps:
-      - name: Check out tested commit
+      - name: Check out commit
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Deploy to Clever Cloud
         env:
