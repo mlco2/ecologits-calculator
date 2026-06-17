@@ -19,29 +19,55 @@ def test_scenarios_match_supported_tasks():
         ("✍️ Re-write the Lord Of The Rings trilogy", 500000),
         ("🎬 Generate a 720p video", None),
         ("🎬 Generate a 1080p video", None),
+        ("🎬 Generate a 720p video without audio", None),
         ("🎬 Generate a 4K video", None),
     ]
     assert [scenario.duration for scenario in SCENARIOS if scenario.modality == "video"] == [
-        6,
-        6,
-        6,
+        8,
+        8,
+        8,
+        8,
     ]
 
 
-def test_load_video_models_filters_by_resolution(streamlit_mock):
-    models_1080p = load_video_models(resolution="1920x1080")
+def test_load_video_models_filters_by_resolution_and_audio(streamlit_mock):
+    models_1080p = load_video_models(resolution="1920x1080", duration=8, with_audio=True)
 
     assert not models_1080p.empty
     assert "Kling AI" not in set(models_1080p["provider_clean"])
+    assert set(models_1080p["audio_generation"]) == {True}
 
 
-def test_load_video_models_supports_4k(streamlit_mock):
-    models_4k = load_video_models(resolution="3840x2160")
+def test_load_video_models_uses_real_compatibility_data(streamlit_mock):
+    models_without_audio = load_video_models(
+        resolution="1280x720",
+        duration=8,
+        with_audio=False,
+    )
 
-    assert set(models_4k["provider_clean"]) == {"Google", "OpenAI"}
+    assert not models_without_audio.empty
+    assert "Runway" in set(models_without_audio["provider_clean"])
 
 
-def test_mock_video_impacts_use_standard_formatting():
+def test_load_video_models_can_extrapolate_4k_resolution(streamlit_mock):
+    exact_models = load_video_models(
+        resolution="3840x2160",
+        duration=8,
+        with_audio=True,
+    )
+    extrapolated_models = load_video_models(
+        resolution="3840x2160",
+        duration=8,
+        with_audio=True,
+        extrapolate_resolution=True,
+    )
+
+    assert exact_models.empty
+    assert not extrapolated_models.empty
+    assert set(extrapolated_models["audio_generation"]) == {True}
+
+
+def test_video_impacts_use_standard_formatting():
     scenario = next(scenario for scenario in SCENARIOS if scenario.modality == "video")
 
     impacts = compute_scenario_impacts(

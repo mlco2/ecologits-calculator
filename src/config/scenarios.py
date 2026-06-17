@@ -12,6 +12,7 @@ class Scenario:
     resolution: str | None = None
     duration: int | None = None
     with_audio: bool = False
+    extrapolate_resolution: bool = False
 
 
 TEXT_SCENARIOS = [
@@ -47,22 +48,30 @@ VIDEO_SCENARIOS = [
         label="🎬 Generate a 720p video",
         modality="video",
         resolution="1280x720",
-        duration=6,
+        duration=8,
         with_audio=True,
     ),
     Scenario(
         label="🎬 Generate a 1080p video",
         modality="video",
         resolution="1920x1080",
-        duration=6,
+        duration=8,
         with_audio=True,
+    ),
+    Scenario(
+        label="🎬 Generate a 720p video without audio",
+        modality="video",
+        resolution="1280x720",
+        duration=8,
+        with_audio=False,
     ),
     Scenario(
         label="🎬 Generate a 4K video",
         modality="video",
         resolution="3840x2160",
-        duration=6,
+        duration=8,
         with_audio=True,
+        extrapolate_resolution=True,
     ),
 ]
 

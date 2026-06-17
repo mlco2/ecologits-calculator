@@ -24,7 +24,12 @@ def _render_scenario_selector() -> Scenario:
 
 def _load_compatible_models(scenario: Scenario):
     if scenario.modality == "video":
-        return load_video_models(resolution=scenario.resolution)
+        return load_video_models(
+            resolution=scenario.resolution,
+            duration=scenario.duration,
+            with_audio=scenario.with_audio,
+            extrapolate_resolution=scenario.extrapolate_resolution,
+        )
     return load_models(filter_main=True)
 
 
@@ -64,6 +69,9 @@ def calculator_mode():
             scenario = _render_scenario_selector()
 
         df = _load_compatible_models(scenario)
+        if df.empty:
+            st.error("No compatible model is available for this task.")
+            return
 
         provider, model = render_model_selector(df, col2, col3, key_suffix="calc")
 

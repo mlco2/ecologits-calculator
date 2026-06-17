@@ -195,8 +195,8 @@ wheels = [
 
 [[package]]
 name = "ecologits"
-version = "0.10.2"
-source = { git = "https://github.com/mlco2/ecologits#c2f40901c01670a3ea5c612b9796ad9fe3c5a0e7" }
+version = "0.11.0"
+source = { git = "https://github.com/mlco2/ecologits#5a76dfff1572ca11de7d43617b974a6da3b0346f" }
 dependencies = [
     { name = "packaging" },
     { name = "pydantic" },
