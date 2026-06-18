@@ -2,7 +2,9 @@
 
 import pytest
 
-from src.ui.expert import extract_param_value
+from ecologits.utils.range_value import RangeValue
+
+from src.ui.expert import extract_param_value, impact_param_value
 
 
 class TestExtractParamValue:
@@ -62,3 +64,27 @@ class TestExtractParamValue:
         """Test that boolean value raises ValueError."""
         with pytest.raises(ValueError, match="Parameter value must be int, float, or dict"):
             extract_param_value(True)
+
+
+class TestImpactParamValue:
+    """Test the impact_param_value function."""
+
+    def test_preserves_default_range_dict(self):
+        """Should convert an unchanged range dict to RangeValue."""
+        result = impact_param_value({"min": 70, "max": 120}, 95)
+
+        assert isinstance(result, RangeValue)
+        assert result.min == 70
+        assert result.max == 120
+
+    def test_uses_scalar_when_range_input_was_changed(self):
+        """Should use the expert input when it differs from the range midpoint."""
+        result = impact_param_value({"min": 70, "max": 120}, 100)
+
+        assert result == 100
+
+    def test_uses_scalar_for_scalar_model_value(self):
+        """Should keep scalar model metadata scalar."""
+        result = impact_param_value(440, 440)
+
+        assert result == 440

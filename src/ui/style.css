@@ -133,6 +133,107 @@ html, body, [class*="css"] {
     }
 }
 
+.how-to-card {
+    background:
+        radial-gradient(circle at top right, rgba(0, 191, 99, 0.06), transparent 55%),
+        #fff;
+    border: 1px solid rgba(49, 51, 63, 0.2);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    margin: 0.5rem 0 1.25rem;
+    padding: 1.4rem 1.6rem 1.5rem;
+}
+
+.how-to-title {
+    color: #0b3b36;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.15rem;
+}
+
+.how-to-steps {
+    align-items: stretch;
+    display: grid;
+    gap: 0.4rem;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+}
+
+.how-to-step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.how-to-step-header {
+    align-items: center;
+    display: flex;
+    gap: 0.6rem;
+}
+
+.how-to-step-number {
+    align-items: center;
+    background: rgba(0, 191, 99, 0.12);
+    border-radius: 999px;
+    color: #087f4f;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.82rem;
+    font-weight: 700;
+    height: 1.55rem;
+    justify-content: center;
+    line-height: 1;
+    width: 1.55rem;
+}
+
+.how-to-step-title {
+    color: #0b3b36;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.how-to-step-body {
+    color: rgba(6, 37, 34, 0.78);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    margin: 0 !important;
+}
+
+.how-to-step-body b {
+    color: #0b3b36;
+    font-weight: 600;
+}
+
+.how-to-step-connector {
+    align-items: center;
+    color: rgba(0, 191, 99, 0.55);
+    display: flex;
+    justify-content: center;
+    padding-top: 0.25rem;
+}
+
+.how-to-step-connector svg {
+    height: 0.85rem;
+    width: 2rem;
+}
+
+@media (max-width: 900px) {
+    .how-to-card {
+        padding: 1.15rem 1.15rem 1.25rem;
+    }
+
+    .how-to-steps {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .how-to-step-connector {
+        display: none;
+    }
+}
+
 .st-key-mode_toggles {
     margin-bottom: -0.5rem;
     margin-top: 0.75rem;
@@ -155,4 +256,128 @@ html, body, [class*="css"] {
 [data-testid="metric-container"] label {
     width: fit-content;
     margin: auto;
+}
+
+.section-title {
+    text-align: left;
+}
+
+.section-title-impacts {
+    margin: 2.8rem 0 0.85rem !important;
+}
+
+.section-title-equivalents {
+    margin: 2.8rem 0 0.85rem !important;
+}
+
+.section-subtitle {
+    color: rgba(6, 37, 34, 0.72);
+    margin: -0.45rem 0 0.85rem !important;
+    text-align: left;
+}
+
+.section-description {
+    color: rgba(6, 37, 34, 0.62);
+    font-size: 0.82rem;
+    margin: -0.55rem 0 0.85rem !important;
+    text-align: left;
+}
+
+.environment-card-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(var(--environment-card-desktop-columns), minmax(0, 1fr));
+}
+
+.environment-card {
+    border: 1px solid rgba(49, 51, 63, 0.2);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 1.4rem 1.35rem 1.05rem;
+}
+
+.environment-card-header {
+    align-items: flex-start;
+    color: #0b3b36;
+    display: flex;
+    font-size: 1.05rem;
+    font-weight: 500;
+    gap: 0.45rem;
+    line-height: 1.25;
+    margin-bottom: 1.2rem;
+    min-height: 2.65rem;
+    text-align: left;
+    width: fit-content;
+}
+
+.environment-card-icon {
+    flex: 0 0 auto;
+    font-size: 1rem;
+    line-height: 1;
+    padding-top: 0.15rem;
+}
+
+.environment-card-title {
+    min-width: 0;
+}
+
+.environment-card-value {
+    align-items: baseline;
+    color: #062522;
+    display: flex;
+    gap: 0.35rem;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    text-align: left;
+    width: fit-content;
+}
+
+.environment-card-number {
+    font-size: 1.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.environment-card-unit {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.environment-card-subtext {
+    color: rgba(6, 37, 34, 0.72);
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    min-height: 1.6rem;
+    text-align: left;
+}
+
+@media (max-width: 900px) {
+    .environment-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .environment-card-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .environment-card-number {
+        font-size: 1.65rem;
+    }
+
+    .environment-card-unit {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .environment-card-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .environment-card {
+        padding: 1.15rem 1rem 0.9rem;
+    }
 }

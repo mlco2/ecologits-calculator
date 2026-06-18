@@ -1,5 +1,54 @@
+from html import escape
+
 import pandas as pd
 import streamlit as st
+
+
+def render_environment_card(
+    *,
+    title: str,
+    value: str,
+    emoji: str = "",
+    unit: str = "",
+    subtext: str = "",
+) -> None:
+    st.html(
+        render_environment_card_html(
+            title=title,
+            value=value,
+            emoji=emoji,
+            unit=unit,
+            subtext=subtext,
+        )
+    )
+
+
+def render_environment_card_html(
+    *,
+    title: str,
+    value: str,
+    emoji: str = "",
+    unit: str = "",
+    subtext: str = "",
+) -> str:
+    unit_html = f'<span class="environment-card-unit">{escape(unit)}</span>' if unit else ""
+    subtext_html = (
+        f'<p class="environment-card-subtext">{escape(subtext)}</p>' if subtext else ""
+    )
+
+    return f"""
+        <div class="environment-card">
+            <div class="environment-card-header">
+                <span class="environment-card-icon">{escape(emoji)}</span>
+                <span class="environment-card-title">{escape(title)}</span>
+            </div>
+            <div class="environment-card-value">
+                <span class="environment-card-number">{escape(value)}</span>
+                {unit_html}
+            </div>
+            {subtext_html}
+        </div>
+        """
 
 
 def render_model_selector(

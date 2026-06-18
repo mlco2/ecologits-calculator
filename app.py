@@ -29,10 +29,10 @@ def _render_announcement() -> None:
     st.html(
         """
         <div class="announcement">
-            EcoLogits is joining the CodeCarbon non-profit.
-            <a href="https://www.linkedin.com/posts/genai-impact_grande-nouvelle-pour-un-numérique-plus-activity-7420053917440376832-QBEw/" target="_blank">
-                Read the announcement
-            </a>
+            <strong>EcoLogits now supports AI-generated videos 🎬.
+            <a href="https://ecologits.ai/blog/" target="_blank">
+                Read our blog post.
+            </a></strong>
         </div>
         """
     )
@@ -44,7 +44,7 @@ def _calculator_page() -> None:
 
 def _render_calculator() -> None:
     _render_announcement()
-    st.expander("How to use this calculator?", expanded=False).markdown(HOW_TO_TEXT)
+    st.html(HOW_TO_TEXT)
 
     with st.container(
         key="mode_toggles",

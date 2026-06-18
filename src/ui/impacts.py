@@ -1,23 +1,34 @@
 import streamlit as st
 
+from src.ui.components import render_environment_card, render_environment_card_html
+
+
+def _format_quantity_value(value) -> str:
+    return f"{value.magnitude:.3g}"
+
+
+def _format_quantity_unit(value) -> str:
+    return f"{value.units:~}"
+
+
+def _format_impact_subtext(values_min, values_max) -> str:
+    if values_min is None or values_max is None:
+        return ""
+
+    unit = _format_quantity_unit(values_min)
+    return f"between {_format_quantity_value(values_min)}-{_format_quantity_value(values_max)} {unit}"
+
 
 def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max=None):
 
     with st.container(border=True):
-        st.markdown(
-            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'>{icon}</p>""",
-            unsafe_allow_html=True,
+        render_environment_card(
+            title=impact_lablel,
+            value=_format_quantity_value(values),
+            unit=_format_quantity_unit(values),
+            emoji=icon,
+            subtext=_format_impact_subtext(values_min, values_max),
         )
-        st.markdown(
-            f"""<p style='font-size:25px; text-align: center;margin-left: 0px'><strong>{impact_lablel}</strong></p>""",
-            unsafe_allow_html=True,
-        )
-
-        if values_min is not None and values_max is not None:
-            help_text = f"Min: {values_min.magnitude:.3g} {values_min.units} — Max: {values_max.magnitude:.3g} {values_max.units}"
-        else:
-            help_text = None
-        st.latex(rf"\Large {values.magnitude:.3g} \ \large {values.units}", help=help_text)
 
 
 def display_impacts(
@@ -61,7 +72,7 @@ def display_impacts(
         ),
         (
             "Water",
-            "Water",
+            "Water consumption",
             impacts_output.wcf,
             "🚰",
             impacts_output.wcf_min,
@@ -91,18 +102,25 @@ def display_impacts(
         if key in impacts_to_display
     ]
 
-    if mode == "basic":
-        cols = st.columns(len(selected))
-        for i, (label, values, icon, vmin, vmax) in enumerate(selected):
-            with cols[i].container():
-                display_mono_impact(
-                    impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
-                )
+    desktop_columns = len(selected) if mode == "basic" else 2
+    cards_html = "\n".join(
+        render_environment_card_html(
+            title=label,
+            value=_format_quantity_value(values),
+            unit=_format_quantity_unit(values),
+            emoji=icon,
+            subtext=_format_impact_subtext(vmin, vmax),
+        )
+        for label, values, icon, vmin, vmax in selected
+    )
 
-    else:
-        cols = st.columns(2)
-        for i, (label, values, icon, vmin, vmax) in enumerate(selected):
-            with cols[i % 2].container():
-                display_mono_impact(
-                    impact_lablel=label, values=values, icon=icon, values_min=vmin, values_max=vmax
-                )
+    st.html(
+        f"""
+        <div
+            class="environment-card-grid environment-card-grid-{mode}"
+            style="--environment-card-desktop-columns: {desktop_columns};"
+        >
+            {cards_html}
+        </div>
+        """
+    )
