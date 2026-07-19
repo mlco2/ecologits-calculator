@@ -76,7 +76,7 @@
       />
       <p>
         The EcoLogits Calculator is now available at<br />
-        <a href="https://calculator.ecologits.ai/" target="_top" rel="noopener">
+        <a href="https://calculator.ecologits.ai/" target="_blank" rel="noopener noreferrer">
           calculator.ecologits.ai<span class="external-link-icon" aria-hidden="true">↗</span>
         </a>
       </p>
@@ -97,10 +97,11 @@
         if (secondsRemaining === 0) {
           window.clearInterval(countdown);
 
-          try {
-            window.top.location.replace(destination);
-          } catch (error) {
+          if (window.top === window.self) {
             window.location.replace(destination);
+          } else {
+            secondsElement.parentElement.textContent =
+              "Select the address above to open the calculator in a new tab.";
           }
         }
       }, 1000);
