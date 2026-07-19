@@ -11,10 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          lfs: true
-      - name: Push to hub
+      - name: Update deprecation Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://vdwow:$HF_TOKEN@huggingface.co/spaces/genai-impact/ecologits-calculator main
+        run: |
+          git clone "https://vdwow:${HF_TOKEN}@huggingface.co/spaces/genai-impact/ecologits-calculator" /tmp/ecologits-hf-space
+          git -C /tmp/ecologits-hf-space rm -r --ignore-unmatch .
+          cp huggingface-space/README.md huggingface-space/index.html /tmp/ecologits-hf-space/
+          git -C /tmp/ecologits-hf-space add README.md index.html
+          if git -C /tmp/ecologits-hf-space diff --cached --quiet; then
+            exit 0
+          fi
+          git -C /tmp/ecologits-hf-space config user.name "github-actions[bot]"
+          git -C /tmp/ecologits-hf-space config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C /tmp/ecologits-hf-space commit -m "chore: redirect to the new calculator"
+          git -C /tmp/ecologits-hf-space push origin main

@@ -14,7 +14,7 @@ uv run ruff check --fix && uv run ruff format  # Lint and format
 
 ## Architecture
 
-**EcoLogits Calculator** is a Streamlit app that estimates the environmental impact (energy, CO₂, water) of generative AI inference. It wraps the `ecologits` library for impact calculations and is deployed to Hugging Face Spaces.
+**EcoLogits Calculator** is a Streamlit app that estimates the environmental impact (energy, CO₂, water) of generative AI inference. It wraps the `ecologits` library for impact calculations and is deployed to Clever Cloud.
 
 **Entry point**: `app.py` — sets up the page and routes to one of four calculator modes.
 
@@ -37,4 +37,4 @@ uv run ruff check --fix && uv run ruff format  # Lint and format
 
 ## CI/CD
 
-GitHub Actions runs ruff, mypy (non-blocking), and pytest on Python 3.11/3.12. Pushes to `main` auto-deploy to Hugging Face Spaces.
+GitHub Actions runs ruff, mypy (non-blocking), and pytest on Python 3.11/3.12. Pushes to `main` deploy the calculator to Clever Cloud and update the static deprecation page on Hugging Face Spaces.

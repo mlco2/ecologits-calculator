@@ -54,7 +54,7 @@ The calculator provides:
 
 ## 🚀 Quick Start
 
-The Calculator is currently hosted on Hugging Face Spaces and can be accessed directly [here](https://huggingface.co/spaces/genai-impact/ecologits-calculator).
+The Calculator is available at [calculator.ecologits.ai](https://calculator.ecologits.ai/).
 
 If you want to run the calculator locally, follow the instructions below.
 
