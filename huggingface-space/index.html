@@ -59,12 +59,6 @@
         text-decoration: none;
       }
 
-      .countdown {
-        margin-top: 2.5rem;
-        color: #52716d;
-        font-size: 0.95rem;
-      }
-
     </style>
   </head>
   <body>
@@ -80,31 +74,6 @@
           calculator.ecologits.ai<span class="external-link-icon" aria-hidden="true">↗</span>
         </a>
       </p>
-      <p class="countdown" aria-live="polite">
-        You will be redirected automatically in <span id="seconds">6</span> seconds.
-      </p>
     </main>
-
-    <script>
-      const destination = "https://calculator.ecologits.ai/";
-      const secondsElement = document.getElementById("seconds");
-      let secondsRemaining = 6;
-
-      const countdown = window.setInterval(() => {
-        secondsRemaining -= 1;
-        secondsElement.textContent = secondsRemaining;
-
-        if (secondsRemaining === 0) {
-          window.clearInterval(countdown);
-
-          if (window.top === window.self) {
-            window.location.replace(destination);
-          } else {
-            secondsElement.parentElement.textContent =
-              "Select the address above to open the calculator in a new tab.";
-          }
-        }
-      }, 1000);
-    </script>
   </body>
 </html>
