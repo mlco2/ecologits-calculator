@@ -19,18 +19,6 @@ def _format_impact_subtext(values_min, values_max) -> str:
     return f"between {_format_quantity_value(values_min)}-{_format_quantity_value(values_max)} {unit}"
 
 
-def display_mono_impact(impact_lablel, values, icon, values_min=None, values_max=None):
-
-    with st.container(border=True):
-        render_environment_card(
-            title=impact_lablel,
-            value=_format_quantity_value(values),
-            unit=_format_quantity_unit(values),
-            emoji=icon,
-            subtext=_format_impact_subtext(values_min, values_max),
-        )
-
-
 def display_impacts(
     impacts_output=None,
     impacts_to_display: list | None = None,
