@@ -10,7 +10,7 @@
   **Measure the Environmental Impact of Generative AI**
   
   [![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-blue.svg)](LICENSE)
-  [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
+  [![Python](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/)
   [![Streamlit](https://img.shields.io/badge/built%20with-streamlit-FF4B4B.svg)](https://streamlit.io/)
 
 </div>
@@ -48,7 +48,7 @@ If you want to run the calculator locally, follow the instructions below.
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.13+
 - [uv](https://docs.astral.sh/uv/) package manager
 
 ### Installation
