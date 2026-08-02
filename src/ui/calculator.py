@@ -35,9 +35,8 @@ def _load_compatible_models(scenario: Scenario):
 
 def _scenario_context_text(scenario: Scenario) -> str | None:
     if scenario.modality == "video":
-        return (
-            f"{scenario.resolution}, {scenario.duration}s"
-            + (" with audio" if scenario.with_audio else "")
+        return f"{scenario.resolution}, {scenario.duration}s" + (
+            " with audio" if scenario.with_audio else ""
         )
     if scenario.output_token_count is not None:
         return f"{scenario.output_token_count:,} output tokens"

@@ -39,11 +39,7 @@ def load_video_models(
             for model_resolution in capabilities["resolutions"]
         ]
 
-        if (
-            resolution is not None
-            and resolution not in resolutions
-            and not extrapolate_resolution
-        ):
+        if resolution is not None and resolution not in resolutions and not extrapolate_resolution:
             continue
         if frames_count is not None and frames_count not in capabilities["frames_count"]:
             continue

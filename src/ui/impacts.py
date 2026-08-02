@@ -1,6 +1,6 @@
 import streamlit as st
 
-from src.ui.components import render_environment_card, render_environment_card_html
+from src.ui.components import render_environment_card_html
 
 
 def _format_quantity_value(value) -> str:
@@ -16,7 +16,9 @@ def _format_impact_subtext(values_min, values_max) -> str:
         return ""
 
     unit = _format_quantity_unit(values_min)
-    return f"between {_format_quantity_value(values_min)}-{_format_quantity_value(values_max)} {unit}"
+    return (
+        f"between {_format_quantity_value(values_min)}-{_format_quantity_value(values_max)} {unit}"
+    )
 
 
 def display_impacts(

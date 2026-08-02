@@ -32,9 +32,7 @@ def render_environment_card_html(
     subtext: str = "",
 ) -> str:
     unit_html = f'<span class="environment-card-unit">{escape(unit)}</span>' if unit else ""
-    subtext_html = (
-        f'<p class="environment-card-subtext">{escape(subtext)}</p>' if subtext else ""
-    )
+    subtext_html = f'<p class="environment-card-subtext">{escape(subtext)}</p>' if subtext else ""
 
     return f"""
         <div class="environment-card">
@@ -74,8 +72,15 @@ def render_model_selector(
                 if x in df[df["provider_clean"] == provider]["name_clean"].unique()
             ]
         )
-        default_model_index = models_clean.index("Claude sonnet 4 6") if "Claude sonnet 4 6" in models_clean else 0
-        model = st.selectbox(label="Model", options=models_clean, key=f"model_select_{key_suffix}", index=default_model_index)
+        default_model_index = (
+            models_clean.index("Claude sonnet 4 6") if "Claude sonnet 4 6" in models_clean else 0
+        )
+        model = st.selectbox(
+            label="Model",
+            options=models_clean,
+            key=f"model_select_{key_suffix}",
+            index=default_model_index,
+        )
 
     return provider, model
 

@@ -85,13 +85,14 @@ COUNTRY_CODES = [
 
 # Organized constants by category
 
-class energy_activity:
+
+class EnergyActivity:
     # From https://www.runningtools.com/energyusage.htm
     RUNNING_ENERGY_EQ = q("294 kJ / km")  # running 1 km at 10 km/h with a weight of 70 kg
     WALKING_ENERGY_EQ = q("196 kJ / km")  # walking 1 km at 3 km/h with a weight of 70 kg
 
 
-class transportation:
+class Transportation:
     # From https://selectra.info/energie/actualites/insolite/consommation-vehicules-electriques-france-2040
     # and https://www.tesla.com/fr_fr/support/power-consumption
     EV_ENERGY_EQ = q("0.17 kWh / km")
@@ -104,19 +105,19 @@ class transportation:
     AIRPLANE_PARIS_NYC_GWP_EQ = q("177000 kgCO2eq")
 
 
-class media_consumption:
+class MediaConsumption:
     # From https://impactco2.fr/outils/comparateur?value=1&comparisons=streamingvideo
     STREAMING_GWP_EQ = q("15.6 h / kgCO2eq")
 
 
-class global_stats:
+class GlobalStats:
     # From https://ourworldindata.org/population-growth
     ONE_PERCENT_WORLD_POPULATION = 80_000_000
 
     DAYS_IN_YEAR = 365
 
 
-class electricity_production:
+class ElectricityProduction:
     # For a 900 MW nuclear plant -> 500 000 MWh / month
     # From https://www.edf.fr/groupe-edf/espaces-dedies/jeunes-enseignants/pour-les-jeunes/lenergie-de-a-a-z/produire-de-lelectricite/le-nucleaire-en-chiffres
     YEARLY_NUCLEAR_ENERGY_EQ = q("6 TWh")
@@ -126,14 +127,14 @@ class electricity_production:
     YEARLY_WIND_ENERGY_EQ = q("4.2 GWh")
 
 
-class electricity_consumption:
+class ElectricityConsumption:
     # Ireland yearly electricity consumption
     # From https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption
     YEARLY_IRELAND_ELECTRICITY_CONSUMPTION = q("33 TWh")
     IRELAND_POPULATION_MILLION = 5
 
 
-class environmental_units:
+class EnvironmentalUnits:
     # From https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html
     # ADPE for building a NVIDIA H100 80GB = 0.00895 kgSbeq
     NVIDIA_H100 = q("8.95 gSbeq")
@@ -151,6 +152,3 @@ class environmental_units:
 
     # source : https://www.mdpi.com/2078-1547/8/2/21
     IPHONE = q("2 gSbeq")
-
-
-

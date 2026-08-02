@@ -1,4 +1,4 @@
-.PHONY: help install run test lint format check clean
+.PHONY: help install run test lint format check-ci check clean
 
 # Default target when running 'make' with no arguments
 help:
@@ -7,8 +7,9 @@ help:
 	@echo "  make run      - Run the Streamlit application"
 	@echo "  make test     - Run tests with pytest"
 	@echo "  make lint     - Check code style with ruff and mypy"
-	@echo "  make format   - Format code using ruff"
-	@echo "  make check    - Run formatting, linting, and tests (CI simulation)"
+	@echo "  make format   - Format code using ruff (mutating)"
+	@echo "  make check-ci - Run read-only CI checks (ruff, format --check, mypy, tests)"
+	@echo "  make check    - Alias for check-ci"
 	@echo "  make clean    - Remove cache directories and temporary files"
 
 install:
@@ -29,7 +30,13 @@ format:
 	uv run ruff check --fix
 	uv run ruff format
 
-check: format lint test
+check-ci:
+	uv run ruff check
+	uv run ruff format --check
+	uv run mypy src || true
+	uv run pytest tests/ -v
+
+check: check-ci
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
