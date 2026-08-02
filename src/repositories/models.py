@@ -22,6 +22,10 @@ PROVIDERS_FORMAT = {
 }
 
 
+def normalize_params(params):
+    return dict(params) if isinstance(params, RangeValue) else params
+
+
 def clean_model_name(model_name: str) -> str:
     # Define a mapping of characters to replace
     replacements = {
@@ -48,36 +52,16 @@ def load_models(filter_main=True) -> pd.DataFrame:
             continue  # Ignore "not main" models when filter is enabled
 
         if m.architecture.type == ArchitectureTypes.DENSE:
-            if isinstance(m.architecture.parameters, RangeValue):
-                total_parameters = dict(m.architecture.parameters)
-            else:
-                total_parameters = m.architecture.parameters
+            total_parameters = normalize_params(m.architecture.parameters)
             active_parameters = total_parameters
 
         elif m.architecture.type == ArchitectureTypes.MOE:
-            # Handle ParametersMoE objects
-            if hasattr(m.architecture.parameters, "total") and hasattr(
-                m.architecture.parameters, "active"
-            ):
-                # This is a ParametersMoE object
-                total_param = m.architecture.parameters.total
-                active_param = m.architecture.parameters.active
-
-                if isinstance(total_param, RangeValue):
-                    total_parameters = dict(total_param)
-                else:
-                    total_parameters = total_param
-
-                if isinstance(active_param, RangeValue):
-                    active_parameters = dict(active_param)
-                else:
-                    active_parameters = active_param
+            params = m.architecture.parameters
+            if hasattr(params, "total") and hasattr(params, "active"):
+                total_parameters = normalize_params(params.total)
+                active_parameters = normalize_params(params.active)
             else:
-                # This is a simple number (int/float)
-                if isinstance(m.architecture.parameters, RangeValue):
-                    total_parameters = dict(m.architecture.parameters)
-                else:
-                    total_parameters = m.architecture.parameters
+                total_parameters = normalize_params(params)
                 active_parameters = total_parameters
 
         else:
