@@ -26,7 +26,7 @@ from src.core.formatting import (
 
 # from src.core.latency_estimator import latency_estimator
 from src.repositories.models import get_raw_model_names, load_models
-from src.ui.impacts import display_impacts
+from src.ui.components.impacts import display_impacts
 
 _COL_PROVIDER = "Provider"
 _COL_MODEL = "Model"

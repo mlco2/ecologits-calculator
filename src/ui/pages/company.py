@@ -11,13 +11,13 @@ from src.repositories.electricity_mix import (
     format_country_name,
 )
 from src.repositories.models import get_raw_model_names, load_models
-from src.ui.components import (
+from src.ui.components.components import (
     display_electricity_mix_warnings,
     display_model_warnings,
     render_model_selector,
 )
-from src.ui.equivalents import display_equivalents
-from src.ui.impacts import display_impacts
+from src.ui.components.equivalents import display_equivalents
+from src.ui.components.impacts import display_impacts
 
 
 def company_mode():

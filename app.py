@@ -9,11 +9,11 @@ from src.config.content import (
     METHODOLOGY_TEXT,
     SUPPORT_TEXT,
 )
-from src.ui.calculator import calculator_mode
-from src.ui.company import company_mode
-from src.ui.expert import expert_mode
-from src.ui.expert_company import expert_company_mode
-from src.ui.token_estimator import token_estimator
+from src.ui.pages.calculator import calculator_mode
+from src.ui.pages.company import company_mode
+from src.ui.pages.expert import expert_mode
+from src.ui.pages.expert_company import expert_company_mode
+from src.ui.pages.token_estimator import token_estimator
 
 
 def _initialize_navigation_state() -> None:
@@ -176,7 +176,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    with open("src/ui/style.css") as css:
+    with open("src/ui/components/style.css") as css:
         st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
     _initialize_navigation_state()

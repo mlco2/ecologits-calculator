@@ -2,7 +2,7 @@
 
 from ecologits.electricity_mix_repository import electricity_mixes
 
-from src.ui.components import display_electricity_mix_warnings
+from src.ui.components.components import display_electricity_mix_warnings
 
 
 class TestElectricityMixWarnings:

@@ -15,8 +15,8 @@ from src.repositories.electricity_mix import (
     format_electricity_mix_criterion,
 )
 from src.repositories.models import get_raw_model_names, load_models
-from src.ui.components import display_electricity_mix_warnings, render_model_selector
-from src.ui.impacts import display_impacts
+from src.ui.components.components import display_electricity_mix_warnings, render_model_selector
+from src.ui.components.impacts import display_impacts
 
 logger = logging.getLogger(__name__)
 

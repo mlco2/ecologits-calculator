@@ -3,23 +3,7 @@
   "models": [
     {
       "provider": "anthropic",
-      "name": "claude-opus-4-5-20251101"
-    },
-    {
-      "provider": "anthropic",
-      "name": "claude-opus-4-6"
-    },
-    {
-      "provider": "anthropic",
-      "name": "claude-opus-4-7"
-    },
-    {
-      "provider": "anthropic",
       "name": "claude-opus-4-8"
-    },
-    {
-      "provider": "anthropic",
-      "name": "claude-sonnet-4-5-20250929"
     },
     {
       "provider": "anthropic",
@@ -28,18 +12,6 @@
     {
       "provider": "anthropic",
       "name": "claude-haiku-4-5-20251001"
-    },
-    {
-      "provider": "openai",
-      "name": "gpt-4.1"
-    },
-    {
-      "provider": "openai",
-      "name": "gpt-4.1-mini"
-    },
-    {
-      "provider": "openai",
-      "name": "gpt-4.1-nano"
     },
     {
       "provider": "openai",

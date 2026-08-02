@@ -5,12 +5,12 @@ from src.core.formatting import format_impacts
 from src.core.impact_calculator import compute_scenario_impacts
 from src.repositories.models import get_raw_model_names, load_models
 from src.repositories.video_models import load_video_models
-from src.ui.components import render_model_selector
-from src.ui.equivalents import (
+from src.ui.components.components import render_model_selector
+from src.ui.components.equivalents import (
     display_equivalents,
     render_equivalents_title,
 )
-from src.ui.impacts import display_impacts
+from src.ui.components.impacts import display_impacts
 
 
 def _render_scenario_selector() -> Scenario:

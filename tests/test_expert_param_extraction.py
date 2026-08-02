@@ -4,7 +4,7 @@ import pytest
 
 from ecologits.utils.range_value import RangeValue
 
-from src.ui.expert import extract_param_value, impact_param_value
+from src.ui.pages.expert import extract_param_value, impact_param_value
 
 
 class TestExtractParamValue:

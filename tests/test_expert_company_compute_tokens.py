@@ -3,7 +3,7 @@
 import pytest
 
 from src.config.constants import PROMPTS, USAGE_INTENSITY
-from src.ui.expert_company import _compute_row_tokens
+from src.ui.pages.expert_company import _compute_row_tokens
 
 
 class TestComputeRowTokens:
@@ -18,7 +18,7 @@ class TestComputeRowTokens:
         }
 
         # Mock the column names
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"
@@ -50,7 +50,7 @@ class TestComputeRowTokens:
             "_COL_NUM_USERS": "",
         }
 
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"
@@ -67,7 +67,7 @@ class TestComputeRowTokens:
             "_COL_NUM_USERS": None,
         }
 
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"
@@ -84,7 +84,7 @@ class TestComputeRowTokens:
             "_COL_NUM_USERS": "-100",
         }
 
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"
@@ -101,7 +101,7 @@ class TestComputeRowTokens:
             "_COL_NUM_USERS": "not_a_number",
         }
 
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"
@@ -118,7 +118,7 @@ class TestComputeRowTokens:
             "_COL_NUM_USERS": "0",
         }
 
-        import src.ui.expert_company as expert_company
+        import src.ui.pages.expert_company as expert_company
 
         expert_company._COL_USAGE_TYPE = "_COL_USAGE_TYPE"
         expert_company._COL_USAGE_INTENSITY = "_COL_USAGE_INTENSITY"

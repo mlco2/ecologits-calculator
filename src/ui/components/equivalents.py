@@ -18,7 +18,7 @@ from src.core.equivalences import (
     format_wue_eq_pints,
     format_wue_eq_pools,
 )
-from src.ui.components import render_environment_card
+from src.ui.components.components import render_environment_card
 
 EQUIVALENT_TITLES = {
     "at_scale": {

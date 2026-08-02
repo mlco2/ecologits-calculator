@@ -1,6 +1,6 @@
 import streamlit as st
 
-from src.ui.components import render_environment_card_html
+from src.ui.components.components import render_environment_card_html
 
 
 def _format_quantity_value(value) -> str:
