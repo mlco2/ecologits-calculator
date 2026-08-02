@@ -25,7 +25,7 @@ class TestJSONModelFiltering:
 
         # Should contain expected recent models
         expected_models = [
-            "claude-opus-4-1-20250805",
+            "claude-opus-4-5-20251101",
             "gpt-5",
             "gemini-3-flash-preview",
             "command-a-plus-05-2026",
