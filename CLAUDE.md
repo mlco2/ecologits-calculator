@@ -37,4 +37,4 @@ uv run ruff check --fix && uv run ruff format  # Lint and format
 
 ## CI/CD
 
-GitHub Actions runs ruff, mypy (non-blocking), and pytest on Python 3.11/3.12. Pushes to `main` deploy the calculator to Clever Cloud and update the static deprecation page on Hugging Face Spaces.
+GitHub Actions runs ruff, mypy (non-blocking), and pytest on Python 3.13. Pushes to `main` deploy the calculator to Clever Cloud and update the static deprecation page on Hugging Face Spaces.
