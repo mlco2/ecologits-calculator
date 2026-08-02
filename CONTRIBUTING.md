@@ -53,9 +53,11 @@ Before pushing your work, run the linter / formatter.
 
 ```shell
 # Run all checks before commit with Ruff
-uv run ruff check .
+uv run ruff check src/ tests/ app.py
 # Auto-format code with Ruff
-uv run ruff format .
+uv run ruff format src/ tests/ app.py
+# Or run all checks at once with make
+make check
 ```
 
 ### Commit and push your changes
