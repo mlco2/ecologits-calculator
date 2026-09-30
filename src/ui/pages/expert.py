@@ -207,7 +207,11 @@ def expert_mode():
         datacenter_wue=datacenter_wue,
     )
 
-    impacts, usage, embodied = format_impacts(impacts)
+    try:
+        impacts, usage, embodied = format_impacts(impacts)
+    except ValueError as error:
+        st.error(str(error))
+        return
 
     with st.container(border=True):
         st.markdown(

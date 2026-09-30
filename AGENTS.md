@@ -20,10 +20,10 @@ uv run ruff check --fix && uv run ruff format  # Lint and format
 
 **Four layers under `src/`**:
 
-- `config/` — constants (prompt templates, usage intensities, model lists), UI text content, pydantic-style data models
+- `config/` — constants (prompt templates, model lists), UI text content, dataclasses
 - `core/` — pure functions: unit registry (`pint`), environmental equivalences, impact formatting
 - `repositories/` — data access: loads AI model metadata from the `ecologits` library, electricity mix by country
-- `ui/` — Streamlit components per mode: `calculator.py` (standard + expert), `company.py` + `expert_company.py` (organization-level footprint), `token_estimator.py`, plus shared `impacts.py`, `components.py`, `plotting.py`
+- `ui/` — Streamlit pages in `pages/{calculator,expert,company,expert_company,token_estimator}.py` and shared components in `components/{components,impacts,equivalents}.py`
 
 **Data flow**: user input → model metadata from `repositories/` → `ecologits` impact calculation → `core/formatting.py` → `ui/impacts.py` display.
 

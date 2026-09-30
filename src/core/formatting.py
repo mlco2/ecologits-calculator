@@ -129,6 +129,10 @@ def format_wcf(wcf_value: float, wcf_unit: str | None = None) -> Quantity:
 
 
 def format_impacts(impacts: Impacts | ImpactsOutput) -> tuple[QImpacts, Usage, Embodied]:
+    if isinstance(impacts, ImpactsOutput) and impacts.has_errors:
+        errors = "; ".join(str(error) for error in impacts.errors)
+        raise ValueError(f"Unable to calculate impacts: {errors}")
+
     if isinstance(impacts.energy.value, float):
         return (
             QImpacts(

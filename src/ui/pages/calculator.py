@@ -101,7 +101,11 @@ def calculator_mode():
         if context_parts:
             st.caption(" · ".join(context_parts))
 
-        impacts_formatted, _, _ = format_impacts(impacts)
+        try:
+            impacts_formatted, _, _ = format_impacts(impacts)
+        except ValueError as error:
+            st.error(str(error))
+            return
 
         # st.write(impacts)
 
