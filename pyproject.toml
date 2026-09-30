@@ -7,6 +7,7 @@ requires-python = ">=3.13, <3.14"
 dependencies = [
     "ecologits>=0.11.0,<0.13.0",
     "openpyxl>=3.1.0",
+    "pandas>=3.0.5",
     "pint>=0.24.4",
     "plotly>=6.2.0",
     "streamlit>=1.47.1",
