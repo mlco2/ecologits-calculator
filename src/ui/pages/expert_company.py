@@ -365,6 +365,7 @@ def expert_company_mode():
             options=list(TIME_HORIZONS.keys()),
             default="Monthly",
             selection_mode="single",
+            required=True,
         )
 
     df_models = load_models(filter_main=True)

@@ -42,6 +42,7 @@ def company_mode():
             options=["Daily pages", "Daily tokens"],
             default="Daily pages",
             selection_mode="single",
+            required=True,
             help="A page refers to a page of content (approx. 500 words) - for tokens, jump to the dedicated tab to learn more.",
         )
 
@@ -67,13 +68,9 @@ def company_mode():
             options=list(TIME_HORIZONS.keys()),
             default="Yearly",
             selection_mode="single",
+            required=True,
         )
-
-        try:
-            time_horizon = TIME_HORIZONS[time_horizon_label]
-        except KeyError:
-            st.error("Invalid time horizon selected. Please choose a valid option.")
-            return
+        time_horizon = TIME_HORIZONS[time_horizon_label]
 
         dc_location = st.selectbox(
             label="Provider location",
@@ -106,7 +103,11 @@ def company_mode():
         if electricity_mix and electricity_mix.has_warnings:
             display_electricity_mix_warnings(electricity_mix)
 
-        impacts_formatted, _, _ = format_impacts(impacts)
+        try:
+            impacts_formatted, _, _ = format_impacts(impacts)
+        except ValueError as error:
+            st.error(str(error))
+            return
 
         with st.container(border=True):
             st.markdown(
