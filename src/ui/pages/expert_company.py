@@ -48,9 +48,9 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
         f"{row.provider_clean} / {row.name_clean}"
         for row in df_models[["provider_clean", "name_clean"]].itertuples(index=False)
     )
-    grid_df = pd.DataFrame(
-        st.session_state["ec_grid_rows"],
-        columns=list(_EMPTY_ROW),
+    grid_df = st.session_state.setdefault(
+        "ec_grid_base",
+        pd.DataFrame([_EMPTY_ROW], columns=list(_EMPTY_ROW)),
     )
     edited_df = st.data_editor(
         grid_df,
@@ -69,6 +69,7 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
             _COL_LOCATION: st.column_config.SelectboxColumn(
                 options=_LOCATION_LABELS,
                 required=True,
+                default=_DEFAULT_LOCATION,
             ),
         },
         num_rows="dynamic",
@@ -77,7 +78,6 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
         key="ec_data_editor",
     )
     rows = edited_df.to_dict("records")
-    st.session_state["ec_grid_rows"] = rows
 
     incomplete = [i + 1 for i, r in enumerate(rows) if not _row_is_complete(r)]
     if incomplete:
@@ -369,8 +369,10 @@ def expert_company_mode():
 
     df_models = load_models(filter_main=True)
 
-    if "ec_grid_rows" not in st.session_state:
-        st.session_state["ec_grid_rows"] = [dict(_EMPTY_ROW)]
+    st.session_state.setdefault(
+        "ec_grid_base",
+        pd.DataFrame([_EMPTY_ROW], columns=list(_EMPTY_ROW)),
+    )
     grid_state = _render_grid(df_models)
 
     if not grid_state["run"]:

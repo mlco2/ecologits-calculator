@@ -297,6 +297,28 @@ html, body, [class*="css"] {
     padding: 1.4rem 1.35rem 1.05rem;
 }
 
+.environment-card-grid-company .environment-card-header {
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.environment-card-grid-company .environment-card-title {
+    white-space: pre-line;
+}
+
+.environment-card-grid-company .environment-card-value {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.environment-card-grid-company .environment-card-subtext {
+    text-align: center;
+}
+
 .environment-card-header {
     align-items: flex-start;
     color: #0b3b36;

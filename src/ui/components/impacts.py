@@ -92,10 +92,10 @@ def display_impacts(
         if key in impacts_to_display
     ]
 
-    desktop_columns = len(selected) if mode == "basic" else 2
+    desktop_columns = len(selected) if mode in {"basic", "company"} else 2
     cards_html = "\n".join(
         render_environment_card_html(
-            title=label,
+            title=label.replace(" ", "\n", 1) if mode == "company" else label,
             value=_format_quantity_value(values),
             unit=_format_quantity_unit(values),
             emoji=icon,
