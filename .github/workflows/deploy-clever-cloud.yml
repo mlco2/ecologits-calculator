@@ -1,7 +1,9 @@
 name: Deploy to Clever Cloud
 
 on:
-  push:
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -10,10 +12,11 @@ permissions:
 
 concurrency:
   group: clever-cloud-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     environment:
       name: clever-cloud-production
