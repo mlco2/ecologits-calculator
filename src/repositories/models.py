@@ -46,6 +46,7 @@ def load_models(filter_main=True) -> pd.DataFrame:
     data = []
     # Load main models list (will be cached)
     main_models = load_main_models() if filter_main else None
+    model_order = {name: index for index, name in enumerate(main_models or [])}
 
     for m in model_repository.list_models():
         if filter_main and m.name not in main_models:
@@ -90,6 +91,9 @@ def load_models(filter_main=True) -> pd.DataFrame:
                 "warning_multi_modal": warning_multi_modal,
             }
         )
+
+    if filter_main:
+        data.sort(key=lambda model: model_order[model["name"]])
 
     return pd.DataFrame(data)
 

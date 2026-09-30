@@ -65,13 +65,13 @@ class TestJSONModelFiltering:
             _make_model("model-c", Providers.anthropic),
         ]
         monkeypatch.setattr(models_repo.model_repository, "list_models", lambda: repo_models)
-        monkeypatch.setattr(models_repo, "load_main_models", lambda: ["model-a", "model-c"])
+        monkeypatch.setattr(models_repo, "load_main_models", lambda: ["model-c", "model-a"])
 
         df_filtered = load_models(filter_main=True)
         df_all = load_models(filter_main=False)
 
         assert len(df_filtered) < len(df_all)
-        assert sorted(df_filtered["name"].tolist()) == ["model-a", "model-c"]
+        assert df_filtered["name"].tolist() == ["model-c", "model-a"]
         assert sorted(df_all["name"].tolist()) == ["model-a", "model-b", "model-c"]
 
         main_models = ["model-a", "model-c"]

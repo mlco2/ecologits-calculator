@@ -65,13 +65,7 @@ def render_model_selector(
         )
 
     with col_model:
-        models_clean = sorted(
-            [
-                x
-                for x in df["name_clean"].unique()
-                if x in df[df["provider_clean"] == provider]["name_clean"].unique()
-            ]
-        )
+        models_clean = df.loc[df["provider_clean"] == provider, "name_clean"].drop_duplicates().tolist()
         default_model_index = (
             models_clean.index("Claude sonnet 4 6") if "Claude sonnet 4 6" in models_clean else 0
         )
