@@ -1,5 +1,4 @@
 import io
-import json
 import math
 import operator
 
@@ -11,9 +10,8 @@ import streamlit as st
 
 from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.tracers.utils import llm_impacts
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
-from src.config.constants import COUNTRY_CODES, PROMPTS, TIME_HORIZONS, USAGE_INTENSITY
+from src.config.constants import COUNTRY_CODES, TIME_HORIZONS
 from src.core.formatting import (
     QImpacts,
     format_adpe,
@@ -28,10 +26,8 @@ from src.core.formatting import (
 from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components.impacts import display_impacts
 
-_COL_PROVIDER = "Provider"
-_COL_MODEL = "Model"
-_COL_USAGE_TYPE = "Usage Type"
-_COL_USAGE_INTENSITY = "Usage Intensity"
+_COL_MODEL = "Provider / Model"
+_COL_TOKENS_PER_USER = "Tokens per User per Selected Unit of Time"
 _COL_NUM_USERS = "Number of Users"
 _COL_LOCATION = "Usage Location"
 
@@ -40,99 +36,70 @@ _LOCATION_LABEL_TO_CODE = dict(COUNTRY_CODES)
 _DEFAULT_LOCATION = _LOCATION_LABELS[0]  # "🌎 World"
 
 _EMPTY_ROW = {
-    _COL_PROVIDER: None,
     _COL_MODEL: None,
-    _COL_USAGE_TYPE: None,
-    _COL_USAGE_INTENSITY: None,
+    _COL_TOKENS_PER_USER: None,
     _COL_NUM_USERS: None,
     _COL_LOCATION: _DEFAULT_LOCATION,
 }
 
-_INCOMPLETE_CELL_STYLE = JsCode("""
-function(params) {
-    if (params.value === null || params.value === undefined || params.value === '') {
-        return { backgroundColor: '#ffd6d6', border: '1px solid #ff4444' };
-    }
-    return {};
-}
-""")
+def _render_grid(df_models: pd.DataFrame) -> dict:
+    """Render native Streamlit editor and return current rows."""
+    models = sorted(
+        f"{row.provider_clean} / {row.name_clean}"
+        for row in df_models[["provider_clean", "name_clean"]].itertuples(index=False)
+    )
+    grid_df = pd.DataFrame(
+        st.session_state["ec_grid_rows"],
+        columns=list(_EMPTY_ROW),
+    )
+    edited_df = st.data_editor(
+        grid_df,
+        column_config={
+            _COL_MODEL: st.column_config.SelectboxColumn(options=models, required=True),
+            _COL_TOKENS_PER_USER: st.column_config.NumberColumn(
+                min_value=0,
+                step=1,
+                required=True,
+            ),
+            _COL_NUM_USERS: st.column_config.NumberColumn(
+                min_value=1,
+                step=1,
+                required=True,
+            ),
+            _COL_LOCATION: st.column_config.SelectboxColumn(
+                options=_LOCATION_LABELS,
+                required=True,
+            ),
+        },
+        num_rows="dynamic",
+        hide_index=True,
+        width="stretch",
+        key="ec_data_editor",
+    )
+    rows = edited_df.to_dict("records")
+    st.session_state["ec_grid_rows"] = rows
 
+    incomplete = [i + 1 for i, r in enumerate(rows) if not _row_is_complete(r)]
+    if incomplete:
+        st.warning(
+            f"Some row(s) {incomplete} have incomplete fields. Fill all columns before running calculations.",
+            icon="⚠️",
+        )
 
-def _build_provider_models_map(df: pd.DataFrame) -> dict[str, list[str]]:
     return {
-        provider: sorted(group["name_clean"].unique().tolist())
-        for provider, group in df.groupby("provider_clean")
+        "rows": rows,
+        "incomplete": incomplete,
+        "run": st.button(
+            "▶ Run calculations",
+            type="primary",
+            width="stretch",
+            disabled=bool(incomplete) or not rows,
+        ),
     }
-
-
-def _build_grid_options(df: pd.DataFrame) -> dict:
-    providers = sorted(df["provider_clean"].unique().tolist())
-    provider_models_map = _build_provider_models_map(df)
-    prompt_labels = [p.label for p in PROMPTS]
-    intensity_keys = list(USAGE_INTENSITY.keys())
-
-    model_cell_editor_params = JsCode(
-        f"""
-function(params) {{
-    var providerModelsMap = {json.dumps(provider_models_map)};
-    var provider = params.data["{_COL_PROVIDER}"];
-    return {{ values: providerModelsMap[provider] || [] }};
-}}
-"""
-    )
-
-    gb = GridOptionsBuilder.from_dataframe(
-        pd.DataFrame([_EMPTY_ROW]),
-        editable=True,
-    )
-    gb.configure_default_column(editable=True, resizable=True, cellStyle=_INCOMPLETE_CELL_STYLE)
-
-    gb.configure_column(
-        _COL_PROVIDER,
-        cellEditor="agSelectCellEditor",
-        cellEditorParams={"values": providers},
-        minWidth=150,
-    )
-    gb.configure_column(
-        _COL_MODEL,
-        cellEditor="agSelectCellEditor",
-        cellEditorParams=model_cell_editor_params,
-        minWidth=200,
-    )
-    gb.configure_column(
-        _COL_USAGE_TYPE,
-        cellEditor="agSelectCellEditor",
-        cellEditorParams={"values": prompt_labels},
-        minWidth=280,
-    )
-    gb.configure_column(
-        _COL_USAGE_INTENSITY,
-        header_name="Usage Intensity (per time horizon)",
-        cellEditor="agSelectCellEditor",
-        cellEditorParams={"values": intensity_keys},
-        minWidth=240,
-    )
-    gb.configure_column(
-        _COL_NUM_USERS,
-        type=["numericColumn"],
-        cellEditor="agNumberCellEditor",
-        cellEditorParams={"min": 1, "precision": 0},
-        minWidth=160,
-    )
-    gb.configure_column(
-        _COL_LOCATION,
-        cellEditor="agSelectCellEditor",
-        cellEditorParams={"values": _LOCATION_LABELS},
-        minWidth=200,
-    )
-    gb.configure_selection(selection_mode="multiple", use_checkbox=True)
-    gb.configure_grid_options(singleClickEdit=True, stopEditingWhenCellsLoseFocus=True)
-
-    return gb.build()
 
 
 def _is_empty(value: object) -> bool:
-    """Return True for None, empty string, zero, or NaN."""
+    """Return True for None, empty string, or NaN."""
     if value is None or value == "":
         return True
     try:
@@ -145,21 +112,30 @@ def _row_is_complete(row: dict) -> bool:
     return all(
         not _is_empty(row.get(col))
         for col in [
-            _COL_PROVIDER,
             _COL_MODEL,
-            _COL_USAGE_TYPE,
-            _COL_USAGE_INTENSITY,
+            _COL_TOKENS_PER_USER,
             _COL_NUM_USERS,
         ]
     )
 
 
-def _compute_row_tokens(row: dict) -> dict[str, int]:
-    """Compute daily token counts for a single filled row."""
-    prompt = next(p for p in PROMPTS if p.label == row[_COL_USAGE_TYPE])
-    daily_count = USAGE_INTENSITY[row[_COL_USAGE_INTENSITY]]
+def _split_model_selection(value: str) -> tuple[str, str] | None:
+    provider, separator, model = value.partition(" / ")
+    return (provider, model) if separator else None
 
-    # Validate and convert num_users to int
+
+def _compute_row_tokens(row: dict) -> dict[str, int]:
+    """Compute token counts from selected-period usage for one row."""
+    tokens_per_user = row[_COL_TOKENS_PER_USER]
+    if tokens_per_user is None or tokens_per_user == "":
+        raise ValueError("Tokens per user cannot be empty or None")
+    try:
+        tokens_per_user = int(tokens_per_user)
+        if tokens_per_user < 0:
+            raise ValueError(f"Tokens per user must be non-negative, got {tokens_per_user}")
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"Invalid tokens per user value '{row[_COL_TOKENS_PER_USER]}': {e}") from e
+
     num_users_str = row[_COL_NUM_USERS]
     if num_users_str is None or num_users_str == "":
         raise ValueError("Number of users cannot be empty or None")
@@ -171,19 +147,22 @@ def _compute_row_tokens(row: dict) -> dict[str, int]:
     except (TypeError, ValueError) as e:
         raise ValueError(f"Invalid number of users value '{num_users_str}': {e}") from e
 
-    multiplier = daily_count * num_users
+    output_tokens = tokens_per_user * num_users
     return {
-        "output_tokens": prompt.output_tokens * multiplier,
-        "input_tokens": prompt.input_tokens * multiplier,
-        "cached_tokens": prompt.cached_tokens * multiplier,
-        "total_tokens": (prompt.output_tokens + prompt.input_tokens + prompt.cached_tokens)
-        * multiplier,
+        "output_tokens": output_tokens,
+        "input_tokens": 0,
+        "cached_tokens": 0,
+        "total_tokens": output_tokens,
     }
 
 
 def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
     """Run ecologits llm_impacts for a single row, returning formatted impacts or None."""
-    raw_names = get_raw_model_names(df_models, row[_COL_PROVIDER], row[_COL_MODEL])
+    model_selection = _split_model_selection(row[_COL_MODEL])
+    if model_selection is None:
+        return None
+    provider, model = model_selection
+    raw_names = get_raw_model_names(df_models, provider, model)
     if raw_names is None:
         return None
     provider_raw, model_raw = raw_names
@@ -224,78 +203,8 @@ def _aggregate_impacts(impacts_list: list[QImpacts]) -> QImpacts:
     )
 
 
-def _render_grid(df_models: pd.DataFrame) -> dict:
-    """Render the multi-row grid UI and handle Add/Remove/Run buttons.
-
-    Returns a dict with keys:
-    - 'rows': current grid rows from session state
-    - 'incomplete': list of row indices (1-based) with incomplete fields
-    - 'run': bool indicating whether Run button was pressed
-    """
-    grid_df = pd.DataFrame(st.session_state["ec_grid_rows"])
-    grid_options = _build_grid_options(df_models)
-
-    grid_response = AgGrid(
-        grid_df,
-        gridOptions=grid_options,
-        update_mode=GridUpdateMode.VALUE_CHANGED,
-        allow_unsafe_jscode=True,
-        fit_columns_on_grid_load=True,
-        height=min(200 + len(st.session_state["ec_grid_rows"]) * 42, 500),
-        key=f"ec_aggrid_{st.session_state['ec_grid_version']}",
-    )
-
-    updated_df: pd.DataFrame = grid_response["data"]
-    st.session_state["ec_grid_rows"] = updated_df.to_dict("records")
-
-    selected_rows: pd.DataFrame = grid_response["selected_rows"]
-    has_selection = isinstance(selected_rows, pd.DataFrame) and len(selected_rows) > 0
-
-    col_add, col_remove, col_run = st.columns([1, 1, 2])
-    with col_add:
-        if st.button("➕ Add row", width="stretch"):
-            st.session_state["ec_grid_rows"] = [*updated_df.to_dict("records"), dict(_EMPTY_ROW)]
-            st.session_state["ec_grid_version"] += 1
-            st.rerun()
-
-    with col_remove:
-        if st.button("🗑 Remove selected", width="stretch", disabled=not has_selection):
-            selected_list = selected_rows.to_dict("records")
-            current_list = updated_df.to_dict("records")
-            remaining = [r for r in current_list if r not in selected_list] or [dict(_EMPTY_ROW)]
-            st.session_state["ec_grid_rows"] = remaining
-            st.session_state["ec_grid_version"] += 1
-            st.rerun()
-
-    rows = st.session_state["ec_grid_rows"]
-    incomplete = [i + 1 for i, r in enumerate(rows) if not _row_is_complete(r)]
-
-    if incomplete:
-        st.warning(
-            f"Some row(s) {incomplete} have incomplete fields (highlighted in red). "
-            "Fill all columns before running calculations.",
-            icon="⚠️",
-        )
-
-    with col_run:
-        run = st.button(
-            "▶ Run calculations",
-            type="primary",
-            width="stretch",
-            disabled=bool(incomplete) or not rows,
-        )
-
-    return {
-        "rows": rows,
-        "incomplete": incomplete,
-        "run": run,
-    }
-
-
 def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_label: str) -> None:
     """Compute impacts for all rows, aggregate by provider/model/location, and display results."""
-    time_horizon_days = TIME_HORIZONS.get(time_horizon_label, TIME_HORIZONS["Monthly"])
-
     # Check for electricity mix warnings in selected locations
     selected_locations = {row.get(_COL_LOCATION, _DEFAULT_LOCATION) for row in rows}
     location_codes = [_LOCATION_LABEL_TO_CODE.get(loc, "WOR") for loc in selected_locations]
@@ -319,16 +228,16 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
     for i, row in enumerate(rows):
         tokens = _compute_row_tokens(row)
         impacts = _run_impacts(df_models, row, tokens["output_tokens"])
+        model_selection = _split_model_selection(row[_COL_MODEL])
+        provider, model = model_selection or ("", row[_COL_MODEL])
 
         horizon_key = time_horizon_label.lower()
         summary_records.append(
             {
-                "llm_provider": row[_COL_PROVIDER],
-                "model_name": row[_COL_MODEL],
+                "llm_provider": provider,
+                "model_name": model,
                 "usage_location": row.get(_COL_LOCATION, _DEFAULT_LOCATION),
-                # f"{horizon_key}_input_tokens": tokens["input_tokens"] * time_horizon_days,
-                f"{horizon_key}_output_tokens": tokens["output_tokens"] * time_horizon_days,
-                # f"{horizon_key}_cached_tokens": tokens["cached_tokens"] * time_horizon_days,
+                f"{horizon_key}_output_tokens": tokens["output_tokens"],
                 "impacts_available": impacts is not None,
             }
         )
@@ -350,7 +259,8 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
 
     group_impacts: dict[tuple, list[QImpacts]] = defaultdict(list)
     for _, row, imp in all_impacts:
-        key = (row[_COL_PROVIDER], row[_COL_MODEL], row.get(_COL_LOCATION, _DEFAULT_LOCATION))
+        provider, model = _split_model_selection(row[_COL_MODEL])
+        key = (provider, model, row.get(_COL_LOCATION, _DEFAULT_LOCATION))
         group_impacts[key].append(imp)
 
     impact_records = []
@@ -446,8 +356,8 @@ def expert_company_mode():
     col_subtitle, col_horizon = st.columns([3, 1])
     with col_subtitle:
         st.markdown(
-            "Configure multiple LLM models with different usage scenarios and user counts "
-            "to estimate combined token usage and environmental impacts."
+            "Configure token usage per user for multiple LLM models to estimate combined "
+            "token usage and environmental impacts."
         )
     with col_horizon:
         time_horizon_label = st.pills(
@@ -457,13 +367,10 @@ def expert_company_mode():
             selection_mode="single",
         )
 
-    df_models = load_models(filter_main=False)
+    df_models = load_models(filter_main=True)
 
     if "ec_grid_rows" not in st.session_state:
         st.session_state["ec_grid_rows"] = [dict(_EMPTY_ROW)]
-    if "ec_grid_version" not in st.session_state:
-        st.session_state["ec_grid_version"] = 0
-
     grid_state = _render_grid(df_models)
 
     if not grid_state["run"]:

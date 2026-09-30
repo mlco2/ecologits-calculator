@@ -11,13 +11,6 @@ PROMPTS = [
     PromptTemplate("Re-write the Lord Of The Rings trilogy", 500000, 500000, 500000),
 ]
 
-USAGE_INTENSITY = {
-    "Light (x1-x3)": 2,
-    "Medium (x4-x10)": 7,
-    "Large (x11-x25)": 18,
-    "XLarge (x26+)": 30,
-}
-
 TIME_HORIZONS = {
     "Daily": 1,
     "Weekly": 5,
