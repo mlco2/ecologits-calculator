@@ -43,6 +43,10 @@ class TestFormatEnergy:
         result = format_energy(0.000001)
         assert "mWh" in str(result.units)
 
+    def test_format_energy_large_converts_to_mwh(self):
+        result = format_energy(1920)
+        assert result.to("MWh").magnitude == 1.92
+
 
 class TestFormatGWP:
     """Test cases for format_gwp function."""
@@ -69,6 +73,10 @@ class TestFormatGWP:
         result = format_gwp(0.00001)
         assert "mgCO2" in str(result.units)
 
+    def test_format_gwp_large_converts_to_tonnes(self):
+        result = format_gwp(1920)
+        assert result.to("tCO2eq").magnitude == 1.92
+
 
 class TestFormatADPe:
     """Test cases for format_adpe function."""
@@ -93,6 +101,10 @@ class TestFormatADPe:
         result_in_kg = result.to("kgSbeq")
         assert abs(result_in_kg.magnitude - 0.001) < 0.0001
 
+    def test_format_adpe_large_converts_to_tonnes(self):
+        result = format_adpe(1920)
+        assert result.to("tSbeq").magnitude == 1.92
+
 
 class TestFormatPE:
     """Test cases for format_pe function."""
@@ -114,6 +126,10 @@ class TestFormatPE:
         result_in_mj = result.to("MJ")
         assert abs(result_in_mj.magnitude - 0.5) < 0.01
 
+    def test_format_pe_large_converts_to_gj(self):
+        result = format_pe(1920)
+        assert result.to("GJ").magnitude == 1.92
+
 
 class TestFormatWCF:
     """Test cases for format_wcf function."""
@@ -134,6 +150,10 @@ class TestFormatWCF:
         # Convert back to L to verify value is preserved
         result_in_l = result.to("L")
         assert abs(result_in_l.magnitude - 0.1) < 0.01
+
+    def test_format_wcf_large_converts_to_kl(self):
+        result = format_wcf(1920)
+        assert result.to("kL").magnitude == 1.92
 
 
 class TestFormatImpacts:
