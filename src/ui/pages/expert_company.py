@@ -40,6 +40,7 @@ _EMPTY_ROW = {
     _COL_LOCATION: _DEFAULT_LOCATION,
 }
 
+
 def _render_grid(df_models: pd.DataFrame) -> dict:
     """Render native Streamlit editor and return current rows."""
     models = sorted(
