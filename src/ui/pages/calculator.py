@@ -61,7 +61,6 @@ def _combine_warnings(warnings) -> str | None:
 
 def calculator_mode():
     with st.container(border=True):
-        # st.markdown('<h3 align="center">Calculator</h3>', unsafe_allow_html=True)
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -106,8 +105,6 @@ def calculator_mode():
         except ValueError as error:
             st.error(str(error))
             return
-
-        # st.write(impacts)
 
         st.markdown(
             '<h3 class="section-title section-title-impacts">Environmental impacts</h3>',

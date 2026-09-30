@@ -21,8 +21,6 @@ from src.core.formatting import (
     format_pe,
     format_wcf,
 )
-
-# from src.core.latency_estimator import latency_estimator
 from src.repositories.models import get_raw_model_names, load_models
 from src.ui.components.impacts import display_impacts
 
@@ -168,11 +166,6 @@ def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
     provider_raw, model_raw = raw_names
     location_code = _LOCATION_LABEL_TO_CODE.get(row.get(_COL_LOCATION, _DEFAULT_LOCATION), "WOR")
 
-    # estimated_latency = latency_estimator.estimate(
-    #     provider=provider_raw,
-    #     model_name=model_raw,
-    #     output_tokens=output_token_count,
-    #
     result = llm_impacts(
         provider=provider_raw,
         model_name=model_raw,
@@ -246,9 +239,7 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
 
     horizon_key = time_horizon_label.lower()
     _TOKEN_COLS = [
-        # f"{horizon_key}_input_tokens",
         f"{horizon_key}_output_tokens",
-        # f"{horizon_key}_cached_tokens",
     ]
     _GROUP_COLS = ["llm_provider", "model_name", "usage_location"]
     _IMPACT_COLS = ["energy", "gwp", "adpe", "pe", "wcf"]
@@ -286,9 +277,7 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
         "llm_provider": "Provider",
         "model_name": "Model",
         "usage_location": _COL_LOCATION,
-        # f"{horizon_key}_input_tokens": f"{time_horizon_label} Input Tokens",
         f"{horizon_key}_output_tokens": f"{time_horizon_label} Output Tokens",
-        # f"{horizon_key}_cached_tokens": f"{time_horizon_label} Cached Tokens",
         "energy": "Energy",
         "gwp": "GWP",
         "adpe": "ADPe",
@@ -323,7 +312,6 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
         with st.container(border=True):
             st.markdown(
                 f"<h5 align='center'>Aggregated {time_horizon_label.lower()} environmental impacts</h5>",
-                # f"(all rows · {time_horizon_label.lower()})</h5>",
                 unsafe_allow_html=True,
             )
             display_impacts(

@@ -29,7 +29,6 @@ def token_estimator():
     with col2:
         st.metric(
             label="tokens estimated amount",
-            # label_visibility = 'hidden',
             value=num_tokens_from_string(user_text_input, "cl100k_base"),
             border=True,
         )
