@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to code agents when working with code in this repository.
 
 ## Commands
 
@@ -33,7 +33,7 @@ uv run ruff check --fix && uv run ruff format  # Lint and format
 
 - `ecologits` — the upstream impact calculation library. Its `Impacts` / `ImpactsOutput` types are used throughout; check its API before assuming attribute names.
 - `pint` — unit conversions live in `src/core/units.py`; always go through the unit registry there, don't construct raw `pint` quantities elsewhere.
-- `streamlit-aggrid` — used for the company-mode data grid.
+- `st.data_editor` — native Streamlit editor used for the expert company data grid.
 
 ## CI/CD
 
