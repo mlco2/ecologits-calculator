@@ -1,7 +1,6 @@
 import streamlit as st
 
 from src.config.content import (
-    ABOUT_TEXT,
     CITATION_LABEL,
     CITATION_TEXT,
     HOW_TO_TEXT,
@@ -9,11 +8,12 @@ from src.config.content import (
     METHODOLOGY_TEXT,
     SUPPORT_TEXT,
 )
+from src.ui.pages.about import about_page
 from src.ui.pages.calculator import calculator_mode
 from src.ui.pages.company import company_mode
 from src.ui.pages.expert import expert_mode
 from src.ui.pages.expert_company import expert_company_mode
-from src.ui.pages.token_estimator import token_estimator
+from src.ui.pages.model_comparison import model_comparison_page
 
 
 def _initialize_navigation_state() -> None:
@@ -81,9 +81,7 @@ def _render_calculator() -> None:
 
 
 def _about_page() -> None:
-    with st.container(key="reading_page"):
-        st.title("About us")
-        st.markdown(ABOUT_TEXT, unsafe_allow_html=True)
+    about_page()
 
 
 def _methodology_page() -> None:
@@ -91,12 +89,6 @@ def _methodology_page() -> None:
         st.title("Methodology")
         content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
         st.markdown(content, unsafe_allow_html=True)
-
-
-def _token_estimator_page() -> None:
-    with st.container(key="reading_page"):
-        st.title("Token estimator")
-        token_estimator()
 
 
 def _support_page() -> None:
@@ -189,13 +181,14 @@ def main():
     page = st.navigation(
         [
             st.Page(_calculator_page, title="Calculator", url_path="", default=True),
+            st.Page(
+                model_comparison_page,
+                title="Model comparison",
+                icon=":material/compare_arrows:",
+                url_path="model-comparison",
+            ),
             st.Page(_about_page, title="About us", url_path="about"),
             st.Page(_methodology_page, title="Methodology", url_path="methodology"),
-            st.Page(
-                _token_estimator_page,
-                title="Token estimator",
-                url_path="token-estimator",
-            ),
             st.Page(
                 _support_page,
                 title="Support us",
