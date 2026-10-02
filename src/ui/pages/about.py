@@ -10,7 +10,7 @@ def about_page(calculator_page: st.Page | None = None) -> None:
                 icon=":material/eco:",
                 color="green",
             )
-            st.title("Making the footprint of generative AI visible")
+            st.title("Making the footprint of generative AI visible", text_alignment="center")
             st.markdown(
                 "EcoLogits Calculator raises awareness on the environmental "
                 "impacts of AI inference — energy, carbon, water — with "

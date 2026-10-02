@@ -6,7 +6,6 @@ from src.config.content import (
     HOW_TO_TEXT,
     LICENCE_TEXT,
     METHODOLOGY_TEXT,
-    SUPPORT_TEXT,
 )
 from src.ui.pages.about import about_page
 from src.ui.pages.calculator import calculator_mode
@@ -14,6 +13,7 @@ from src.ui.pages.company import company_mode
 from src.ui.pages.expert import expert_mode
 from src.ui.pages.expert_company import expert_company_mode
 from src.ui.pages.model_comparison import model_comparison_page
+from src.ui.pages.support import support_page
 
 
 def _initialize_navigation_state() -> None:
@@ -92,9 +92,7 @@ def _methodology_page() -> None:
 
 
 def _support_page() -> None:
-    with st.container(key="reading_page"):
-        st.title("Support us")
-        st.markdown(SUPPORT_TEXT, unsafe_allow_html=True)
+    support_page()
 
 
 def _render_footer() -> None:
@@ -133,7 +131,7 @@ def _render_footer() -> None:
 
         with brand:
             with st.container(key="footer_brand"):
-                st.image("assets/logo.png", width=400)
+                st.image("assets/logo.png", width=220)
 
         with about:
             with st.container(key="footer_about"):

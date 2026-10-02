@@ -61,13 +61,15 @@ html, body, [class*="css"] {
     width: 60%;
 }
 
-.st-key-about_page {
+.st-key-about_page,
+.st-key-support_page {
     margin-inline: auto;
     max-width: 60rem;
     width: 100%;
 }
 
-.st-key-about_page [data-testid="stSubtitle"] {
+.st-key-about_page [data-testid="stSubtitle"],
+.st-key-support_page [data-testid="stSubtitle"] {
     color: rgba(6, 37, 34, 0.72);
 }
 
@@ -76,14 +78,24 @@ html, body, [class*="css"] {
         width: 100%;
     }
 
-    .st-key-about_page {
+    .st-key-about_page,
+    .st-key-support_page {
         max-width: 100%;
     }
 }
 
 .st-key-app_footer {
-    margin-top: 8rem;
+    margin-top: 3rem;
     padding-bottom: 1rem;
+}
+
+.st-key-app_footer p {
+    margin-bottom: 0.25rem;
+}
+
+.st-key-app_footer ul {
+    margin-bottom: 0;
+    margin-top: 0.25rem;
 }
 
 .st-key-footer_citation {
@@ -106,7 +118,7 @@ html, body, [class*="css"] {
 
 @media (max-width: 900px) {
     .st-key-app_footer {
-        margin-top: 4rem;
+        margin-top: 2rem;
     }
 
     .st-key-app_footer [data-testid="stHorizontalBlock"] {
