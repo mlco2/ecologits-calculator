@@ -5,13 +5,13 @@ from src.config.content import (
     CITATION_TEXT,
     HOW_TO_TEXT,
     LICENCE_TEXT,
-    METHODOLOGY_TEXT,
 )
 from src.ui.pages.about import about_page
 from src.ui.pages.calculator import calculator_mode
 from src.ui.pages.company import company_mode
 from src.ui.pages.expert import expert_mode
 from src.ui.pages.expert_company import expert_company_mode
+from src.ui.pages.methodology import methodology_page
 from src.ui.pages.model_comparison import model_comparison_page
 from src.ui.pages.support import support_page
 
@@ -85,10 +85,7 @@ def _about_page(calculator_page: st.Page | None = None) -> None:
 
 
 def _methodology_page() -> None:
-    with st.container(key="reading_page"):
-        st.title("Methodology")
-        content = METHODOLOGY_TEXT.removeprefix("\n### 📖 Methodology\n")
-        st.markdown(content, unsafe_allow_html=True)
+    methodology_page()
 
 
 def _support_page() -> None:

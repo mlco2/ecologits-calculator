@@ -62,14 +62,16 @@ html, body, [class*="css"] {
 }
 
 .st-key-about_page,
-.st-key-support_page {
+.st-key-support_page,
+.st-key-methodology_page {
     margin-inline: auto;
     max-width: 60rem;
     width: 100%;
 }
 
 .st-key-about_page [data-testid="stSubtitle"],
-.st-key-support_page [data-testid="stSubtitle"] {
+.st-key-support_page [data-testid="stSubtitle"],
+.st-key-methodology_page [data-testid="stSubtitle"] {
     color: rgba(6, 37, 34, 0.72);
 }
 
@@ -79,7 +81,8 @@ html, body, [class*="css"] {
     }
 
     .st-key-about_page,
-    .st-key-support_page {
+    .st-key-support_page,
+    .st-key-methodology_page {
         max-width: 100%;
     }
 }
