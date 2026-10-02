@@ -80,8 +80,8 @@ def _render_calculator() -> None:
             company_mode()
 
 
-def _about_page() -> None:
-    about_page()
+def _about_page(calculator_page: st.Page | None = None) -> None:
+    about_page(calculator_page=calculator_page)
 
 
 def _methodology_page() -> None:
@@ -178,16 +178,21 @@ def main():
         link="https://ecologits.ai/",
     )
 
+    calculator_nav_page = st.Page(_calculator_page, title="Calculator", url_path="", default=True)
+
+    def _about_nav_page() -> None:
+        _about_page(calculator_page=calculator_nav_page)
+
     page = st.navigation(
         [
-            st.Page(_calculator_page, title="Calculator", url_path="", default=True),
+            calculator_nav_page,
             st.Page(
                 model_comparison_page,
                 title="Model comparison",
                 icon=":material/compare_arrows:",
                 url_path="model-comparison",
             ),
-            st.Page(_about_page, title="About us", url_path="about"),
+            st.Page(_about_nav_page, title="About us", url_path="about"),
             st.Page(_methodology_page, title="Methodology", url_path="methodology"),
             st.Page(
                 _support_page,

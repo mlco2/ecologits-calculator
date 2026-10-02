@@ -61,9 +61,23 @@ html, body, [class*="css"] {
     width: 60%;
 }
 
+.st-key-about_page {
+    margin-inline: auto;
+    max-width: 60rem;
+    width: 100%;
+}
+
+.st-key-about_page [data-testid="stSubtitle"] {
+    color: rgba(6, 37, 34, 0.72);
+}
+
 @media (max-width: 900px) {
     .st-key-reading_page {
         width: 100%;
+    }
+
+    .st-key-about_page {
+        max-width: 100%;
     }
 }
 
