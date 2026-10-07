@@ -8,7 +8,8 @@ from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
 from ecologits.utils.range_value import RangeValue
 
-from src.config.constants import COUNTRY_CODES, PROMPTS
+from src.config.constants import COUNTRY_CODES
+from src.config.scenarios import TEXT_SCENARIOS
 from src.core.formatting import format_impacts
 from src.repositories.electricity_mix import (
     format_country_name,
@@ -134,14 +135,18 @@ def expert_mode():
 
         with prompt_col:
             output_tokens_exp = st.selectbox(
-                label="Usage scenario", options=[p.label for p in PROMPTS], key="prompt_exp"
+                label="Usage scenario",
+                options=[s.label for s in TEXT_SCENARIOS],
+                key="prompt_exp",
             )
 
         with token_col:
             output_tokens = st.number_input(
                 label="Output completion tokens",
                 min_value=0,
-                value=next(p.output_tokens for p in PROMPTS if p.label == output_tokens_exp),
+                value=next(
+                    s.output_token_count for s in TEXT_SCENARIOS if s.label == output_tokens_exp
+                ),
             )
 
     with st.container(border=True):

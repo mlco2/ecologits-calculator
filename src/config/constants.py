@@ -1,15 +1,4 @@
-from src.config.models import PromptTemplate
 from src.core.units import q
-
-PROMPTS = [
-    PromptTemplate("Write a tweet", 50, 50, 0),
-    PromptTemplate("Write an email", 170, 170, 0),
-    PromptTemplate("Write an article summary", 250, 2000, 0),
-    PromptTemplate("Small conversation with a chatbot", 400, 400, 2000),
-    PromptTemplate("Write a 5-page report", 5000, 10000, 100),
-    PromptTemplate("Assist application development", 100000, 1000000, 10000000),
-    PromptTemplate("Re-write the Lord Of The Rings trilogy", 500000, 500000, 500000),
-]
 
 TIME_HORIZONS = {
     "Daily": 1,
