@@ -1,7 +1,8 @@
 """Tests for JSON-based model filtering."""
 
 import json
-import os
+
+from pathlib import Path
 
 import pytest
 
@@ -37,12 +38,12 @@ class TestJSONModelFiltering:
 
     def test_json_file_exists(self) -> None:
         """Should have models_recent.json file."""
-        json_path = os.path.join("src", "config", "models_recent.json")
-        assert os.path.exists(json_path), "models_recent.json file should exist"
+        json_path = Path(__file__).resolve().parent.parent / "src" / "config" / "models_recent.json"
+        assert json_path.exists(), "models_recent.json file should exist"
 
     def test_json_file_structure(self) -> None:
         """Should have valid JSON structure."""
-        json_path = os.path.join("src", "config", "models_recent.json")
+        json_path = Path(__file__).resolve().parent.parent / "src" / "config" / "models_recent.json"
 
         with open(json_path) as f:
             data = json.load(f)

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import streamlit as st
 
 from src.config.content import (
@@ -14,6 +16,8 @@ from src.ui.pages.expert_company import expert_company_mode
 from src.ui.pages.methodology import methodology_page
 from src.ui.pages.model_comparison import model_comparison_page
 from src.ui.pages.support import support_page
+
+ROOT = Path(__file__).resolve().parent
 
 
 def _render_announcement() -> None:
@@ -104,7 +108,7 @@ def _render_footer() -> None:
 
         with brand:
             with st.container(key="footer_brand"):
-                st.image("assets/logo.png", width=220)
+                st.image(str(ROOT / "assets/logo.png"), width=220)
 
         with about:
             with st.container(key="footer_about"):
@@ -139,11 +143,11 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    with open("src/ui/components/style.css") as css:
+    with open(ROOT / "src/ui/components/style.css") as css:
         st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
     st.logo(
-        "assets/ecologits-logo.png",
+        str(ROOT / "assets/ecologits-logo.png"),
         size="small",
         link="https://ecologits.ai/",
     )
