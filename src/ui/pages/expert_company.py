@@ -40,6 +40,35 @@ _EMPTY_ROW = {
     _COL_LOCATION: _DEFAULT_LOCATION,
 }
 
+_REQUIRED_COLS = [_COL_MODEL, _COL_TOKENS_PER_USER, _COL_NUM_USERS, _COL_LOCATION]
+
+_EXAMPLE_TOKENS_PER_USER = 50_000
+_EXAMPLE_NUM_USERS = 10
+_EXAMPLE_MODEL_CANDIDATES = (
+    "Anthropic / Claude Opus 5.5",
+    "OpenAI / GPT 5.5",
+    "Anthropic / Claude Sonnet 4.6",
+    "Google / Gemini 3.5 Flash",
+)
+
+
+def _missing_columns(row: dict) -> list[str]:
+    """Return the list of required columns that are empty in a row."""
+    return [col for col in _REQUIRED_COLS if _is_empty(row.get(col))]
+
+
+def _build_example_row(models: list[str]) -> dict:
+    """Build a pre-filled example row using a preferred model if available."""
+    example_model = next((m for m in _EXAMPLE_MODEL_CANDIDATES if m in models), None)
+    if example_model is None and models:
+        example_model = models[0]
+    return {
+        _COL_MODEL: example_model,
+        _COL_TOKENS_PER_USER: _EXAMPLE_TOKENS_PER_USER,
+        _COL_NUM_USERS: _EXAMPLE_NUM_USERS,
+        _COL_LOCATION: _DEFAULT_LOCATION,
+    }
+
 
 def _render_grid(df_models: pd.DataFrame) -> dict:
     """Render native Streamlit editor and return current rows."""
@@ -47,10 +76,11 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
         f"{row.provider_clean} / {row.name_clean}"
         for row in df_models[["provider_clean", "name_clean"]].itertuples(index=False)
     )
-    grid_df = st.session_state.setdefault(
-        "ec_grid_base",
-        pd.DataFrame([_EMPTY_ROW], columns=list(_EMPTY_ROW)),
-    )
+    if "ec_grid_base" not in st.session_state:
+        st.session_state["ec_grid_base"] = pd.DataFrame(
+            [_build_example_row(models)], columns=list(_EMPTY_ROW)
+        )
+    grid_df = st.session_state["ec_grid_base"]
     edited_df = st.data_editor(
         grid_df,
         column_config={
@@ -78,12 +108,20 @@ def _render_grid(df_models: pd.DataFrame) -> dict:
     )
     rows = edited_df.to_dict("records")
 
-    incomplete = [i + 1 for i, r in enumerate(rows) if not _row_is_complete(r)]
-    if incomplete:
+    incomplete_details = [
+        (i + 1, _missing_columns(r)) for i, r in enumerate(rows) if not _row_is_complete(r)
+    ]
+    if incomplete_details:
+        details = "; ".join(
+            f"Row {num} is missing: {', '.join(cols)}" for num, cols in incomplete_details
+        )
         st.warning(
-            f"Some row(s) {incomplete} have incomplete fields. Fill all columns before running calculations.",
+            f"Some row(s) have incomplete fields — {details}. Fill all columns before running calculations.",
             icon="⚠️",
         )
+        incomplete = [num for num, _ in incomplete_details]
+    else:
+        incomplete = []
 
     return {
         "rows": rows,
@@ -108,14 +146,7 @@ def _is_empty(value: object) -> bool:
 
 
 def _row_is_complete(row: dict) -> bool:
-    return all(
-        not _is_empty(row.get(col))
-        for col in [
-            _COL_MODEL,
-            _COL_TOKENS_PER_USER,
-            _COL_NUM_USERS,
-        ]
-    )
+    return not _missing_columns(row)
 
 
 def _split_model_selection(value: str) -> tuple[str, str] | None:
@@ -354,10 +385,6 @@ def expert_company_mode():
 
     df_models = load_models(filter_main=True)
 
-    st.session_state.setdefault(
-        "ec_grid_base",
-        pd.DataFrame([_EMPTY_ROW], columns=list(_EMPTY_ROW)),
-    )
     grid_state = _render_grid(df_models)
 
     if not grid_state["run"]:
