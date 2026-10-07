@@ -102,49 +102,53 @@ def auto_scale(value: Quantity, thresholds: list[tuple[Quantity, str]]) -> Quant
     return value
 
 
+_DEFAULT_UNIT_CLS = {
+    "energy": Energy,
+    "gwp": GWP,
+    "adpe": ADPe,
+    "pe": PE,
+    "wcf": WCF,
+}
+
+_LARGE_SCALE: dict[str, tuple[Quantity, str]] = {
+    "energy": (q("1000 kWh"), "MWh"),
+    "gwp": (q("1000 kgCO2eq"), "tCO2eq"),
+    "adpe": (q("1000 kgSbeq"), "tSbeq"),
+    "pe": (q("1000 MJ"), "GJ"),
+    "wcf": (q("1000 L"), "kL"),
+}
+
+_CRITERIA = ("energy", "gwp", "adpe", "pe", "wcf")
+
+
+def _format(kind: str, value: float, unit: str | None = None) -> Quantity:
+    if unit is None:
+        unit = _DEFAULT_UNIT_CLS[kind](value=0.0).unit
+    val = q(value, unit)
+    limit, target = _LARGE_SCALE[kind]
+    if val >= limit:
+        val = val.to(target)
+    return auto_scale(val, THRESHOLDS[kind])
+
+
 def format_energy(energy_value: float, energy_unit: str | None = None) -> Quantity:
-    if energy_unit is None:
-        energy_unit = Energy(value=0.0).unit
-    val = q(energy_value, energy_unit)
-    if val >= q("1000 kWh"):
-        val = val.to("MWh")
-    return auto_scale(val, THRESHOLDS["energy"])
+    return _format("energy", energy_value, energy_unit)
 
 
 def format_gwp(gwp_value: float, gwp_unit: str | None = None) -> Quantity:
-    if gwp_unit is None:
-        gwp_unit = GWP(value=0.0).unit
-    val = q(gwp_value, gwp_unit)
-    if val >= q("1000 kgCO2eq"):
-        val = val.to("tCO2eq")
-    return auto_scale(val, THRESHOLDS["gwp"])
+    return _format("gwp", gwp_value, gwp_unit)
 
 
 def format_adpe(adpe_value: float, adpe_unit: str | None = None) -> Quantity:
-    if adpe_unit is None:
-        adpe_unit = ADPe(value=0.0).unit
-    val = q(adpe_value, adpe_unit)
-    if val >= q("1000 kgSbeq"):
-        val = val.to("tSbeq")
-    return auto_scale(val, THRESHOLDS["adpe"])
+    return _format("adpe", adpe_value, adpe_unit)
 
 
 def format_pe(pe_value: float, pe_unit: str | None = None) -> Quantity:
-    if pe_unit is None:
-        pe_unit = PE(value=0.0).unit
-    val = q(pe_value, pe_unit)
-    if val >= q("1000 MJ"):
-        val = val.to("GJ")
-    return auto_scale(val, THRESHOLDS["pe"])
+    return _format("pe", pe_value, pe_unit)
 
 
 def format_wcf(wcf_value: float, wcf_unit: str | None = None) -> Quantity:
-    if wcf_unit is None:
-        wcf_unit = WCF(value=0.0).unit
-    val = q(wcf_value, wcf_unit)
-    if val >= q("1000 L"):
-        val = val.to("kL")
-    return auto_scale(val, THRESHOLDS["wcf"])
+    return _format("wcf", wcf_value, wcf_unit)
 
 
 def format_impacts(impacts: Impacts | ImpactsOutput) -> tuple[QImpacts, Usage, Embodied]:
@@ -155,42 +159,22 @@ def format_impacts(impacts: Impacts | ImpactsOutput) -> tuple[QImpacts, Usage, E
     if isinstance(impacts.energy.value, float):
         return (
             QImpacts(
-                energy=format_energy(impacts.energy.value),
-                gwp=format_gwp(impacts.gwp.value),
-                adpe=format_adpe(impacts.adpe.value),
-                pe=format_pe(impacts.pe.value),
-                wcf=format_wcf(impacts.wcf.value),
+                **{kind: _format(kind, getattr(impacts, kind).value) for kind in _CRITERIA}  # type: ignore[arg-type]
             ),
             impacts.usage,
             impacts.embodied,
         )
 
     else:
-        energy = format_energy(impacts.energy.value.mean)
-        gwp = format_gwp(impacts.gwp.value.mean)
-        adpe = format_adpe(impacts.adpe.value.mean)
-        pe = format_pe(impacts.pe.value.mean)
-        wcf = format_wcf(impacts.wcf.value.mean)
-
+        values = {kind: getattr(impacts, kind).value for kind in _CRITERIA}
+        means = {kind: _format(kind, values[kind].mean) for kind in _CRITERIA}
+        kwargs: dict = {"ranges": True}
+        for kind in _CRITERIA:
+            kwargs[kind] = means[kind]
+            kwargs[f"{kind}_min"] = _format(kind, values[kind].min).to(means[kind].units)
+            kwargs[f"{kind}_max"] = _format(kind, values[kind].max).to(means[kind].units)
         return (
-            QImpacts(
-                energy=energy,
-                energy_min=format_energy(impacts.energy.value.min).to(energy.units),
-                energy_max=format_energy(impacts.energy.value.max).to(energy.units),
-                gwp=gwp,
-                gwp_min=format_gwp(impacts.gwp.value.min).to(gwp.units),
-                gwp_max=format_gwp(impacts.gwp.value.max).to(gwp.units),
-                adpe=adpe,
-                adpe_min=format_adpe(impacts.adpe.value.min).to(adpe.units),
-                adpe_max=format_adpe(impacts.adpe.value.max).to(adpe.units),
-                pe=pe,
-                pe_min=format_pe(impacts.pe.value.min).to(pe.units),
-                pe_max=format_pe(impacts.pe.value.max).to(pe.units),
-                wcf=wcf,
-                wcf_min=format_wcf(impacts.wcf.value.min).to(wcf.units),
-                wcf_max=format_wcf(impacts.wcf.value.max).to(wcf.units),
-                ranges=True,
-            ),
+            QImpacts(**kwargs),  # type: ignore[arg-type]
             impacts.usage,
             impacts.embodied,
         )
