@@ -1,4 +1,6 @@
 [theme]
 base="light"
+# Brand colours — keep in sync with BRAND_DARK / BRAND_PRIMARY in src/config/constants.py
+# and --color-dark / --color-primary in src/ui/components/style.css.
 textColor="#0B3B36"
 primaryColor = "#00BF63"

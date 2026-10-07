@@ -3,6 +3,7 @@ from html import escape
 import plotly.graph_objects as go
 import streamlit as st
 
+from src.config.constants import BRAND_INK, BRAND_PRIMARY_DEEP
 from src.config.scenarios import SCENARIOS
 from src.core.formatting import format_impacts, format_number
 from src.core.impact_calculator import compute_scenario_impacts
@@ -38,10 +39,12 @@ _DUEL_IMPACTS = {
     "Fossil Fuels": ("pe", "pe_min", "pe_max", "fossil fuels"),
 }
 
-# EcoLogits charter greens
+# EcoLogits charter greens (solid colors from src.config.constants;
+# translucent fills below are the same brand colors with alpha for Plotly,
+# which does not support CSS color-mix).
 _TRACK_COLOR = "rgba(6, 37, 34, 0.08)"
-_LARGE_COLOR = "#087f4f"
-_TICK_COLOR = "#062522"
+_LARGE_COLOR = BRAND_PRIMARY_DEEP
+_TICK_COLOR = BRAND_INK
 
 
 def _scenario_context(scenario) -> str | None:
@@ -245,7 +248,7 @@ def _mapping_bar_figure(mapped, impact_label, target_unit) -> go.Figure | None:
         margin={"l": 220, "r": 40, "t": 60, "b": 60},
         plot_bgcolor="white",
         paper_bgcolor="white",
-        font={"color": "#062522"},
+        font={"color": BRAND_INK},
         title={
             "text": f"{impact_label} by model by task ({target_unit})",
             "x": 0.5,
@@ -347,7 +350,7 @@ def _render_duel_radar(label_a, label_b, impacts_a, impacts_b) -> None:
         margin={"l": 80, "r": 80, "t": 60, "b": 80},
         plot_bgcolor="white",
         paper_bgcolor="white",
-        font={"color": "#062522"},
+        font={"color": BRAND_INK},
         showlegend=True,
         legend={"orientation": "h", "yanchor": "bottom", "y": -0.2, "xanchor": "center", "x": 0.5},
         polar={

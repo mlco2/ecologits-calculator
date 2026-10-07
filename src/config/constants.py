@@ -63,6 +63,13 @@ COUNTRY_CODES = [
 
 # Organized constants by category
 
+# Brand colours — keep in sync with `:root` variables in
+# `src/ui/components/style.css` and `[theme]` in `.streamlit/config.toml`.
+BRAND_PRIMARY = "#00BF63"
+BRAND_DARK = "#0B3B36"
+BRAND_INK = "#062522"
+BRAND_PRIMARY_DEEP = "#087F4F"
+
 
 class EnergyActivity:
     # From https://www.runningtools.com/energyusage.htm

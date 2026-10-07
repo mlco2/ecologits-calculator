@@ -8,7 +8,7 @@ from ecologits.electricity_mix_repository import electricity_mixes
 from ecologits.impacts.llm import compute_llm_impacts
 from ecologits.utils.range_value import RangeValue
 
-from src.config.constants import COUNTRY_CODES
+from src.config.constants import BRAND_DARK, BRAND_PRIMARY, COUNTRY_CODES
 from src.config.scenarios import TEXT_SCENARIOS
 from src.core.formatting import format_impacts
 from src.repositories.electricity_mix import (
@@ -248,7 +248,7 @@ def expert_mode():
                 ],
                 names=["usage", "embodied"],
                 title="GHG emissions",
-                color_discrete_sequence=["#00BF63", "#0B3B36"],
+                color_discrete_sequence=[BRAND_PRIMARY, BRAND_DARK],
                 width=100,
             )
             fig_gwp.update_layout(showlegend=False, title_x=0.5)
@@ -267,7 +267,7 @@ def expert_mode():
                 ],
                 names=["usage", "embodied"],
                 title="Abiotic depletion",
-                color_discrete_sequence=["#0B3B36", "#00BF63"],
+                color_discrete_sequence=[BRAND_PRIMARY, BRAND_DARK],
                 width=100,
             )
             fig_adpe.update_layout(showlegend=False, title_x=0.5)
@@ -284,7 +284,7 @@ def expert_mode():
                 ],
                 names=["usage", "embodied"],
                 title="Primary energy",
-                color_discrete_sequence=["#00BF63", "#0B3B36"],
+                color_discrete_sequence=[BRAND_PRIMARY, BRAND_DARK],
                 width=100,
             )
             fig_pe.update_layout(showlegend=False, title_x=0.5)

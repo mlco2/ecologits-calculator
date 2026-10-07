@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+    --color-primary: #00BF63;
+    --color-dark: #0B3B36;
+    --color-ink: #062522;
+    --color-primary-deep: #087F4F;
+}
+
 html, body, [class*="css"] {
     font-size: 18px;
     font-weight: 500;
-    color: #062522;
+    color: var(--color-ink);
 }
 
 [data-testid="stTopNavLink"] {
@@ -25,11 +32,11 @@ html, body, [class*="css"] {
 }
 
 .announcement {
-    background: rgba(0, 191, 99, 0.06);
-    border-bottom: 1px solid rgba(0, 191, 99, 0.35);
-    border-top: 1px solid rgba(0, 191, 99, 0.35);
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
     box-sizing: border-box;
-    color: #0b3b36;
+    color: var(--color-dark);
     font-size: 0.82rem;
     margin-bottom: 1rem;
     padding: 0.55rem 0.8rem;
@@ -41,7 +48,7 @@ html, body, [class*="css"] {
 }
 
 .announcement a {
-    color: #087f4f;
+    color: var(--color-primary-deep);
     font-weight: 700;
     margin-left: 0.25rem;
     text-decoration: none;
@@ -72,7 +79,7 @@ html, body, [class*="css"] {
 .st-key-about_page [data-testid="stSubtitle"],
 .st-key-support_page [data-testid="stSubtitle"],
 .st-key-methodology_page [data-testid="stSubtitle"] {
-    color: rgba(6, 37, 34, 0.72);
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
 }
 
 @media (max-width: 900px) {
@@ -164,7 +171,7 @@ html, body, [class*="css"] {
 
 .how-to-card {
     background:
-        radial-gradient(circle at top right, rgba(0, 191, 99, 0.06), transparent 55%),
+        radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 6%, transparent), transparent 55%),
         #fff;
     border: 1px solid rgba(49, 51, 63, 0.2);
     border-radius: 0.5rem;
@@ -174,7 +181,7 @@ html, body, [class*="css"] {
 }
 
 .how-to-title {
-    color: #0b3b36;
+    color: var(--color-dark);
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -203,9 +210,9 @@ html, body, [class*="css"] {
 
 .how-to-step-number {
     align-items: center;
-    background: rgba(0, 191, 99, 0.12);
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
     border-radius: 999px;
-    color: #087f4f;
+    color: var(--color-primary-deep);
     display: inline-flex;
     flex: 0 0 auto;
     font-size: 0.82rem;
@@ -217,27 +224,27 @@ html, body, [class*="css"] {
 }
 
 .how-to-step-title {
-    color: #0b3b36;
+    color: var(--color-dark);
     font-size: 0.98rem;
     font-weight: 600;
     line-height: 1.25;
 }
 
 .how-to-step-body {
-    color: rgba(6, 37, 34, 0.78);
+    color: color-mix(in srgb, var(--color-ink) 78%, transparent);
     font-size: 0.86rem;
     line-height: 1.45;
     margin: 0 !important;
 }
 
 .how-to-step-body b {
-    color: #0b3b36;
+    color: var(--color-dark);
     font-weight: 600;
 }
 
 .how-to-step-connector {
     align-items: center;
-    color: rgba(0, 191, 99, 0.55);
+    color: color-mix(in srgb, var(--color-primary) 55%, transparent);
     display: flex;
     justify-content: center;
     padding-top: 0.25rem;
@@ -300,13 +307,13 @@ html, body, [class*="css"] {
 }
 
 .section-subtitle {
-    color: rgba(6, 37, 34, 0.72);
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
     margin: -0.45rem 0 0.85rem !important;
     text-align: left;
 }
 
 .section-description {
-    color: rgba(6, 37, 34, 0.62);
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
     font-size: 0.82rem;
     margin: -0.55rem 0 0.85rem !important;
     text-align: left;
@@ -350,7 +357,7 @@ html, body, [class*="css"] {
 
 .environment-card-header {
     align-items: flex-start;
-    color: #0b3b36;
+    color: var(--color-dark);
     display: flex;
     font-size: 1.05rem;
     font-weight: 500;
@@ -375,7 +382,7 @@ html, body, [class*="css"] {
 
 .environment-card-value {
     align-items: baseline;
-    color: #062522;
+    color: var(--color-ink);
     display: flex;
     gap: 0.35rem;
     line-height: 1;
@@ -397,7 +404,7 @@ html, body, [class*="css"] {
 }
 
 .environment-card-subtext {
-    color: rgba(6, 37, 34, 0.72);
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
     font-size: 0.72rem !important;
     line-height: 1.25 !important;
     margin: 0 !important;
@@ -474,7 +481,7 @@ html, body, [class*="css"] {
 }
 
 .duel-ratio {
-    color: #087f4f;
+    color: var(--color-primary-deep);
     font-size: 2.6rem;
     font-weight: 800;
     letter-spacing: -0.01em;
@@ -482,13 +489,13 @@ html, body, [class*="css"] {
 }
 
 .duel-sentence {
-    color: #062522;
+    color: var(--color-ink);
     font-size: 1.05rem;
     margin-top: 0.35rem;
 }
 
 .duel-values {
-    color: rgba(6, 37, 34, 0.62);
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
     font-size: 0.9rem;
     margin-top: 0.25rem;
 }
