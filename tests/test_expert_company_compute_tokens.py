@@ -10,12 +10,15 @@ class TestComputeRowTokens:
 
     def test_valid_input(self):
         """Test with valid input values."""
-        assert _compute_row_tokens(
-            {
-                "Tokens per User per Selected Unit of Time": "500",
-                "Number of Users": "100",
-            }
-        ) == 50_000
+        assert (
+            _compute_row_tokens(
+                {
+                    "Tokens per User per Selected Unit of Time": "500",
+                    "Number of Users": "100",
+                }
+            )
+            == 50_000
+        )
 
     def test_empty_num_users(self):
         """Test with empty number of users."""

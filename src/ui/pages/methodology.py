@@ -139,9 +139,7 @@ def methodology_page() -> None:
                     "[runningtools.com](https://www.runningtools.com/energyusage.htm)): "
                     "walking 196 kJ/km at 3 km/h, running 294 kJ/km at 10 km/h."
                 )
-            with st.expander(
-                "Electric vehicle distance", icon=":material/ev_station:"
-            ):
+            with st.expander("Electric vehicle distance", icon=":material/ev_station:"):
                 st.write(
                     "Request energy vs. EV consumption of 0.17 kWh/km "
                     "([selectra.info](https://selectra.info/energie/actualites/insolite/consommation-vehicules-electriques-france-2040), "
@@ -168,9 +166,7 @@ def methodology_page() -> None:
                     "[ecologie.gouv.fr](https://www.ecologie.gouv.fr/eolien-terrestre)) "
                     "and a 900 MW nuclear plant (6 TWh/year)."
                 )
-            with st.expander(
-                "Ireland electricity consumption", icon=":material/public:"
-            ):
+            with st.expander("Ireland electricity consumption", icon=":material/public:"):
                 st.write(
                     "Scaled energy vs. Ireland: 33 TWh/year for 5M people "
                     "([wikipedia.org](https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption))."
@@ -183,8 +179,7 @@ def methodology_page() -> None:
                 )
 
         st.info(
-            "Motivated to help test and improve this methodology? We would "
-            "love to hear from you.",
+            "Motivated to help test and improve this methodology? We would love to hear from you.",
             icon=":material/lightbulb:",
         )
         with st.container(horizontal=True, horizontal_alignment="center"):

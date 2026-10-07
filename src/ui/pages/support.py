@@ -55,9 +55,7 @@ def support_page() -> None:
             st.subheader("If you have 5 minutes")
             st.caption("Share feedback and help the community.")
             st.markdown(
-                "- Chat with us on Discord\n"
-                "- Start a GitHub discussion\n"
-                "- Message us on LinkedIn"
+                "- Chat with us on Discord\n- Start a GitHub discussion\n- Message us on LinkedIn"
             )
             st.link_button(
                 "Start a discussion",
