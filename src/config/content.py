@@ -11,7 +11,6 @@ def _load(filename: str) -> str:
     return (_CONTENT_DIR / filename).read_text(encoding="utf-8")
 
 
-HERO_TEXT = _load("hero.html")
 HOW_TO_TEXT = _load("how_to.html")
 TOKEN_ESTIMATOR_TEXT = _load("token_estimator.md")
 ABOUT_TEXT = _load("about.md")

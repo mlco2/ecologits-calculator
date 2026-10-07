@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from math import floor, log10
 
 from ecologits.impacts.modeling import (
     GWP,
@@ -58,6 +59,24 @@ THRESHOLDS: dict[str, list[tuple[Quantity, str]]] = {
         (q("1 L"), "mL"),
     ],
 }
+
+
+def format_number(value: float, sig: int = 3) -> str:
+    """Format with sig significant digits, never in scientific notation.
+
+    Unlike f"{value:.{sig}g}", very small or very large values render as
+    plain decimals (e.g. "0.00000000123" instead of "1.23e-09").
+    """
+    if value != value or value in (float("inf"), float("-inf")):
+        return str(value)
+    if value == 0:
+        return "0"
+    order = floor(log10(abs(value)))
+    decimals = min(max(0, (sig - 1) - order), 24)
+    text = f"{value:.{decimals}f}"
+    if "." in text:
+        text = text.rstrip("0").rstrip(".")
+    return text
 
 
 def auto_scale(value: Quantity, thresholds: list[tuple[Quantity, str]]) -> Quantity:

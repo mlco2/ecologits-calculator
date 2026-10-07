@@ -18,10 +18,6 @@ TIME_HORIZONS = {
     "Yearly": 260,
 }
 
-MODEL_REPOSITORY_URL = (
-    "https://raw.githubusercontent.com/mlco2/ecologits/refs/heads/main/ecologits/data/models.json"
-)
-
 
 COUNTRY_CODES = [
     ("🌎 World", "WOR"),

@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from src.config.constants import COUNTRY_CODES
 
-PATH = "src/data/electricity_mix.csv"
-
 CRITERIA = {
     "gwp": "GHG Emission (kg CO2 eq)",
     "adpe": "Abiotic Resources (kg Sb eq)",

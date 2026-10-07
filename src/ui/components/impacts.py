@@ -1,10 +1,11 @@
 import streamlit as st
 
+from src.core.formatting import format_number
 from src.ui.components.components import render_environment_card_html
 
 
 def _format_quantity_value(value) -> str:
-    return f"{value.magnitude:.3g}"
+    return format_number(value.magnitude)
 
 
 def _format_quantity_unit(value) -> str:

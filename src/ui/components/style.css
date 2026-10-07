@@ -432,3 +432,63 @@ html, body, [class*="css"] {
         padding: 1.15rem 1rem 0.9rem;
     }
 }
+
+/* Model comparison: centered page text */
+.st-key-compare_header [data-testid="stTitle"] {
+    text-align: center;
+}
+
+.st-key-compare_header [data-testid="stTitle"] h1 {
+    text-align: center;
+    width: 100%;
+}
+
+.st-key-compare_header [data-testid="stCaptionContainer"] {
+    text-align: center;
+}
+
+.st-key-compare_header [data-testid="stWidgetLabel"] {
+    justify-content: center;
+    text-align: center;
+}
+
+.st-key-compare_header [data-testid="stPills"] div[role="radiogroup"] {
+    justify-content: center;
+}
+
+.st-key-duel_card,
+.st-key-mapping_chart {
+    text-align: center;
+}
+
+.st-key-duel_card [data-testid="stPlotlyChart"],
+.st-key-mapping_chart [data-testid="stPlotlyChart"] {
+    width: 100%;
+    max-width: none;
+}
+
+/* 1 vs 1 duel header, adapted from reference card to EcoLogits charter */
+.duel-header {
+    margin: 0.5rem 0 0.25rem;
+    text-align: center;
+}
+
+.duel-ratio {
+    color: #087f4f;
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+
+.duel-sentence {
+    color: #062522;
+    font-size: 1.05rem;
+    margin-top: 0.35rem;
+}
+
+.duel-values {
+    color: rgba(6, 37, 34, 0.62);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}

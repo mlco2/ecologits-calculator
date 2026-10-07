@@ -11,7 +11,7 @@ from ecologits.status_messages import (
 )
 from ecologits.utils.range_value import RangeValue
 
-from src.repositories.model_config import load_main_models
+from src.repositories.model_config import load_main_models, load_model_aliases
 
 PROVIDERS_FORMAT = {
     "anthropic": "Anthropic",
@@ -38,6 +38,10 @@ def clean_model_name(model_name: str) -> str:
     for old, new in replacements.items():
         model_name = model_name.replace(old, new)
     model_name = re.sub(r"\d{8}", "", model_name)
+    # Strip trailing date-like version suffixes (e.g. Mistral 2512, 2604,
+    # Cohere 03 2025): "MM YYYY" then standalone "YYYY"/"YYMM".
+    model_name = re.sub(r"\s\d{2}\s\d{4}\s*$", "", model_name)
+    model_name = re.sub(r"\s\d{4}\s*$", "", model_name)
     return " ".join(model_name.split())
 
 
@@ -47,6 +51,9 @@ def load_models(filter_main=True) -> pd.DataFrame:
     # Load main models list (will be cached)
     main_models = load_main_models() if filter_main else None
     model_order = {name: index for index, name in enumerate(main_models or [])}
+    # Display aliases from models_recent.json: raw name -> alias.
+    # Applies in all modes so expert mode stays consistent.
+    aliases = load_model_aliases()
 
     for m in model_repository.list_models():
         if filter_main and m.name not in main_models:
@@ -81,7 +88,7 @@ def load_models(filter_main=True) -> pd.DataFrame:
                 "provider": m.provider.value,
                 "provider_clean": PROVIDERS_FORMAT.get(m.provider.value, m.provider.value),
                 "name": m.name,
-                "name_clean": clean_model_name(m.name),
+                "name_clean": aliases.get(m.name, clean_model_name(m.name)),
                 "architecture_type": m.architecture.type.value,
                 "total_parameters": total_parameters,
                 "active_parameters": active_parameters,
