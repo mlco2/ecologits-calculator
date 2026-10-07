@@ -123,8 +123,8 @@ def _split_model_selection(value: str) -> tuple[str, str] | None:
     return (provider, model) if separator else None
 
 
-def _compute_row_tokens(row: dict) -> dict[str, int]:
-    """Compute token counts from selected-period usage for one row."""
+def _compute_row_tokens(row: dict) -> int:
+    """Compute total output tokens from selected-period usage for one row."""
     tokens_per_user = row[_COL_TOKENS_PER_USER]
     if tokens_per_user is None or tokens_per_user == "":
         raise ValueError("Tokens per user cannot be empty or None")
@@ -147,12 +147,7 @@ def _compute_row_tokens(row: dict) -> dict[str, int]:
         raise ValueError(f"Invalid number of users value '{num_users_str}': {e}") from e
 
     output_tokens = tokens_per_user * num_users
-    return {
-        "output_tokens": output_tokens,
-        "input_tokens": 0,
-        "cached_tokens": 0,
-        "total_tokens": output_tokens,
-    }
+    return output_tokens
 
 
 def _run_impacts(df_models: pd.DataFrame, row: dict, output_token_count: int):
@@ -220,8 +215,8 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
     all_impacts = []
 
     for i, row in enumerate(rows):
-        tokens = _compute_row_tokens(row)
-        impacts = _run_impacts(df_models, row, tokens["output_tokens"])
+        output_tokens = _compute_row_tokens(row)
+        impacts = _run_impacts(df_models, row, output_tokens)
         model_selection = _split_model_selection(row[_COL_MODEL])
         provider, model = model_selection or ("", row[_COL_MODEL])
 
@@ -231,7 +226,7 @@ def _aggregate_and_display(df_models: pd.DataFrame, rows: list, time_horizon_lab
                 "llm_provider": provider,
                 "model_name": model,
                 "usage_location": row.get(_COL_LOCATION, _DEFAULT_LOCATION),
-                f"{horizon_key}_output_tokens": tokens["output_tokens"],
+                f"{horizon_key}_output_tokens": output_tokens,
                 "impacts_available": impacts is not None,
             }
         )
