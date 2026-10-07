@@ -163,6 +163,17 @@ def _render_duel_header(label_a, label_b, impact_label, a_vals, b_vals) -> None:
     )
 
 
+def _format_bar_label(label: str) -> str:
+    """Format a 'Provider — Model' label for bar chart y-axis.
+
+    Model name in bold, provider in upper case italic, on two lines.
+    """
+    provider, model = _split_provider_model(label)
+    if provider:
+        return f"<b>{escape(model)}</b><br><i>{escape(provider.upper())}</i>"
+    return f"<b>{escape(label)}</b>"
+
+
 def _mapping_bar_figure(mapped, impact_label, target_unit) -> go.Figure | None:
     """Build the shared horizontal bar chart (mean + asymmetric error bars)."""
     mapped = sorted(mapped, key=lambda r: r["mean"])
@@ -174,9 +185,10 @@ def _mapping_bar_figure(mapped, impact_label, target_unit) -> go.Figure | None:
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
-            y=[r["label"] for r in mapped],
+            y=[_format_bar_label(r["label"]) for r in mapped],
             x=[r["mean"] for r in mapped],
             orientation="h",
+            width=0.6,
             marker_color=_LARGE_COLOR,
             error_x={
                 "type": "data",
@@ -203,7 +215,8 @@ def _mapping_bar_figure(mapped, impact_label, target_unit) -> go.Figure | None:
     )
     fig.update_layout(
         autosize=True,
-        height=max(220, 90 + 70 * len(mapped)),
+        height=max(280, 100 + 90 * len(mapped)),
+        bargap=0.45,
         margin={"l": 220, "r": 40, "t": 60, "b": 60},
         plot_bgcolor="white",
         paper_bgcolor="white",
