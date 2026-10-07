@@ -1,13 +1,14 @@
 """Model configuration and filtering."""
 
 import json
-import os
+
+from pathlib import Path
 
 
 def _load_models_json() -> dict:
     """Load raw models_recent.json content."""
-    json_path = os.path.join(os.path.dirname(__file__), "..", "config", "models_recent.json")
-    with open(json_path) as f:
+    json_path = Path(__file__).parent.parent / "config" / "models_recent.json"
+    with json_path.open(encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -17,33 +18,16 @@ def load_main_models() -> list[str]:
     Returns:
         List of model names that should be considered "main" models
         for the filtered UI modes.
+
+    Raises:
+        FileNotFoundError: If models_recent.json is missing.
+        json.JSONDecodeError: If models_recent.json is not valid JSON.
+        KeyError: If the expected keys are missing.
     """
-    try:
-        # Try to load from the JSON file
-        data = _load_models_json()
+    data = _load_models_json()
 
-        # Extract model names from the JSON
-        return [model["name"] for model in data["models"]]
-
-    except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
-        # Fallback to a basic list if JSON loading fails
-        print(f"Warning: Could not load models_recent.json, using basic fallback list: {e}")
-        # Basic fallback with some common models
-        return [
-            "gpt-4",
-            "gpt-4-turbo",
-            "gpt-4o",
-            "claude-3-opus",
-            "claude-3-sonnet",
-            "claude-3-haiku",
-            "gemini-1.5-pro",
-            "gemini-1.5-flash",
-            "command-r",
-            "command-r-plus",
-            "mistral-large",
-            "mistral-medium",
-            "mistral-small",
-        ]
+    # Extract model names from the JSON
+    return [model["name"] for model in data["models"]]
 
 
 def load_model_aliases() -> dict[str, str]:
@@ -54,14 +38,13 @@ def load_model_aliases() -> dict[str, str]:
     selectors. Entries without an alias fall back to ``clean_model_name``.
 
     Returns:
-        Mapping of raw model name -> display alias. Empty dict if the
-        JSON cannot be loaded.
+        Mapping of raw model name -> display alias.
+
+    Raises:
+        FileNotFoundError: If models_recent.json is missing.
+        json.JSONDecodeError: If models_recent.json is not valid JSON.
     """
-    try:
-        data = _load_models_json()
-    except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
-        print(f"Warning: Could not load model aliases from models_recent.json: {e}")
-        return {}
+    data = _load_models_json()
     aliases = {}
     for model in data.get("models", []):
         name = model.get("name")

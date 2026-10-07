@@ -78,8 +78,8 @@ class TestJSONModelFiltering:
         for model_name in df_filtered["name"]:
             assert model_name in main_models
 
-    def test_fallback_to_hardcoded_list(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Should fallback to a hardcoded list if JSON loading fails."""
+    def test_load_errors_propagate(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Missing or corrupt JSON must fail loudly, not fall back."""
         import src.repositories.model_config as model_config
 
         def _raise_json_error(*_args, **_kwargs) -> None:
@@ -87,10 +87,18 @@ class TestJSONModelFiltering:
 
         monkeypatch.setattr(model_config.json, "load", _raise_json_error)
 
-        fallback = load_main_models()
-        assert isinstance(fallback, list)
-        assert len(fallback) > 0
-        assert "gpt-4" in fallback
+        with pytest.raises(json.JSONDecodeError):
+            load_main_models()
+
+    def test_every_listed_model_exists_in_repository(self) -> None:
+        """Every name in models_recent.json must exist in ecologits repository."""
+        from ecologits.model_repository import models as model_repository
+
+        available = {m.name for m in model_repository.list_models()}
+        for name in load_main_models():
+            assert name in available, (
+                f"{name!r} listed in models_recent.json but missing from ecologits repository"
+            )
 
 
 class TestModelFilteringIntegration:
