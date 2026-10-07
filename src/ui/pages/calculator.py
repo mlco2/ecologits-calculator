@@ -5,7 +5,7 @@ from src.core.formatting import format_impacts
 from src.core.impact_calculator import compute_scenario_impacts
 from src.repositories.models import get_raw_model_names, load_models
 from src.repositories.video_models import load_video_models
-from src.ui.components.components import render_model_selector
+from src.ui.components.components import combine_model_warnings, render_model_selector
 from src.ui.components.equivalents import (
     display_equivalents,
     render_equivalents_title,
@@ -43,22 +43,6 @@ def _scenario_context_text(scenario: Scenario) -> str | None:
     return None
 
 
-def _combine_warnings(warnings) -> str | None:
-    if not warnings:
-        return None
-    messages = [str(getattr(warning, "message", warning)) for warning in warnings]
-    if not messages:
-        return None
-    if len(messages) == 1:
-        return messages[0]
-    if len(messages) == 2:
-        head, separator, suffix = messages[0].partition(",")
-        tail = messages[1].partition(",")[0].lower()
-        if separator and tail:
-            return f"{head} and {tail},{suffix}"
-    return " ".join(messages)
-
-
 def calculator_mode():
     with st.container(border=True):
         col1, col2, col3 = st.columns(3)
@@ -94,7 +78,7 @@ def calculator_mode():
         if scenario_text:
             icon = "🎬" if scenario.modality == "video" else "✍️"
             context_parts.append(f"{icon} {scenario_text}")
-        warning_text = _combine_warnings(impacts.warnings)
+        warning_text = combine_model_warnings(impacts.warnings)
         if warning_text:
             context_parts.append(f"⚠️ {warning_text}")
         if context_parts:

@@ -96,8 +96,7 @@ def company_mode():
             request_latency=float("inf"),
             electricity_mix_zone=electricity_mix.zone,
         )
-        if impacts.warnings:
-            display_model_warnings(impacts)
+        display_model_warnings(impacts)
 
         # Display electricity mix warnings if any
         if electricity_mix and electricity_mix.has_warnings:

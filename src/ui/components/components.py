@@ -81,15 +81,25 @@ def render_model_selector(
     return provider, model
 
 
+def combine_model_warnings(warnings) -> str | None:
+    if not warnings:
+        return None
+    messages = [str(getattr(warning, "message", warning)) for warning in warnings]
+    if len(messages) == 1:
+        return messages[0]
+    if len(messages) == 2:
+        head, separator, suffix = messages[0].partition(",")
+        tail = messages[1].partition(",")[0].lower()
+        if separator and tail:
+            return f"{head} and {tail},{suffix}"
+    return " ".join(messages)
+
+
 def display_model_warnings(impacts) -> None:
     """Display warning messages based on model characteristics."""
-    if len(impacts.warnings) == 1:
-        st.warning(impacts.warnings[0].message, icon="⚠️")
-    elif len(impacts.warnings) == 2:
-        st.warning(
-            f"{impacts.warnings[0].message.split(',')[0]} and {impacts.warnings[1].message.split(',')[0].lower()}, {impacts.warnings[0].message.split(',')[1]}",
-            icon="⚠️",
-        )
+    warning_text = combine_model_warnings(impacts.warnings)
+    if warning_text:
+        st.warning(warning_text, icon="⚠️")
 
 
 def display_electricity_mix_warnings(electricity_mix) -> None:
