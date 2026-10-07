@@ -9,9 +9,7 @@ from src.core.impact_calculator import compute_scenario_impacts
 from src.core.units import q as _q
 from src.repositories.models import load_models
 from src.repositories.video_models import load_video_models
-from src.ui.components.impacts import display_impacts
 
-_COMPARISON_IMPACTS = ["Electricity", "Carbon Footprint", "Water", "Metals & Minerals"]
 _MAX_MODELS = 4
 _MODES = ["1 vs 1", "Model mapping"]
 
@@ -35,7 +33,6 @@ _DUEL_IMPACTS = {
 
 # EcoLogits charter greens
 _TRACK_COLOR = "rgba(6, 37, 34, 0.08)"
-_SMALL_COLOR = "rgba(0, 191, 99, 0.45)"
 _LARGE_COLOR = "#087f4f"
 _TICK_COLOR = "#062522"
 
@@ -150,143 +147,186 @@ def _render_duel_header(label_a, label_b, impact_label, a_vals, b_vals) -> None:
             f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× more {escape(noun)} "
             f"than {_phrase(model_b, provider_b)}"
         )
-        arrow = "↑"
     else:
         sentence = (
             f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× less {escape(noun)} "
             f"than {_phrase(model_b, provider_b)}"
         )
-        arrow = "↓"
 
     st.html(
         f"""
         <div class="duel-header">
-            <div class="duel-ratio">{arrow} {format_number(ratio, 2)}×</div>
+            <div class="duel-ratio">{format_number(ratio, 2)}×</div>
             <div class="duel-sentence">{sentence}</div>
         </div>
         """
     )
 
 
-def _render_duel_plot(label_a, label_b, impact_label, a_vals, b_vals) -> None:
-    a_mean, a_min, a_max, unit = a_vals
-    b_mean, b_min, b_max, _ = b_vals
-    scale_max = max(a_max, b_max, a_mean, b_mean)
-    if scale_max <= 0:
-        st.info("No positive values to plot.", icon=":material/info:")
-        return
-    scale_max *= 1.04
-
-    a_is_large = a_mean >= b_mean
-    color_a = _LARGE_COLOR if a_is_large else _SMALL_COLOR
-    color_b = _SMALL_COLOR if a_is_large else _LARGE_COLOR
-
-    labels = [label_a, label_b]
-    means = [a_mean, b_mean]
-    mins = [min(a_min, a_mean), min(b_min, b_mean)]
-    maxs = [max(a_max, a_mean), max(b_max, b_mean)]
-    # Guarantee a visible stub: point estimates (min == max) get a thin
-    # segment centered on the mean instead of a zero-width, invisible bar.
-    min_width = scale_max * 0.02
-    bases = []
-    widths = []
-    for mean, mn, mx in zip(means, mins, maxs, strict=True):
-        if mx - mn >= min_width:
-            bases.append(mn)
-            widths.append(mx - mn)
-        else:
-            bases.append(max(0.0, mean - min_width / 2))
-            widths.append(min_width)
-    right_labels = [
-        f"{format_number(m)} ± {format_number((mx - mn) / 2)} {unit}"
-        if mx > mn
-        else f"{format_number(m)} {unit}"
-        for m, mn, mx in zip(means, mins, maxs, strict=True)
-    ]
-
+def _mapping_bar_figure(mapped, impact_label, target_unit) -> go.Figure | None:
+    """Build the shared horizontal bar chart (mean + asymmetric error bars)."""
+    mapped = sorted(mapped, key=lambda r: r["mean"])
+    x_max = max(max(r["max"], r["mean"]) for r in mapped)
+    if x_max <= 0:
+        x_max = max(r["mean"] for r in mapped)
+    if x_max <= 0:
+        return None
     fig = go.Figure()
-    # Background track: full scale, light charter tint
     fig.add_trace(
         go.Bar(
-            y=labels,
-            x=[scale_max, scale_max],
+            y=[r["label"] for r in mapped],
+            x=[r["mean"] for r in mapped],
             orientation="h",
-            marker_color=_TRACK_COLOR,
-            hoverinfo="skip",
-            showlegend=False,
-        )
-    )
-    # Uncertainty interval segments [min, max]
-    fig.add_trace(
-        go.Bar(
-            y=labels,
-            x=widths,
-            base=bases,
-            orientation="h",
-            marker_color=[color_a, color_b],
-            marker_line_width=0,
-            customdata=[
-                [format_number(means[0]), format_number(mins[0]), format_number(maxs[0])],
-                [format_number(means[1]), format_number(mins[1]), format_number(maxs[1])],
+            marker_color=_LARGE_COLOR,
+            error_x={
+                "type": "data",
+                "symmetric": False,
+                "array": [r["max"] - r["mean"] for r in mapped],
+                "arrayminus": [r["mean"] - r["min"] for r in mapped],
+                "color": _TICK_COLOR,
+                "thickness": 2,
+                "width": 6,
+            },
+            text=[
+                f"{format_number(r['mean'])} {target_unit}<br>± {format_number((r['max'] - r['min']) / 2)} {target_unit}"
+                if r["max"] > r["min"]
+                else f"{format_number(r['mean'])} {target_unit}"
+                for r in mapped
             ],
-            hovertemplate=(
-                "%{y}<br>mean: %{customdata[0]} "
-                + escape(unit)
-                + "<br>range: %{customdata[1]}–%{customdata[2]} "
-                + escape(unit)
-                + "<extra></extra>"
-            ),
+            textposition="inside",
+            insidetextanchor="start",
+            textfont={"color": "white", "size": 12},
+            hovertemplate="%{y}<br>mean: %{customdata} " + escape(target_unit) + "<extra></extra>",
+            customdata=[format_number(r["mean"]) for r in mapped],
             showlegend=False,
         )
     )
-    # Mean ticks: dark vertical markers
-    fig.add_trace(
-        go.Scatter(
-            x=means,
-            y=labels,
-            mode="markers",
-            marker_symbol="line-ns",
-            marker_line_color=_TICK_COLOR,
-            marker_line_width=3,
-            marker_size=22,
-            hoverinfo="skip",
-            showlegend=False,
-        )
-    )
-    # Value annotations next to the mean tick (middle point).
-    # The label on the dark green (larger) bar sits on the bar fill, so white.
-    large_label = label_a if a_is_large else label_b
-    for label, mean, text in zip(labels, means, right_labels, strict=True):
-        fig.add_annotation(
-            x=mean,
-            y=label,
-            text=text,
-            xanchor="left",
-            yanchor="middle",
-            xshift=8,
-            showarrow=False,
-            font={"color": "white" if label == large_label else "#062522", "size": 12},
-        )
-
     fig.update_layout(
         autosize=True,
-        barmode="overlay",
-        bargap=0.45,
-        height=260,
-        margin={"l": 220, "r": 170, "t": 12, "b": 60},
+        height=max(220, 90 + 70 * len(mapped)),
+        margin={"l": 220, "r": 40, "t": 60, "b": 60},
         plot_bgcolor="white",
         paper_bgcolor="white",
         font={"color": "#062522"},
+        title={
+            "text": f"{impact_label} by model by task ({target_unit})",
+            "x": 0.5,
+            "xanchor": "center",
+        },
         xaxis={
-            "range": [0, scale_max * 1.45],
-            "title": f"{impact_label} ({unit})",
-            "gridcolor": "rgba(6, 37, 34, 0.08)",
+            "title": f"{impact_label} ({target_unit})",
+            "range": [0, x_max * 1.02],
+            "gridcolor": _TRACK_COLOR,
             "zeroline": False,
             "automargin": True,
         },
-        yaxis={"autorange": "reversed", "showgrid": False, "automargin": True},
+        yaxis={"autorange": "reversed", "automargin": True},
     )
+    return fig
+
+
+def _render_duel_plot(label_a, label_b, impact_label, a_vals, b_vals) -> None:
+    a_mean, a_min, a_max, unit = a_vals
+    b_mean, b_min, b_max, _ = b_vals
+    mapped = [
+        {
+            "label": label_a,
+            "mean": a_mean,
+            "min": min(a_min, a_mean),
+            "max": max(a_max, a_mean),
+        },
+        {
+            "label": label_b,
+            "mean": b_mean,
+            "min": min(b_min, b_mean),
+            "max": max(b_max, b_mean),
+        },
+    ]
+    fig = _mapping_bar_figure(mapped, impact_label, unit)
+    if fig is None:
+        st.info("No positive values to plot.", icon=":material/info:")
+        return
     st.plotly_chart(fig, width="stretch", config={"responsive": True})
+
+
+def _render_duel_radar(label_a, label_b, impacts_a, impacts_b) -> None:
+    """Radar comparing both models across all impact categories (normalized per axis)."""
+    categories = list(_DUEL_IMPACTS)
+    norm_a: list[float] = []
+    norm_b: list[float] = []
+    hover_a: list[str] = []
+    hover_b: list[str] = []
+    for category in categories:
+        (a_mean, _, _, unit), (b_mean, _, _, _) = _harmonize(
+            _impact_values(impacts_a, category),
+            _impact_values(impacts_b, category),
+        )
+        peak = max(a_mean, b_mean)
+        if peak <= 0:
+            norm_a.append(0.0)
+            norm_b.append(0.0)
+        else:
+            norm_a.append(a_mean / peak)
+            norm_b.append(b_mean / peak)
+        hover_a.append(f"{format_number(a_mean)} {unit}")
+        hover_b.append(f"{format_number(b_mean)} {unit}")
+
+    # Close the loop for radar display.
+    theta = [*categories, categories[0]]
+    r_a = [*norm_a, norm_a[0]] if norm_a else []
+    r_b = [*norm_b, norm_b[0]] if norm_b else []
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatterpolar(
+            r=r_a,
+            theta=theta,
+            fill="toself",
+            fillcolor="rgba(8, 127, 79, 0.2)",
+            line={"color": _LARGE_COLOR, "width": 2},
+            marker={"color": _LARGE_COLOR, "size": 6},
+            customdata=[*hover_a, hover_a[0]],
+            hovertemplate="%{theta}<br>" + escape(label_a) + ": %{customdata}<extra></extra>",
+            name=label_a,
+        )
+    )
+    fig.add_trace(
+        go.Scatterpolar(
+            r=r_b,
+            theta=theta,
+            fill="toself",
+            fillcolor="rgba(6, 37, 34, 0.15)",
+            line={"color": _TICK_COLOR, "width": 2, "dash": "dash"},
+            marker={"color": _TICK_COLOR, "size": 6},
+            customdata=[*hover_b, hover_b[0]],
+            hovertemplate="%{theta}<br>" + escape(label_b) + ": %{customdata}<extra></extra>",
+            name=label_b,
+        )
+    )
+    fig.update_layout(
+        autosize=True,
+        height=600,
+        margin={"l": 80, "r": 80, "t": 60, "b": 80},
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        font={"color": "#062522"},
+        showlegend=True,
+        legend={"orientation": "h", "yanchor": "bottom", "y": -0.2, "xanchor": "center", "x": 0.5},
+        polar={
+            "bgcolor": "white",
+            "radialaxis": {
+                "visible": True,
+                "range": [0, 1],
+                "tickvals": [0, 0.5, 1],
+                "ticktext": ["0", "50%", "100%"],
+                "gridcolor": _TRACK_COLOR,
+                "linecolor": _TRACK_COLOR,
+            },
+            "angularaxis": {"gridcolor": _TRACK_COLOR, "linecolor": _TRACK_COLOR},
+        },
+    )
+    with st.expander("Full impacts delta breakdown", expanded=False):
+        st.plotly_chart(fig, width="stretch", config={"responsive": True})
 
 
 def _default_option_index(model_options, key: tuple[str, str], fallback: int) -> int:
@@ -303,17 +343,24 @@ def _one_vs_one(scenario, model_options) -> None:
     default_b = _default_option_index(
         model_options, _DEFAULT_MAPPING_MODELS[1], 1 if len(labels) > 1 else 0
     )
-    col_a, col_b = st.columns(2)
+    col_a, col_impact, col_b = st.columns([2, 4, 2], gap="large", vertical_alignment="center")
     with col_a:
-        label_a = st.selectbox("Model A", options=labels, index=default_a, key="compare_model_a")
+        label_a = st.selectbox(
+            "Model A", options=labels, index=default_a, key="compare_model_a", width="stretch"
+        )
+    with col_impact:
+        impact_label = st.pills(
+            "Impact to compare",
+            options=list(_DUEL_IMPACTS),
+            default="Electricity",
+            required=True,
+            key="duel_impact",
+            width="stretch",
+        )
     with col_b:
-        label_b = st.selectbox("Model B", options=labels, index=default_b, key="compare_model_b")
-    impact_label = st.pills(
-        "Impact to compare",
-        options=list(_DUEL_IMPACTS),
-        default="Electricity",
-        key="duel_impact",
-    )
+        label_b = st.selectbox(
+            "Model B", options=labels, index=default_b, key="compare_model_b", width="stretch"
+        )
     if impact_label is None:
         st.info("Select an impact above to see the comparison.", icon=":material/info:")
         return
@@ -339,13 +386,7 @@ def _one_vs_one(scenario, model_options) -> None:
         _render_duel_header(label_a, label_b, impact_label, a_vals, b_vals)
         _render_duel_plot(label_a, label_b, impact_label, a_vals, b_vals)
 
-    detail_a, detail_b = st.columns(2)
-    with detail_a.container(border=True):
-        st.subheader(label_a)
-        display_impacts(impacts_output=impacts_a, impacts_to_display=_COMPARISON_IMPACTS)
-    with detail_b.container(border=True):
-        st.subheader(label_b)
-        display_impacts(impacts_output=impacts_b, impacts_to_display=_COMPARISON_IMPACTS)
+    _render_duel_radar(label_a, label_b, impacts_a, impacts_b)
 
 
 def _default_mapping_selection(model_options) -> list[str]:
@@ -358,27 +399,31 @@ def _default_mapping_selection(model_options) -> list[str]:
 
 
 def _model_mapping(scenario, model_options) -> None:
-    selected = st.multiselect(
-        "Models to compare",
-        options=list(model_options),
-        default=_default_mapping_selection(model_options),
-        max_selections=_MAX_MODELS,
-        help="Select up to four models. Estimates use identical task settings.",
-        key="compare_models",
-    )
+    col_models, col_impact = st.columns(2, gap="medium", vertical_alignment="center")
+    with col_models:
+        selected = st.multiselect(
+            "Models to compare",
+            options=list(model_options),
+            default=_default_mapping_selection(model_options),
+            max_selections=_MAX_MODELS,
+            help="Select up to four models. Estimates use identical task settings.",
+            key="compare_models",
+        )
+    with col_impact:
+        impact_label = st.pills(
+            "Impact to map",
+            options=list(_DUEL_IMPACTS),
+            default="Carbon Footprint",
+            required=True,
+            width="stretch",
+            key="mapping_impact",
+        )
     if not selected:
         st.info(
             "Select at least one model above to see its estimated impacts.",
             icon=":material/info:",
         )
         return
-
-    impact_label = st.pills(
-        "Impact to map",
-        options=list(_DUEL_IMPACTS),
-        default="Carbon Footprint",
-        key="mapping_impact",
-    )
 
     results = []
     for label in selected:
@@ -416,55 +461,12 @@ def _model_mapping(scenario, model_options) -> None:
                 pass
             mapped.append(conv)
         mapped.sort(key=lambda r: r["mean"])
-        x_max = max(max(r["max"], r["mean"]) for r in mapped)
-        if x_max <= 0:
-            x_max = max(r["mean"] for r in mapped)
-        fig = go.Figure()
-        fig.add_trace(
-            go.Bar(
-                y=[r["label"] for r in mapped],
-                x=[r["mean"] for r in mapped],
-                orientation="h",
-                marker_color=_LARGE_COLOR,
-                error_x={
-                    "type": "data",
-                    "symmetric": False,
-                    "array": [r["max"] - r["mean"] for r in mapped],
-                    "arrayminus": [r["mean"] - r["min"] for r in mapped],
-                    "color": _TICK_COLOR,
-                    "thickness": 2,
-                    "width": 6,
-                },
-                hovertemplate="%{y}<br>mean: %{customdata} "
-                + escape(target_unit)
-                + "<extra></extra>",
-                customdata=[format_number(r["mean"]) for r in mapped],
-                showlegend=False,
-            )
-        )
-        fig.update_layout(
-            autosize=True,
-            height=max(220, 90 + 70 * len(mapped)),
-            margin={"l": 220, "r": 40, "t": 60, "b": 60},
-            plot_bgcolor="white",
-            paper_bgcolor="white",
-            font={"color": "#062522"},
-            title={
-                "text": f"{impact_label} by model ({target_unit})",
-                "x": 0.5,
-                "xanchor": "center",
-            },
-            xaxis={
-                "title": f"{impact_label} ({target_unit})",
-                "range": [0, x_max * 1.25],
-                "gridcolor": _TRACK_COLOR,
-                "zeroline": False,
-                "automargin": True,
-            },
-            yaxis={"autorange": "reversed", "automargin": True},
-        )
-        with st.container(border=True, key="mapping_chart"):
-            st.plotly_chart(fig, width="stretch", config={"responsive": True})
+        fig = _mapping_bar_figure(mapped, impact_label, target_unit)
+        if fig is None:
+            st.info("No positive values to plot.", icon=":material/info:")
+        else:
+            with st.container(border=True, key="mapping_chart"):
+                st.plotly_chart(fig, width="stretch", config={"responsive": True})
 
     for result in results:
         if result["error"] is not None:
@@ -484,6 +486,7 @@ def model_comparison_page() -> None:
                 "Comparison mode",
                 options=_MODES,
                 default="1 vs 1",
+                required=True,
                 key="compare_mode",
             )
 
