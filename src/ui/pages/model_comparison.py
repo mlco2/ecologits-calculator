@@ -22,6 +22,13 @@ _DEFAULT_MAPPING_MODELS = [
     ("google_genai", "gemini-3.8-flash"),
 ]
 
+# Default selection for video "Model mapping" as (provider, raw model name).
+_DEFAULT_MAPPING_VIDEO_MODELS = [
+    ("tencent", "tencent/hunyuanvideo-1.5"),
+    ("alibaba", "alibaba/wan2.2"),
+    ("openai", "openai/sora-2-pro"),
+]
+
 # Impact label -> (QImpacts value attr, QImpacts min attr, QImpacts max attr, noun for sentences)
 _DUEL_IMPACTS = {
     "Electricity": ("energy", "energy_min", "energy_max", "energy"),
@@ -143,20 +150,38 @@ def _render_duel_header(label_a, label_b, impact_label, a_vals, b_vals) -> None:
         return f"<b>{escape(model)}</b>"
 
     if a_first:
-        sentence = (
-            f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× more {escape(noun)} "
-            f"than {_phrase(model_b, provider_b)}"
-        )
+        if ratio < 2:
+            pct = round((ratio - 1) * 100)
+            badge = f"+{pct}%"
+            sentence = (
+                f"{_phrase(model_a, provider_a)} uses {pct}% more {escape(noun)} "
+                f"than {_phrase(model_b, provider_b)}"
+            )
+        else:
+            badge = f"{format_number(ratio, 2)}×"
+            sentence = (
+                f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× more {escape(noun)} "
+                f"than {_phrase(model_b, provider_b)}"
+            )
     else:
-        sentence = (
-            f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× less {escape(noun)} "
-            f"than {_phrase(model_b, provider_b)}"
-        )
+        if ratio < 2:
+            pct = round((1 - 1 / ratio) * 100)
+            badge = f"-{pct}%"
+            sentence = (
+                f"{_phrase(model_a, provider_a)} uses {pct}% less {escape(noun)} "
+                f"than {_phrase(model_b, provider_b)}"
+            )
+        else:
+            badge = f"{format_number(ratio, 2)}×"
+            sentence = (
+                f"{_phrase(model_a, provider_a)} uses {format_number(ratio, 2)}× less {escape(noun)} "
+                f"than {_phrase(model_b, provider_b)}"
+            )
 
     st.html(
         f"""
         <div class="duel-header">
-            <div class="duel-ratio">{format_number(ratio, 2)}×</div>
+            <div class="duel-ratio">{badge}</div>
             <div class="duel-sentence">{sentence}</div>
         </div>
         """
@@ -403,11 +428,12 @@ def _one_vs_one(scenario, model_options) -> None:
 
 
 def _default_mapping_selection(model_options) -> list[str]:
-    """Return default labels for model mapping, in _DEFAULT_MAPPING_MODELS order."""
+    """Return default labels for model mapping, in default order."""
     lookup = {(provider, name): label for label, (provider, name) in model_options.items()}
-    selected = [lookup[key] for key in _DEFAULT_MAPPING_MODELS if key in lookup]
-    if selected:
-        return selected
+    for keys in (_DEFAULT_MAPPING_VIDEO_MODELS, _DEFAULT_MAPPING_MODELS):
+        selected = [lookup[key] for key in keys if key in lookup]
+        if selected:
+            return selected
     return list(model_options)[:2]
 
 
