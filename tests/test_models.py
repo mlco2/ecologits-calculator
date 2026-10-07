@@ -89,11 +89,8 @@ class TestLoadModels:
                 "provider_clean",
                 "name",
                 "name_clean",
-                "architecture_type",
                 "total_parameters",
                 "active_parameters",
-                "warning_arch",
-                "warning_multi_modal",
             }
             assert expected_columns.issubset(set(result.columns))
 

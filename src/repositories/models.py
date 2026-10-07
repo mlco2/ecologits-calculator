@@ -5,10 +5,6 @@ import streamlit as st
 
 from ecologits.model_repository import ArchitectureTypes
 from ecologits.model_repository import models as model_repository
-from ecologits.status_messages import (
-    ModelArchMultimodalWarning,
-    ModelArchNotReleasedWarning,
-)
 from ecologits.utils.range_value import RangeValue
 
 from src.repositories.model_config import load_main_models, load_model_aliases
@@ -75,27 +71,16 @@ def load_models(filter_main=True) -> pd.DataFrame:
         else:
             continue  # Ignore model
 
-        warning_arch = False
-        warning_multi_modal = False
-        for w in m.warnings:
-            if isinstance(w, ModelArchNotReleasedWarning):
-                warning_arch = True
-            if isinstance(w, ModelArchMultimodalWarning):
-                warning_multi_modal = True
-
         data.append(
             {
                 "provider": m.provider.value,
                 "provider_clean": PROVIDERS_FORMAT.get(m.provider.value, m.provider.value),
                 "name": m.name,
                 "name_clean": aliases.get(m.name, clean_model_name(m.name)),
-                "architecture_type": m.architecture.type.value,
                 "total_parameters": total_parameters,
                 "active_parameters": active_parameters,
                 "tps": m.deployment.tps,
                 "ttft": m.deployment.ttft,
-                "warning_arch": warning_arch,
-                "warning_multi_modal": warning_multi_modal,
             }
         )
 
