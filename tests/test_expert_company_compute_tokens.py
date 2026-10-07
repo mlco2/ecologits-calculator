@@ -15,12 +15,7 @@ class TestComputeRowTokens:
                 "Tokens per User per Selected Unit of Time": "500",
                 "Number of Users": "100",
             }
-        ) == {
-            "output_tokens": 50_000,
-            "input_tokens": 0,
-            "cached_tokens": 0,
-            "total_tokens": 50_000,
-        }
+        ) == 50_000
 
     def test_empty_num_users(self):
         """Test with empty number of users."""
@@ -71,10 +66,5 @@ class TestComputeRowTokens:
 
         result = _compute_row_tokens(row)
 
-        # Should return all zeros
-        assert result == {
-            "output_tokens": 0,
-            "input_tokens": 0,
-            "cached_tokens": 0,
-            "total_tokens": 0,
-        }
+        # Should return zero tokens
+        assert result == 0
