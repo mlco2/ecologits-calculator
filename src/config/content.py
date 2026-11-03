@@ -18,6 +18,7 @@ SUPPORT_TEXT = _load("support.md")
 METHODOLOGY_TEXT = _load("methodology.md")
 CITATION_TEXT = _load("citation.bib")
 LICENCE_TEXT = _load("licence.html")
+ADDITIONAL_CREDITS = _load("additional_credits.md")
 
 
 CITATION_LABEL = "BibTeX citation for EcoLogits Calculator and the EcoLogits library:"

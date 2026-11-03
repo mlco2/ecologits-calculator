@@ -94,6 +94,42 @@ html, body, [class*="css"] {
     }
 }
 
+.st-key-research_credits {
+    margin-top: 3rem;
+    max-width: 30rem;
+    width: 100%;
+}
+
+.st-key-research_credits p {
+    color: #777;
+    font-size: 0.72rem;
+    font-weight: 400;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.st-key-research_credits h3,
+.st-key-research_credits h4 {
+    color: #777;
+    font-weight: 400;
+    line-height: 1.4;
+    padding: 0;
+}
+
+.st-key-research_credits h3 {
+    font-size: 0.86rem;
+    margin: 0 0 0.5rem;
+}
+
+.st-key-research_credits h4 {
+    font-size: 0.78rem;
+    margin: 0 0 0.35rem;
+}
+
+.st-key-research_credits p + h4 {
+    margin-top: 0.75rem;
+}
+
 .st-key-app_footer {
     margin-top: 3rem;
     padding-bottom: 1rem;

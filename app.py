@@ -7,6 +7,7 @@ from src.config.content import (
     CITATION_TEXT,
     HOW_TO_TEXT,
     LICENCE_TEXT,
+    ADDITIONAL_CREDITS,
 )
 from src.ui.pages.about import about_page
 from src.ui.pages.calculator import calculator_mode
@@ -55,9 +56,15 @@ def _render_calculator() -> None:
         )
 
     if company_enabled:
-        expert_company_mode() if expert_enabled else company_mode()
+        if expert_enabled:
+            expert_company_mode()
+        else:
+            company_mode()
     else:
-        expert_mode() if expert_enabled else calculator_mode()
+        if expert_enabled:
+            expert_mode()
+        else:
+            calculator_mode()
 
 
 def _about_page(calculator_page: st.Page | None = None) -> None:
@@ -133,6 +140,9 @@ def _render_footer() -> None:
                     - [Discord](https://discord.gg/7KPzAfcN)
                     """
                 )
+
+        with st.container(key="research_credits"):
+            st.markdown(ADDITIONAL_CREDITS)
 
 
 def main():
