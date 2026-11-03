@@ -80,3 +80,5 @@ warn_unused_ignores = true
 
 [tool.uv]
 exclude-newer = "2 weeks"
+# Allow the security fixes in Pillow 13 and the Streamlit patch that supports it.
+exclude-newer-package = { pillow = "2026-11-03T23:59:59Z", streamlit = "2026-11-03T23:59:59Z" }
