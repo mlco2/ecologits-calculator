@@ -3,11 +3,11 @@ from pathlib import Path
 import streamlit as st
 
 from src.config.content import (
+    ADDITIONAL_CREDITS,
     CITATION_LABEL,
     CITATION_TEXT,
     HOW_TO_TEXT,
     LICENCE_TEXT,
-    ADDITIONAL_CREDITS,
 )
 from src.ui.pages.about import about_page
 from src.ui.pages.calculator import calculator_mode
